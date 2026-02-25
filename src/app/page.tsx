@@ -1,25 +1,30 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import CountersSection from "@/components/CountersSection";
-import ProblemSection from "@/components/ProblemSection";
-import HowItWorksSection from "@/components/HowItWorksSection";
+import AgentsSection from "@/components/AgentsSection";
+import AgentBuilder from "@/components/AgentBuilder";
+import AcademySection from "@/components/AcademySection";
+import MetodologiaSection from "@/components/MetodologiaSection";
 import PlansSection from "@/components/PlansSection";
-import TargetSection from "@/components/TargetSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
 import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#0a0a0f] text-white overflow-x-hidden">
+    <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Navbar />
       <HeroSection />
-      <CountersSection />
-      <ProblemSection />
-      <HowItWorksSection />
+      {/* Divider */}
+      <div className="section-divider" />
+      <AgentsSection />
+      <div className="section-divider" />
+      <AgentBuilder />
+      <div className="section-divider" />
+      <AcademySection />
+      <div className="section-divider" />
+      <MetodologiaSection />
+      <div className="section-divider" />
       <PlansSection />
-      <TargetSection />
-      <TestimonialsSection />
+      <div className="section-divider" />
       <CtaSection />
       <Footer />
     </main>

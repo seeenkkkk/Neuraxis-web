@@ -1,133 +1,120 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
-import dynamic from "next/dynamic";
 
-const ParticlesBackground = dynamic(() => import("./ParticlesBackground"), {
-  ssr: false,
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 28, scale: 0.97 },
+  animate: { opacity: 1, y: 0, scale: 1 },
+  transition: { duration: 0.65, delay, ease: "easeOut" as const },
 });
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-[#0a0a0f]">
-      {/* Particles */}
-      <ParticlesBackground />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background pt-20">
 
-      {/* Radial glow blobs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-purple/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-brand-cyan/10 rounded-full blur-3xl pointer-events-none" />
+      {/* Ambient blobs */}
+      <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-gradient-to-br from-brand-purple/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-br from-brand-cyan/8 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-brand-purple/5 via-transparent to-brand-cyan/5 rounded-full blur-2xl pointer-events-none" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 pt-24 pb-16 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left: Copy */}
-          <div className="flex flex-col gap-6">
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 w-fit px-4 py-1.5 rounded-full border border-brand-purple/40 bg-brand-purple/10 text-brand-cyan text-sm font-medium"
-            >
-              <span className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse-slow" />
-              Automatización con IA · Activo 24/7
-            </motion.div>
+      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
 
-            {/* Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight"
-            >
-              Automatiza tu negocio con{" "}
-              <span className="gradient-text">
-                Inteligencia Artificial
-              </span>
-            </motion.h1>
+        {/* Badge */}
+        <motion.div {...fadeUp(0)} className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full glass-white border border-brand-purple/20 text-sm font-medium text-text-secondary shadow-card">
+          <span className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse-cyan shadow-neon-cyan" />
+          Plataforma de Agentes IA · Nuevo Builder 2.0
+        </motion.div>
 
-            {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg text-white/60 leading-relaxed max-w-lg"
-            >
-              Workflows, agentes IA y automatizaciones que trabajan por ti
-              24/7. Captura leads, gestiona clientes y cierra ventas de forma
-              automática.
-            </motion.p>
+        {/* Headline */}
+        <motion.h1 {...fadeUp(0.1)} className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] text-text-primary mb-6 text-balance">
+          Tu negocio funciona solo{" "}
+          <br className="hidden sm:block" />
+          con{" "}
+          <span className="gradient-neon-text">
+            Inteligencia Artificial
+          </span>
+        </motion.h1>
 
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4 pt-2"
-            >
-              <a
-                href="#planes"
-                className="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold text-white bg-gradient-to-r from-brand-purple to-brand-cyan hover:opacity-90 hover:scale-105 transition-all duration-200 shadow-glow-brand"
-              >
-                Empieza gratis
-              </a>
-              <a
-                href="#contacto"
-                className="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold text-white border border-white/30 hover:border-brand-cyan/60 hover:bg-white/5 transition-all duration-200"
-              >
-                Agenda una llamada
-              </a>
-            </motion.div>
+        {/* Subtitle */}
+        <motion.p {...fadeUp(0.2)} className="text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed mb-10">
+          Diseña, entrena y despliega agentes IA personalizados que capturan leads,
+          gestionan clientes y cierran ventas — todo sin intervención humana.
+        </motion.p>
 
-            {/* Trust badges */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="flex items-center gap-6 pt-2 text-sm text-white/40"
-            >
-              <span>✓ Sin tarjeta de crédito</span>
-              <span>✓ Setup en minutos</span>
-              <span>✓ Cancela cuando quieras</span>
-            </motion.div>
-          </div>
-
-          {/* Right: Avatar */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex items-center justify-center relative"
+        {/* CTA buttons */}
+        <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+          <a
+            href="#builder"
+            className="group px-8 py-4 rounded-full text-base font-bold bg-gradient-to-r from-brand-purple to-brand-cyan text-white hover:opacity-95 hover:scale-105 transition-all duration-300 shadow-neon-purple w-full sm:w-auto text-center"
           >
-            {/* Outer glow ring */}
-            <div className="absolute w-80 h-80 rounded-full bg-gradient-to-r from-brand-purple/30 to-brand-cyan/20 blur-2xl animate-pulse-slow" />
-            <div className="absolute w-72 h-72 rounded-full border border-brand-cyan/20 animate-pulse-slow" />
-            <div className="absolute w-64 h-64 rounded-full border border-brand-purple/20" />
+            Crear mi agente IA
+            <span className="ml-2 group-hover:translate-x-1 inline-block transition-transform">→</span>
+          </a>
+          <a
+            href="#agentes"
+            className="btn-crystal px-8 py-4 rounded-full text-base font-semibold w-full sm:w-auto text-center"
+          >
+            Ver los 5 agentes
+          </a>
+        </motion.div>
 
-            {/* Floating avatar */}
-            <div className="relative animate-float">
-              <div className="relative w-56 h-56 sm:w-72 sm:h-72">
-                {/* Glow behind image */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-brand-purple to-brand-cyan opacity-30 blur-xl" />
-                <Image
-                  src="/avatar.png"
-                  alt="Neuraxis IA Avatar"
-                  fill
-                  className="object-contain relative z-10"
-                  style={{
-                    filter:
-                      "drop-shadow(0 0 30px rgba(34,212,253,0.5)) drop-shadow(0 0 60px rgba(106,17,203,0.3))",
-                  }}
-                  priority
-                />
-              </div>
+        {/* Stats row */}
+        <motion.div
+          {...fadeUp(0.45)}
+          className="flex flex-wrap items-center justify-center gap-8 text-sm"
+        >
+          {[
+            { val: "+500", label: "Automatizaciones activas" },
+            { val: "+50", label: "Empresas usando Neuraxis" },
+            { val: "98%", label: "Tasa de satisfacción" },
+          ].map((s) => (
+            <div key={s.label} className="flex items-center gap-2">
+              <span className="font-bold gradient-neon-text text-lg">{s.val}</span>
+              <span className="text-text-muted">{s.label}</span>
             </div>
-          </motion.div>
-        </div>
+          ))}
+        </motion.div>
+
+        {/* Floating visual hint */}
+        <motion.div
+          {...fadeUp(0.6)}
+          className="mt-20 flex justify-center"
+        >
+          <div className="relative glass-white rounded-2xl px-8 py-5 shadow-card flex items-center gap-6 border border-white/90">
+            {/* Mini agent avatars */}
+            {["A", "N", "L", "S", "C"].map((l, i) => (
+              <div
+                key={l}
+                className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white"
+                style={{
+                  background: [
+                    "linear-gradient(135deg,#6a11cb,#8b3cf7)",
+                    "linear-gradient(135deg,#22d4fd,#06b6d4)",
+                    "linear-gradient(135deg,#10b981,#059669)",
+                    "linear-gradient(135deg,#f59e0b,#d97706)",
+                    "linear-gradient(135deg,#3b82f6,#2563eb)",
+                  ][i],
+                  boxShadow: i === 0
+                    ? "0 0 12px rgba(106,17,203,0.4)"
+                    : i === 1
+                    ? "0 0 12px rgba(34,212,253,0.5)"
+                    : undefined,
+                }}
+              >
+                {l}
+              </div>
+            ))}
+            <div className="h-6 w-px bg-gray-200" />
+            <div className="text-sm text-text-secondary">
+              <span className="font-semibold text-text-primary">5 agentes</span> listos para trabajar
+            </div>
+            <div className="w-2 h-2 rounded-full bg-brand-cyan animate-ping-slow shadow-neon-cyan" />
+          </div>
+        </motion.div>
       </div>
 
-      {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0f] to-transparent pointer-events-none" />
+      {/* Bottom gradient fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent pointer-events-none" />
     </section>
   );
 }
