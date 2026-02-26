@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="none">
+  <defs>
+    <linearGradient id="hexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#00AAFF"/>
+      <stop offset="50%"  stop-color="#A855F7"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="circuitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#00D4FF"/>
+      <stop offset="100%" stop-color="#A855F7"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Hexagon -->
+  <polygon points="30,4 52,16 52,40 30,52 8,40 8,16"
+    fill="url(#hexGrad)" opacity="0.15"/>
+  <polygon points="30,4 52,16 52,40 30,52 8,40 8,16"
+    fill="none" stroke="url(#hexGrad)" stroke-width="1.5"/>
+
+  <!-- Circuit lines from center -->
+  <g stroke="url(#circuitGrad)" stroke-width="0.8" opacity="0.8" filter="url(#glow)">
+    <line x1="30" y1="28" x2="30" y2="6"/>
+    <circle cx="30" cy="6" r="1.5" fill="#00D4FF"/>
+    <line x1="30" y1="28" x2="51" y2="17"/>
+    <circle cx="51" cy="17" r="1.5" fill="#A855F7"/>
+    <line x1="30" y1="28" x2="51" y2="39"/>
+    <circle cx="51" cy="39" r="1.5" fill="#00D4FF"/>
+    <line x1="30" y1="28" x2="30" y2="50"/>
+    <circle cx="30" cy="50" r="1.5" fill="#A855F7"/>
+    <line x1="30" y1="28" x2="9" y2="39"/>
+    <circle cx="9" cy="39" r="1.5" fill="#00D4FF"/>
+    <line x1="30" y1="28" x2="9" y2="17"/>
+    <circle cx="9" cy="17" r="1.5" fill="#A855F7"/>
+    <!-- Center node -->
+    <circle cx="30" cy="28" r="3" fill="url(#hexGrad)"/>
+    <!-- Cross lines -->
+    <line x1="20" y1="20" x2="40" y2="36"/>
+    <line x1="40" y1="20" x2="20" y2="36"/>
+  </g>
+
+  <!-- Text: NEURAXIS -->
+  <text x="62" y="34" font-family="'Syne', system-ui, sans-serif"
+    font-weight="800" font-size="20" fill="#F0F0FF" letter-spacing="2">
+    NEURAXIS
+  </text>
+  <!-- Text: IA -->
+  <text x="163" y="34" font-family="'Syne', system-ui, sans-serif"
+    font-weight="800" font-size="20" fill="#00D4FF"
+    style="filter: drop-shadow(0 0 4px #00D4FF)">
+    IA
+  </text>
+</svg>

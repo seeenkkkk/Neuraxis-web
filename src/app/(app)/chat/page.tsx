@@ -1,0 +1,175 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import NeonCard from "@/components/ui/NeonCard";
+import NeonBadge from "@/components/ui/NeonBadge";
+import NexMascot from "@/components/brand/NexMascot";
+
+type Message = { role: "user" | "assistant"; content: string; ts: Date };
+
+const WELCOME = "¡Hola! Soy NEX, tu asistente IA. ¿En qué puedo ayudarte hoy?";
+
+export default function ChatPage() {
+  const [messages, setMessages] = useState<Message[]>([
+    { role: "assistant", content: WELCOME, ts: new Date() },
+  ]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const send = async () => {
+    if (!input.trim() || loading) return;
+    const userMsg: Message = { role: "user", content: input.trim(), ts: new Date() };
+    setMessages((prev) => [...prev, userMsg]);
+    setInput("");
+    setLoading(true);
+
+    // Simulated response
+    await new Promise((r) => setTimeout(r, 1200));
+    const reply: Message = {
+      role: "assistant",
+      content: `Entendido. Procesando tu consulta sobre "${userMsg.content.slice(0, 40)}..."  Esta funcionalidad conectará con tu agente IA configurado en el panel de agentes.`,
+      ts: new Date(),
+    };
+    setMessages((prev) => [...prev, reply]);
+    setLoading(false);
+  };
+
+  const fmtTime = (d: Date) =>
+    d.toLocaleTimeString("es", { hour: "2-digit", minute: "2-digit" });
+
+  return (
+    <div className="max-w-3xl mx-auto h-[calc(100vh-96px)] flex flex-col gap-4">
+      {/* Header */}
+      <div className="flex items-center gap-3 flex-shrink-0">
+        <div
+          className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm"
+          style={{
+            fontFamily: "var(--font-syne, sans-serif)",
+            background: "rgba(168,85,247,0.15)",
+            border: "1.5px solid rgba(168,85,247,0.4)",
+            color: "#A855F7",
+          }}
+        >
+          N
+        </div>
+        <div>
+          <p className="text-sm font-bold" style={{ color: "var(--text-primary)", fontFamily: "var(--font-syne, sans-serif)" }}>
+            NEX
+          </p>
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88]" style={{ boxShadow: "0 0 4px rgba(0,255,136,0.8)" }} />
+            <span className="text-[10px]" style={{ color: "var(--text-secondary)" }}>Agente activo · Claude 3.5</span>
+          </div>
+        </div>
+        <div className="ml-auto">
+          <NeonBadge color="purple" size="sm">Soporte 24/7</NeonBadge>
+        </div>
+      </div>
+
+      {/* Messages */}
+      <NeonCard className="flex-1 overflow-y-auto p-4 space-y-4">
+        <AnimatePresence initial={false}>
+          {messages.map((msg, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
+              className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
+            >
+              {/* Avatar */}
+              {msg.role === "assistant" ? (
+                <NexMascot emotion="happy" size="sm" animated={false} className="flex-shrink-0" />
+              ) : (
+                <div
+                  className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold"
+                  style={{ background: "rgba(0,170,255,0.15)", border: "1px solid rgba(0,170,255,0.3)", color: "#00AAFF" }}
+                >
+                  A
+                </div>
+              )}
+
+              {/* Bubble */}
+              <div className={`max-w-[75%] space-y-1 ${msg.role === "user" ? "items-end" : "items-start"} flex flex-col`}>
+                <div
+                  className="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed"
+                  style={{
+                    background:
+                      msg.role === "user"
+                        ? "linear-gradient(135deg, #00AAFF20, #7C3AED20)"
+                        : "var(--bg-elevated)",
+                    border: `1px solid ${msg.role === "user" ? "rgba(0,170,255,0.3)" : "var(--border-card)"}`,
+                    color: "var(--text-primary)",
+                  }}
+                >
+                  {msg.content}
+                </div>
+                <span className="text-[10px] px-1" style={{ color: "var(--text-muted)" }}>
+                  {fmtTime(msg.ts)}
+                </span>
+              </div>
+            </motion.div>
+          ))}
+
+          {/* Loading indicator */}
+          {loading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex gap-3 items-center"
+            >
+              <NexMascot emotion="sleeping" size="sm" animated className="flex-shrink-0" />
+              <div
+                className="px-4 py-2.5 rounded-2xl flex gap-1 items-center"
+                style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-card)" }}
+              >
+                {[0, 1, 2].map((j) => (
+                  <motion.span
+                    key={j}
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{ background: "#A855F7" }}
+                    animate={{ opacity: [0.3, 1, 0.3] }}
+                    transition={{ repeat: Infinity, duration: 1, delay: j * 0.2 }}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <div ref={bottomRef} />
+      </NeonCard>
+
+      {/* Input */}
+      <div className="flex gap-2 flex-shrink-0">
+        <input
+          className="flex-1 input-dark"
+          placeholder="Escribe tu mensaje..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
+        />
+        <button
+          onClick={send}
+          disabled={!input.trim() || loading}
+          className="px-4 py-2.5 rounded-xl font-medium text-sm transition-all disabled:opacity-40"
+          style={{
+            background: "linear-gradient(135deg, #00AAFF, #7C3AED)",
+            color: "white",
+            cursor: input.trim() && !loading ? "pointer" : "not-allowed",
+          }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="22" y1="2" x2="11" y2="13" />
+            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+}

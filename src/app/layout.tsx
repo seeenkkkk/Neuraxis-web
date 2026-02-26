@@ -1,30 +1,41 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Syne, DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const syne = Syne({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["700", "800"],
+  variable: "--font-syne",
   display: "swap",
-  weight: ["300", "400", "500", "600", "700", "800"],
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-dm-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Neuraxis IA — Automatiza tu negocio con Inteligencia Artificial",
+  title: "NEURAXIS IA — Plataforma de Agencia de Inteligencia Artificial",
   description:
-    "Agentes IA, workflows y automatizaciones que trabajan por ti 24/7. Captura leads, gestiona clientes y cierra ventas de forma automática.",
+    "Automatiza tu agencia con agentes IA, workflows n8n, academia, generación de Excels e integraciones con Calendly. La plataforma SaaS más completa para agencias de IA.",
+  icons: { icon: "/favicon.svg" },
+  openGraph: {
+    title: "NEURAXIS IA",
+    description: "Plataforma SaaS de Inteligencia Artificial para agencias",
+    images: [{ url: "/assets/og-image.svg", width: 1200, height: 630 }],
+  },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className="scroll-smooth">
-      <body
-        className={`${inter.variable} font-sans antialiased bg-background text-foreground`}
-      >
+    <html
+      lang="es"
+      className={`${syne.variable} ${dmSans.variable} scroll-smooth`}
+    >
+      <body className="font-sans antialiased bg-[--bg-root] text-[--text-primary]"
+        style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
         {children}
       </body>
     </html>
