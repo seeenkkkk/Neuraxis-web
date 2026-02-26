@@ -1,574 +1,703 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
 /* ─── Types ──────────────────────────────────────────── */
-type Intelligence = "basico" | "avanzado" | "elite";
-type Personality = "formal" | "amigable" | "directo" | "empatico";
-type AgentData = {
+type StepId = "identify" | "solutions" | "niche" | "landing" | "config";
+
+interface AgentConfig {
   name: string;
-  role: string;
-  intelligence: Intelligence;
-  personality: Personality;
-};
+  gradientIdx: number;
+  solutions: string[];
+  niche: string;
+  landingFeatures: string[];
+  intelligence: string;
+  language: string;
+}
 
-/* ─── Step config ────────────────────────────────────── */
-const ROLES = [
-  { id: "ventas", label: "Ventas", icon: "💼", color: "#6a11cb" },
-  { id: "soporte", label: "Soporte", icon: "🎧", color: "#22d4fd" },
-  { id: "marketing", label: "Marketing", icon: "📣", color: "#10b981" },
-  { id: "analisis", label: "Análisis", icon: "📊", color: "#f59e0b" },
-  { id: "operaciones", label: "Operaciones", icon: "⚙️", color: "#3b82f6" },
-  { id: "rrhh", label: "RRHH", icon: "👥", color: "#ec4899" },
+/* ─── Step definitions ───────────────────────────────── */
+const STEPS: {
+  id: StepId;
+  label: string;
+  icon: string;
+  color: string;
+  bg: string;
+  desc: string;
+}[] = [
+  {
+    id: "identify",
+    label: "Identificar Agente",
+    icon: "🎯",
+    color: "#6a11cb",
+    bg: "rgba(106,17,203,0.06)",
+    desc: "Nombre, tipo e identidad visual",
+  },
+  {
+    id: "solutions",
+    label: "Soluciones IA",
+    icon: "💡",
+    color: "#22d4fd",
+    bg: "rgba(34,212,253,0.06)",
+    desc: "Capacidades y funciones activas",
+  },
+  {
+    id: "niche",
+    label: "Seleccionar Nicho",
+    icon: "🎪",
+    color: "#10b981",
+    bg: "rgba(16,185,129,0.06)",
+    desc: "Sector e industria objetivo",
+  },
+  {
+    id: "landing",
+    label: "Landing Pages",
+    icon: "🌐",
+    color: "#f59e0b",
+    bg: "rgba(245,158,11,0.06)",
+    desc: "Integraciones web y captación",
+  },
+  {
+    id: "config",
+    label: "Configuración",
+    icon: "⚙️",
+    color: "#ec4899",
+    bg: "rgba(236,72,153,0.06)",
+    desc: "IA, idioma y despliegue",
+  },
 ];
 
-const INTELLIGENCE: { id: Intelligence; label: string; desc: string; neon: number }[] = [
-  { id: "basico", label: "Básico", desc: "Tareas simples y FAQs", neon: 1 },
-  { id: "avanzado", label: "Avanzado", desc: "Razonamiento complejo, contexto largo", neon: 2 },
-  { id: "elite", label: "Élite", desc: "IA de vanguardia, máxima autonomía", neon: 3 },
+const GRADIENTS = [
+  "linear-gradient(135deg,#6a11cb,#8b3cf7)",
+  "linear-gradient(135deg,#22d4fd,#06b6d4)",
+  "linear-gradient(135deg,#10b981,#059669)",
+  "linear-gradient(135deg,#f59e0b,#d97706)",
+  "linear-gradient(135deg,#ec4899,#be185d)",
+  "linear-gradient(135deg,#3b82f6,#2563eb)",
 ];
 
-const PERSONALITIES: { id: Personality; label: string; icon: string; desc: string }[] = [
-  { id: "formal", label: "Formal", icon: "🎩", desc: "Profesional y preciso" },
-  { id: "amigable", label: "Amigable", icon: "😊", desc: "Cercano y cálido" },
-  { id: "directo", label: "Directo", icon: "⚡", desc: "Conciso y orientado a resultados" },
-  { id: "empatico", label: "Empático", icon: "💜", desc: "Comprensivo y humano" },
+const SOLUTIONS_LIST = [
+  { id: "atention", icon: "🎧", label: "Atención al cliente 24/7" },
+  { id: "leads", icon: "📨", label: "Captación de leads" },
+  { id: "followup", icon: "🔔", label: "Seguimiento automático" },
+  { id: "booking", icon: "📅", label: "Booking y citas" },
+  { id: "analytics", icon: "📊", label: "Análisis de datos" },
+  { id: "email", icon: "✉️", label: "Campañas de email" },
 ];
 
-const STEP_LABELS = ["Identidad", "Rol", "Cerebro", "Personalidad", "Despliegue"];
+const NICHES = [
+  { id: "clinica", icon: "💉", label: "Clínicas Estéticas" },
+  { id: "inmobiliaria", icon: "🏠", label: "Inmobiliarias" },
+  { id: "ecommerce", icon: "🛒", label: "E-commerce" },
+  { id: "restauracion", icon: "🍽️", label: "Restauración" },
+  { id: "consultoria", icon: "💼", label: "Consultoría" },
+  { id: "otros", icon: "✨", label: "Otros" },
+];
 
-/* ─── Particle for deploy animation ─────────────────── */
-function DeployParticle({ x, y, color }: { x: number; y: number; color: string }) {
+const LANDING_FEATURES = [
+  { id: "chatbot", label: "Chatbot en landing page" },
+  { id: "form", label: "Formulario de captura" },
+  { id: "whatsapp", label: "Integración WhatsApp" },
+  { id: "popup", label: "Pop-up de salida" },
+];
+
+/* ─── Toggle component ───────────────────────────────── */
+function Toggle({
+  checked,
+  onChange,
+}: {
+  checked: boolean;
+  onChange: () => void;
+}) {
   return (
-    <motion.div
-      className="absolute w-2 h-2 rounded-full"
-      style={{ left: "50%", top: "50%", background: color }}
-      initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
-      animate={{ x, y, opacity: 0, scale: 0 }}
-      transition={{ duration: 1.2 + Math.random() * 0.8, ease: "easeOut" }}
-    />
+    <button
+      onClick={onChange}
+      className={`relative w-10 h-5 rounded-full transition-all duration-300 focus:outline-none ${
+        checked ? "bg-gradient-to-r from-brand-purple to-brand-cyan" : "bg-gray-200"
+      }`}
+    >
+      <span
+        className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${
+          checked ? "translate-x-5" : "translate-x-0"
+        }`}
+      />
+    </button>
   );
+}
+
+/* ─── Modal contents per step ────────────────────────── */
+function ModalContent({
+  stepId,
+  config,
+  onUpdate,
+}: {
+  stepId: StepId;
+  config: AgentConfig;
+  onUpdate: (patch: Partial<AgentConfig>) => void;
+}) {
+  if (stepId === "identify") {
+    return (
+      <div className="flex flex-col gap-5">
+        <div>
+          <label className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2 block">
+            Nombre del agente
+          </label>
+          <input
+            value={config.name}
+            onChange={(e) => onUpdate({ name: e.target.value })}
+            placeholder="Ej: ARIA, NEXUS, LUMA..."
+            maxLength={16}
+            className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-brand-purple focus:outline-none focus:shadow-neon-purple transition-all text-base font-semibold text-text-primary bg-white placeholder:text-gray-300"
+          />
+        </div>
+        <div>
+          <label className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3 block">
+            Color del avatar
+          </label>
+          <div className="grid grid-cols-6 gap-2">
+            {GRADIENTS.map((g, i) => (
+              <button
+                key={i}
+                onClick={() => onUpdate({ gradientIdx: i })}
+                className="w-9 h-9 rounded-full transition-transform duration-200 hover:scale-110"
+                style={{
+                  background: g,
+                  outline: config.gradientIdx === i ? "2.5px solid #6a11cb" : "none",
+                  outlineOffset: "2px",
+                  boxShadow: config.gradientIdx === i ? "0 0 10px rgba(106,17,203,0.5)" : undefined,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (stepId === "solutions") {
+    return (
+      <div className="grid grid-cols-2 gap-2.5">
+        {SOLUTIONS_LIST.map((s) => {
+          const selected = config.solutions.includes(s.id);
+          return (
+            <button
+              key={s.id}
+              onClick={() =>
+                onUpdate({
+                  solutions: selected
+                    ? config.solutions.filter((x) => x !== s.id)
+                    : [...config.solutions, s.id],
+                })
+              }
+              className="flex items-center gap-2.5 p-3 rounded-xl border-2 text-left transition-all duration-200"
+              style={{
+                borderColor: selected ? "#22d4fd" : "#e5e7eb",
+                background: selected ? "rgba(34,212,253,0.06)" : "white",
+                boxShadow: selected ? "0 0 10px rgba(34,212,253,0.2)" : undefined,
+              }}
+            >
+              <span className="text-lg">{s.icon}</span>
+              <span
+                className="text-xs font-semibold leading-tight"
+                style={{ color: selected ? "#22d4fd" : "#374151" }}
+              >
+                {s.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (stepId === "niche") {
+    return (
+      <div className="grid grid-cols-2 gap-2.5">
+        {NICHES.map((n) => (
+          <button
+            key={n.id}
+            onClick={() => onUpdate({ niche: n.id })}
+            className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 text-center transition-all duration-200"
+            style={{
+              borderColor: config.niche === n.id ? "#10b981" : "#e5e7eb",
+              background: config.niche === n.id ? "rgba(16,185,129,0.06)" : "white",
+              boxShadow: config.niche === n.id ? "0 0 10px rgba(16,185,129,0.25)" : undefined,
+              transform: config.niche === n.id ? "scale(1.03)" : "scale(1)",
+            }}
+          >
+            <span className="text-2xl">{n.icon}</span>
+            <span
+              className="text-xs font-semibold"
+              style={{ color: config.niche === n.id ? "#10b981" : "#374151" }}
+            >
+              {n.label}
+            </span>
+          </button>
+        ))}
+      </div>
+    );
+  }
+
+  if (stepId === "landing") {
+    return (
+      <div className="flex flex-col gap-3">
+        {LANDING_FEATURES.map((f) => {
+          const enabled = config.landingFeatures.includes(f.id);
+          return (
+            <div
+              key={f.id}
+              className="flex items-center justify-between p-3.5 rounded-xl bg-gray-50 border border-gray-100"
+            >
+              <span className="text-sm font-medium text-text-secondary">{f.label}</span>
+              <Toggle
+                checked={enabled}
+                onChange={() =>
+                  onUpdate({
+                    landingFeatures: enabled
+                      ? config.landingFeatures.filter((x) => x !== f.id)
+                      : [...config.landingFeatures, f.id],
+                  })
+                }
+              />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (stepId === "config") {
+    return (
+      <div className="flex flex-col gap-4">
+        <div>
+          <label className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2.5 block">
+            Nivel de inteligencia
+          </label>
+          <div className="flex gap-2">
+            {["Básico", "Avanzado", "Élite"].map((lvl) => (
+              <button
+                key={lvl}
+                onClick={() => onUpdate({ intelligence: lvl })}
+                className="flex-1 py-2.5 rounded-xl border-2 text-xs font-bold transition-all duration-200"
+                style={{
+                  borderColor: config.intelligence === lvl ? "#6a11cb" : "#e5e7eb",
+                  background: config.intelligence === lvl ? "rgba(106,17,203,0.06)" : "white",
+                  color: config.intelligence === lvl ? "#6a11cb" : "#6b7280",
+                  boxShadow: config.intelligence === lvl ? "0 0 10px rgba(106,17,203,0.2)" : undefined,
+                }}
+              >
+                {lvl}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2.5 block">
+            Idioma principal
+          </label>
+          <select
+            value={config.language}
+            onChange={(e) => onUpdate({ language: e.target.value })}
+            className="w-full px-4 py-2.5 rounded-xl border-2 border-gray-200 focus:border-brand-purple focus:outline-none text-sm font-medium text-text-primary bg-white"
+          >
+            <option value="es">🇪🇸 Español</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="pt">🇵🇹 Português</option>
+            <option value="fr">🇫🇷 Français</option>
+          </select>
+        </div>
+        <div>
+          <label className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2.5 block">
+            Entorno de despliegue
+          </label>
+          <div className="flex gap-2">
+            {["Test", "Producción"].map((env) => (
+              <button key={env} className="flex-1 py-2.5 rounded-xl border-2 border-gray-200 text-xs font-semibold text-text-muted hover:border-brand-cyan/40 transition-all">
+                {env}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
 }
 
 /* ─── Main component ─────────────────────────────────── */
 export default function AgentBuilder() {
-  const [step, setStep] = useState(0);
-  const [data, setData] = useState<AgentData>({
-    name: "",
-    role: "",
-    intelligence: "avanzado",
-    personality: "amigable",
-  });
-  const [deploying, setDeploying] = useState(false);
+  const [completed, setCompleted] = useState<Set<StepId>>(new Set());
+  const [activeModal, setActiveModal] = useState<StepId | null>(null);
   const [deployed, setDeployed] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [particles, setParticles] = useState<{ id: number; x: number; y: number; color: string }[]>([]);
+  const [config, setConfig] = useState<AgentConfig>({
+    name: "",
+    gradientIdx: 0,
+    solutions: [],
+    niche: "",
+    landingFeatures: [],
+    intelligence: "Avanzado",
+    language: "es",
+  });
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
 
-  /* Deploy logic */
-  useEffect(() => {
-    if (!deploying) return;
-    const colors = ["#6a11cb", "#22d4fd", "#8b3cf7", "#67e8f9", "#10b981"];
-    const newParticles = Array.from({ length: 28 }, (_, i) => ({
-      id: i,
-      x: (Math.random() - 0.5) * 300,
-      y: (Math.random() - 0.5) * 300,
-      color: colors[Math.floor(Math.random() * colors.length)],
-    }));
-    setParticles(newParticles);
-
-    let p = 0;
-    const interval = setInterval(() => {
-      p += Math.random() * 15 + 5;
-      if (p >= 100) {
-        p = 100;
-        clearInterval(interval);
-        setTimeout(() => {
-          setDeploying(false);
-          setDeployed(true);
-        }, 400);
-      }
-      setProgress(Math.min(p, 100));
-    }, 180);
-
-    return () => clearInterval(interval);
-  }, [deploying]);
-
-  const canProceed = () => {
-    if (step === 0) return data.name.trim().length >= 2;
-    if (step === 1) return data.role !== "";
-    return true;
+  const handleUpdate = (patch: Partial<AgentConfig>) => {
+    setConfig((prev) => ({ ...prev, ...patch }));
   };
 
-  const handleNext = () => {
-    if (step === 4) {
-      setDeploying(true);
-      setProgress(0);
-      setDeployed(false);
-    } else {
-      setStep((s) => s + 1);
-    }
+  const handleSaveStep = (id: StepId) => {
+    setCompleted((prev) => new Set(Array.from(prev).concat(id)));
+    setActiveModal(null);
   };
 
-  const reset = () => {
-    setStep(0);
-    setData({ name: "", role: "", intelligence: "avanzado", personality: "amigable" });
-    setDeployed(false);
-    setDeploying(false);
-    setProgress(0);
-    setParticles([]);
-  };
-
-  const roleColor = ROLES.find((r) => r.id === data.role)?.color || "#6a11cb";
+  const progress = (completed.size / STEPS.length) * 100;
+  const agentName = config.name || "MI AGENTE";
+  const agentGradient = GRADIENTS[config.gradientIdx];
+  const nicheLabel = NICHES.find((n) => n.id === config.niche)?.label || "Sin definir";
+  const canDeploy = completed.size >= 3;
 
   return (
-    <section id="builder" ref={ref} className="py-28 bg-background">
-      <div className="max-w-3xl mx-auto px-6">
+    <section id="builder" ref={ref} className="py-24 bg-background">
+      <div className="max-w-6xl mx-auto px-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-14"
+          className="mb-12"
         >
-          <p className="text-brand-purple text-sm font-bold uppercase tracking-widest mb-4">
-            Agent Builder
+          <p className="text-brand-purple text-sm font-bold uppercase tracking-widest mb-3">
+            Agent Builder 2.0
           </p>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-text-primary mb-4">
-            Diseña tu agente en{" "}
-            <span className="gradient-neon-text">5 pasos</span>
-          </h2>
-          <p className="text-text-secondary max-w-lg mx-auto">
-            Configura la identidad, rol, inteligencia y personalidad de tu agente IA
-            en minutos.
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-text-primary">
+              Tu panel de{" "}
+              <span className="gradient-neon-text">control</span>
+            </h2>
+            <p className="text-text-secondary max-w-sm text-base">
+              Configura cada módulo y observa tu agente cobrar vida en tiempo real.
+            </p>
+          </div>
         </motion.div>
 
-        {/* Builder card */}
+        {/* Dashboard grid */}
         <motion.div
-          initial={{ opacity: 0, y: 32, scale: 0.96 }}
+          initial={{ opacity: 0, y: 32, scale: 0.97 }}
           animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-          transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="glass-white-strong rounded-3xl shadow-card-hover overflow-hidden"
+          transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
+          className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6"
         >
-          {/* Progress bar */}
-          <div className="p-8 pb-6">
-            <div className="flex items-center justify-between mb-3">
-              {STEP_LABELS.map((label, i) => (
-                <div key={label} className="flex flex-col items-center gap-1">
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-400 ${
-                      i < step
-                        ? "bg-gradient-to-br from-brand-purple to-brand-cyan text-white"
-                        : i === step
-                        ? "bg-gradient-to-br from-brand-purple to-brand-cyan text-white shadow-neon-purple"
-                        : "bg-gray-100 text-text-muted"
-                    }`}
-                  >
-                    {i < step ? "✓" : i + 1}
-                  </div>
-                  <span className={`text-[10px] font-medium hidden sm:block ${i === step ? "text-brand-purple" : "text-text-muted"}`}>
-                    {label}
-                  </span>
-                </div>
-              ))}
+          {/* ── Left: Action grid ── */}
+          <div className="glass-white-strong rounded-3xl p-6 shadow-card">
+            {/* Panel header */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse-cyan shadow-neon-cyan" />
+                <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
+                  Módulos de configuración
+                </span>
+              </div>
+              <span className="text-xs font-semibold text-brand-purple">
+                {completed.size}/{STEPS.length} completados
+              </span>
             </div>
-            {/* Line */}
-            <div className="h-1 bg-gray-100 rounded-full mt-1 overflow-hidden">
+
+            {/* Progress bar */}
+            <div className="h-1 bg-gray-100 rounded-full mb-8 overflow-hidden">
               <motion.div
                 className="h-full rounded-full bg-gradient-to-r from-brand-purple to-brand-cyan"
-                animate={{ width: `${(step / 4) * 100}%` }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
               />
+            </div>
+
+            {/* Cards grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {STEPS.map((step, i) => {
+                const isDone = completed.has(step.id);
+                return (
+                  <motion.div
+                    key={step.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={inView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.45, delay: 0.3 + i * 0.08 }}
+                    className="relative group"
+                  >
+                    <button
+                      onClick={() => setActiveModal(step.id)}
+                      className="w-full text-left p-5 rounded-2xl border-2 transition-all duration-300"
+                      style={{
+                        borderColor: isDone ? step.color : "#e5e7eb",
+                        background: isDone ? step.bg : "rgba(255,255,255,0.8)",
+                        boxShadow: isDone
+                          ? `0 0 16px ${step.color}25`
+                          : "0 2px 8px rgba(0,0,0,0.04)",
+                        transform: "scale(1)",
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.02)";
+                        (e.currentTarget as HTMLButtonElement).style.boxShadow = isDone
+                          ? `0 0 20px ${step.color}40`
+                          : `0 4px 20px ${step.color}20`;
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
+                        (e.currentTarget as HTMLButtonElement).style.boxShadow = isDone
+                          ? `0 0 16px ${step.color}25`
+                          : "0 2px 8px rgba(0,0,0,0.04)";
+                      }}
+                    >
+                      {/* Status badge */}
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-2xl">{isDone ? "✅" : step.icon}</span>
+                        {isDone ? (
+                          <span
+                            className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                            style={{
+                              background: `${step.color}15`,
+                              color: step.color,
+                            }}
+                          >
+                            Completado
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-semibold text-text-muted px-2 py-0.5 rounded-full bg-gray-100">
+                            Pendiente
+                          </span>
+                        )}
+                      </div>
+
+                      <h3
+                        className="text-sm font-bold mb-1 transition-colors"
+                        style={{ color: isDone ? step.color : "#0f0f1a" }}
+                      >
+                        {step.label}
+                      </h3>
+                      <p className="text-xs text-text-muted">{step.desc}</p>
+
+                      {/* Action hint */}
+                      <div className="mt-3 flex items-center gap-1 text-xs font-semibold" style={{ color: step.color }}>
+                        <span>{isDone ? "Editar" : "Configurar"}</span>
+                        <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                      </div>
+                    </button>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
 
-          {/* Step content */}
-          <div className="px-8 pb-8 min-h-[320px]">
-            <AnimatePresence mode="wait">
-              {/* ── Step 0: Identidad ── */}
-              {step === 0 && (
-                <motion.div
-                  key="step0"
-                  initial={{ opacity: 0, x: 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -30 }}
-                  transition={{ duration: 0.35 }}
+          {/* ── Right: Agent Preview ── */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="glass-white-strong rounded-3xl p-6 shadow-card flex flex-col"
+          >
+            {/* Preview header */}
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-2 h-2 rounded-full bg-brand-purple animate-pulse-neon" />
+              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
+                Vista previa
+              </span>
+            </div>
+
+            {/* Agent avatar */}
+            <div className="flex flex-col items-center text-center mb-6 flex-1">
+              <div className="relative mb-4">
+                {/* Outer glow ring */}
+                <div
+                  className="absolute inset-0 rounded-full blur-xl opacity-40 animate-pulse-slow"
+                  style={{ background: agentGradient, margin: "-12px" }}
+                />
+                <div
+                  className="relative w-24 h-24 rounded-full flex items-center justify-center text-3xl font-black text-white"
+                  style={{
+                    background: agentGradient,
+                    boxShadow: `0 0 30px ${GRADIENTS[config.gradientIdx].includes("6a11cb") ? "rgba(106,17,203,0.5)" : "rgba(34,212,253,0.5)"}`,
+                  }}
                 >
-                  <h3 className="text-xl font-bold text-text-primary mb-2">
-                    ¿Cómo se llamará tu agente?
-                  </h3>
-                  <p className="text-text-secondary text-sm mb-8">
-                    Dale una identidad única. Este será su nombre público.
-                  </p>
-
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={data.name}
-                      onChange={(e) => setData({ ...data, name: e.target.value })}
-                      placeholder="Ej: ARIA, NEXUS, LUNA..."
-                      maxLength={20}
-                      className="w-full px-5 py-4 text-lg font-semibold rounded-2xl bg-gray-50 border-2 border-gray-200 focus:border-brand-purple focus:outline-none focus:shadow-neon-purple transition-all duration-300 text-text-primary placeholder:text-gray-300"
-                    />
-                    {data.name && (
-                      <div
-                        className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-black"
-                        style={{
-                          background: "linear-gradient(135deg,#6a11cb,#22d4fd)",
-                          boxShadow: "0 0 12px rgba(106,17,203,0.4)",
-                        }}
-                      >
-                        {data.name.slice(0, 2).toUpperCase()}
-                      </div>
-                    )}
-                  </div>
-
-                  {data.name.length > 0 && data.name.length < 2 && (
-                    <p className="text-xs text-red-400 mt-2">Mínimo 2 caracteres</p>
-                  )}
-                </motion.div>
-              )}
-
-              {/* ── Step 1: Rol ── */}
-              {step === 1 && (
-                <motion.div
-                  key="step1"
-                  initial={{ opacity: 0, x: 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -30 }}
-                  transition={{ duration: 0.35 }}
-                >
-                  <h3 className="text-xl font-bold text-text-primary mb-2">
-                    ¿Cuál será su especialidad?
-                  </h3>
-                  <p className="text-text-secondary text-sm mb-8">
-                    Selecciona el área donde operará tu agente.
-                  </p>
-
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {ROLES.map((role) => (
-                      <button
-                        key={role.id}
-                        onClick={() => setData({ ...data, role: role.id })}
-                        className="flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all duration-300 text-left"
-                        style={{
-                          borderColor: data.role === role.id ? role.color : "#e5e7eb",
-                          background:
-                            data.role === role.id ? `${role.color}10` : "rgba(255,255,255,0.6)",
-                          boxShadow:
-                            data.role === role.id
-                              ? `0 0 16px ${role.color}30, 0 0 32px ${role.color}15`
-                              : undefined,
-                          transform: data.role === role.id ? "scale(1.03)" : "scale(1)",
-                        }}
-                      >
-                        <span className="text-2xl">{role.icon}</span>
-                        <span
-                          className="text-sm font-semibold"
-                          style={{ color: data.role === role.id ? role.color : "#374151" }}
-                        >
-                          {role.label}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-
-              {/* ── Step 2: Cerebro ── */}
-              {step === 2 && (
-                <motion.div
-                  key="step2"
-                  initial={{ opacity: 0, x: 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -30 }}
-                  transition={{ duration: 0.35 }}
-                >
-                  <h3 className="text-xl font-bold text-text-primary mb-2">
-                    ¿Qué nivel de inteligencia necesitas?
-                  </h3>
-                  <p className="text-text-secondary text-sm mb-8">
-                    Mayor nivel = más capacidad de razonamiento y autonomía.
-                  </p>
-
-                  <div className="flex flex-col gap-3">
-                    {INTELLIGENCE.map((intel) => (
-                      <button
-                        key={intel.id}
-                        onClick={() => setData({ ...data, intelligence: intel.id })}
-                        className="flex items-center gap-4 p-5 rounded-2xl border-2 transition-all duration-300"
-                        style={{
-                          borderColor: data.intelligence === intel.id ? "#6a11cb" : "#e5e7eb",
-                          background:
-                            data.intelligence === intel.id
-                              ? "rgba(106,17,203,0.06)"
-                              : "rgba(255,255,255,0.6)",
-                          boxShadow:
-                            data.intelligence === intel.id
-                              ? "0 0 16px rgba(106,17,203,0.25)"
-                              : undefined,
-                        }}
-                      >
-                        {/* Neon intensity indicator */}
-                        <div className="flex gap-1 items-center">
-                          {[1, 2, 3].map((dot) => (
-                            <div
-                              key={dot}
-                              className="w-3 h-3 rounded-full transition-all duration-300"
-                              style={{
-                                background:
-                                  dot <= intel.neon
-                                    ? "linear-gradient(135deg,#6a11cb,#22d4fd)"
-                                    : "#e5e7eb",
-                                boxShadow:
-                                  dot <= intel.neon && data.intelligence === intel.id
-                                    ? "0 0 6px rgba(106,17,203,0.6)"
-                                    : undefined,
-                              }}
-                            />
-                          ))}
-                        </div>
-                        <div className="text-left flex-1">
-                          <p className="font-bold text-sm text-text-primary">
-                            {intel.label}
-                          </p>
-                          <p className="text-xs text-text-muted">{intel.desc}</p>
-                        </div>
-                        {data.intelligence === intel.id && (
-                          <span className="text-brand-purple font-bold text-sm">✓</span>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-
-              {/* ── Step 3: Personalidad ── */}
-              {step === 3 && (
-                <motion.div
-                  key="step3"
-                  initial={{ opacity: 0, x: 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -30 }}
-                  transition={{ duration: 0.35 }}
-                >
-                  <h3 className="text-xl font-bold text-text-primary mb-2">
-                    ¿Cómo se comunicará tu agente?
-                  </h3>
-                  <p className="text-text-secondary text-sm mb-8">
-                    Define el tono que usará en todas sus interacciones.
-                  </p>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    {PERSONALITIES.map((p) => (
-                      <button
-                        key={p.id}
-                        onClick={() => setData({ ...data, personality: p.id })}
-                        className="flex flex-col gap-2 p-5 rounded-2xl border-2 transition-all duration-300"
-                        style={{
-                          borderColor: data.personality === p.id ? "#22d4fd" : "#e5e7eb",
-                          background:
-                            data.personality === p.id
-                              ? "rgba(34,212,253,0.06)"
-                              : "rgba(255,255,255,0.6)",
-                          boxShadow:
-                            data.personality === p.id
-                              ? "0 0 16px rgba(34,212,253,0.3)"
-                              : undefined,
-                          transform: data.personality === p.id ? "scale(1.02)" : "scale(1)",
-                        }}
-                      >
-                        <span className="text-2xl">{p.icon}</span>
-                        <div>
-                          <p className="font-bold text-sm text-text-primary">{p.label}</p>
-                          <p className="text-xs text-text-muted">{p.desc}</p>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-
-              {/* ── Step 4: Despliegue ── */}
-              {step === 4 && !deploying && !deployed && (
-                <motion.div
-                  key="step4-preview"
-                  initial={{ opacity: 0, x: 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -30 }}
-                  transition={{ duration: 0.35 }}
-                >
-                  <h3 className="text-xl font-bold text-text-primary mb-2">
-                    Resumen de tu agente
-                  </h3>
-                  <p className="text-text-secondary text-sm mb-8">
-                    Revisa la configuración antes de desplegar.
-                  </p>
-
-                  <div className="glass-white rounded-2xl p-6 flex flex-col gap-4">
-                    {/* Agent preview */}
-                    <div className="flex items-center gap-4">
-                      <div
-                        className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black text-white"
-                        style={{
-                          background: `linear-gradient(135deg, ${roleColor}, #22d4fd)`,
-                          boxShadow: `0 0 20px ${roleColor}40`,
-                        }}
-                      >
-                        {data.name.slice(0, 2).toUpperCase() || "AI"}
-                      </div>
-                      <div>
-                        <p className="text-xl font-extrabold text-text-primary">
-                          {data.name || "Sin nombre"}
-                        </p>
-                        <p className="text-sm text-text-muted capitalize">{data.role || "Sin rol"}</p>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3 mt-2">
-                      {[
-                        {
-                          label: "Inteligencia",
-                          value: INTELLIGENCE.find((i) => i.id === data.intelligence)?.label,
-                        },
-                        {
-                          label: "Personalidad",
-                          value: PERSONALITIES.find((p) => p.id === data.personality)?.label,
-                        },
-                      ].map((item) => (
-                        <div key={item.label} className="bg-gray-50 rounded-xl p-3">
-                          <p className="text-xs text-text-muted mb-0.5">{item.label}</p>
-                          <p className="text-sm font-semibold text-text-primary">{item.value}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* ── Deploying ── */}
-              {deploying && (
-                <motion.div
-                  key="deploying"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex flex-col items-center justify-center min-h-[280px] relative"
-                >
-                  {/* Particles */}
-                  <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center">
-                    {particles.map((p) => (
-                      <DeployParticle key={p.id} x={p.x} y={p.y} color={p.color} />
-                    ))}
-                  </div>
-
-                  {/* Central orb */}
-                  <div className="relative mb-8">
-                    <div
-                      className="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-black text-white"
-                      style={{
-                        background: `linear-gradient(135deg, ${roleColor}, #22d4fd)`,
-                        boxShadow: `0 0 30px ${roleColor}60, 0 0 60px ${roleColor}30`,
-                        animation: "pulseOrb 1.2s ease-in-out infinite",
-                      }}
-                    >
-                      {data.name.slice(0, 2).toUpperCase()}
-                    </div>
-                    {/* Rotating ring */}
-                    <div
-                      className="absolute inset-0 rounded-full border-2 border-dashed animate-spin-slow"
-                      style={{ borderColor: `${roleColor}40`, margin: "-10px" }}
-                    />
-                  </div>
-
-                  <p className="text-base font-bold text-text-primary mb-1">
-                    Desplegando agente...
-                  </p>
-                  <p className="text-sm text-text-muted mb-6">
-                    Configurando neuronas y conectando APIs
-                  </p>
-
-                  {/* Progress bar */}
-                  <div className="w-full max-w-xs h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full rounded-full bg-gradient-to-r from-brand-purple to-brand-cyan"
-                      animate={{ width: `${progress}%` }}
-                      transition={{ duration: 0.2 }}
-                    />
-                  </div>
-                  <p className="text-xs text-text-muted mt-2">
-                    {Math.round(progress)}%
-                  </p>
-                </motion.div>
-              )}
-
-              {/* ── Deployed success ── */}
-              {deployed && (
-                <motion.div
-                  key="deployed"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  className="flex flex-col items-center justify-center min-h-[280px] text-center"
-                >
-                  <div
-                    className="w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-6"
-                    style={{
-                      background: "linear-gradient(135deg,#10b981,#059669)",
-                      boxShadow: "0 0 30px rgba(16,185,129,0.5)",
-                    }}
-                  >
-                    ✓
-                  </div>
-                  <h3 className="text-2xl font-extrabold text-text-primary mb-2">
-                    ¡{data.name} está activo!
-                  </h3>
-                  <p className="text-text-secondary mb-8 max-w-xs">
-                    Tu agente está listo para trabajar. Puedes ajustarlo desde el panel de control.
-                  </p>
-                  <div className="flex gap-3">
-                    <a
-                      href="#planes"
-                      className="px-6 py-3 rounded-full text-sm font-bold bg-gradient-to-r from-brand-purple to-brand-cyan text-white hover:opacity-90 transition-all shadow-neon-purple"
-                    >
-                      Ver planes
-                    </a>
-                    <button
-                      onClick={reset}
-                      className="px-6 py-3 rounded-full text-sm font-medium border-2 border-gray-200 text-text-secondary hover:border-brand-purple/40 hover:text-brand-purple transition-all"
-                    >
-                      Crear otro
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Navigation buttons */}
-            {!deploying && !deployed && (
-              <div className="flex items-center justify-between mt-10">
-                <button
-                  onClick={() => setStep((s) => Math.max(0, s - 1))}
-                  disabled={step === 0}
-                  className="px-6 py-3 rounded-full text-sm font-medium border-2 border-gray-200 text-text-secondary hover:border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                >
-                  ← Atrás
-                </button>
-
-                <button
-                  onClick={handleNext}
-                  disabled={!canProceed()}
-                  className="px-8 py-3 rounded-full text-sm font-bold bg-gradient-to-r from-brand-purple to-brand-cyan text-white disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-neon-purple"
-                >
-                  {step === 4 ? "🚀 Desplegar agente" : "Siguiente →"}
-                </button>
+                  {agentName.slice(0, 2).toUpperCase()}
+                </div>
               </div>
+
+              <h3 className="text-2xl font-extrabold text-text-primary mb-1">
+                {agentName}
+              </h3>
+              <p className="text-sm text-text-muted mb-4">{nicheLabel}</p>
+
+              {/* Solutions chips */}
+              {config.solutions.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 justify-center mb-4">
+                  {config.solutions.slice(0, 3).map((sid) => {
+                    const sol = SOLUTIONS_LIST.find((s) => s.id === sid);
+                    return sol ? (
+                      <span key={sid} className="text-[10px] font-semibold px-2 py-1 rounded-full bg-brand-purple/8 text-brand-purple">
+                        {sol.icon} {sol.label}
+                      </span>
+                    ) : null;
+                  })}
+                  {config.solutions.length > 3 && (
+                    <span className="text-[10px] font-semibold px-2 py-1 rounded-full bg-gray-100 text-text-muted">
+                      +{config.solutions.length - 3} más
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* Progress */}
+              <div className="w-full mb-2">
+                <div className="flex items-center justify-between text-xs mb-1.5">
+                  <span className="text-text-muted">Configuración</span>
+                  <span className="font-bold" style={{ color: "#6a11cb" }}>
+                    {Math.round(progress)}%
+                  </span>
+                </div>
+                <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <motion.div
+                    className="h-full rounded-full bg-gradient-to-r from-brand-purple to-brand-cyan"
+                    animate={{ width: `${progress}%` }}
+                    transition={{ duration: 0.6 }}
+                  />
+                </div>
+              </div>
+
+              {/* Status */}
+              <div className="flex items-center gap-1.5 mb-6">
+                <div
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    canDeploy ? "bg-brand-cyan animate-ping-slow" : "bg-gray-300"
+                  }`}
+                />
+                <span className="text-xs text-text-muted">
+                  {deployed
+                    ? "✓ Desplegado"
+                    : canDeploy
+                    ? "Listo para desplegar"
+                    : "En configuración"}
+                </span>
+              </div>
+            </div>
+
+            {/* Deploy button */}
+            {deployed ? (
+              <div className="w-full py-3.5 rounded-xl text-sm font-bold text-center bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg">
+                ✓ {agentName} activo
+              </div>
+            ) : (
+              <button
+                onClick={() => canDeploy && setDeployed(true)}
+                disabled={!canDeploy}
+                className="w-full py-3.5 rounded-xl text-sm font-bold transition-all duration-300"
+                style={
+                  canDeploy
+                    ? {
+                        background: "linear-gradient(135deg,#6a11cb,#22d4fd)",
+                        color: "white",
+                        boxShadow: "0 0 20px rgba(106,17,203,0.4)",
+                      }
+                    : {
+                        background: "#f3f4f6",
+                        color: "#9ca3af",
+                        cursor: "not-allowed",
+                      }
+                }
+              >
+                {canDeploy ? "🚀 Desplegar agente" : `Faltan ${STEPS.length - completed.size} módulos`}
+              </button>
             )}
-          </div>
+            {!canDeploy && (
+              <p className="text-center text-[11px] text-text-muted mt-2">
+                Completa al menos 3 módulos
+              </p>
+            )}
+          </motion.div>
         </motion.div>
       </div>
+
+      {/* ── Modal ── */}
+      <AnimatePresence>
+        {activeModal && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setActiveModal(null)}
+              className="fixed inset-0 z-50 bg-black/25 backdrop-blur-sm"
+            />
+
+            {/* Modal panel */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 20 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md mx-4"
+            >
+              <div className="glass-white-strong rounded-3xl shadow-card-hover overflow-hidden">
+                {/* Modal header */}
+                {(() => {
+                  const step = STEPS.find((s) => s.id === activeModal)!;
+                  return (
+                    <>
+                      <div
+                        className="px-6 py-5 flex items-center justify-between"
+                        style={{ background: step.bg, borderBottom: `1px solid ${step.color}20` }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">{step.icon}</span>
+                          <div>
+                            <h3 className="font-extrabold text-text-primary">{step.label}</h3>
+                            <p className="text-xs text-text-muted">{step.desc}</p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => setActiveModal(null)}
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-white/80 hover:text-text-primary transition-all"
+                        >
+                          ✕
+                        </button>
+                      </div>
+
+                      {/* Modal body */}
+                      <div className="p-6">
+                        <ModalContent
+                          stepId={activeModal}
+                          config={config}
+                          onUpdate={handleUpdate}
+                        />
+                      </div>
+
+                      {/* Modal footer */}
+                      <div className="px-6 pb-6 flex gap-3">
+                        <button
+                          onClick={() => setActiveModal(null)}
+                          className="flex-1 py-3 rounded-xl border-2 border-gray-200 text-sm font-semibold text-text-secondary hover:border-gray-300 transition-all"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={() => handleSaveStep(activeModal)}
+                          className="flex-1 py-3 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 hover:scale-105"
+                          style={{
+                            background: `linear-gradient(135deg, ${step.color}, #22d4fd)`,
+                            boxShadow: `0 0 16px ${step.color}40`,
+                          }}
+                        >
+                          Guardar ✓
+                        </button>
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

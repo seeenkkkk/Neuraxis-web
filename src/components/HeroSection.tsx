@@ -10,7 +10,7 @@ const fadeUp = (delay = 0) => ({
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background pt-20">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background pt-20">
 
       {/* Ambient blobs */}
       <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-gradient-to-br from-brand-purple/10 to-transparent rounded-full blur-3xl pointer-events-none" />

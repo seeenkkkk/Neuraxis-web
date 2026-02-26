@@ -99,6 +99,16 @@ body {
   background: linear-gradient(90deg, transparent, rgba(106,17,203,0.15), rgba(34,212,253,0.15), transparent);
 }
 
+/* ─── Cyan neon pulse border (Premium plan) ──────────── */
+@keyframes pulseCyanBorder {
+  0%, 100% {
+    box-shadow: 0 0 0 1.5px #22d4fd, 0 0 14px rgba(34,212,253,0.35), 0 0 30px rgba(34,212,253,0.12), 0 8px 32px rgba(0,0,0,0.06);
+  }
+  50% {
+    box-shadow: 0 0 0 2px #67e8f9, 0 0 28px rgba(34,212,253,0.55), 0 0 55px rgba(34,212,253,0.22), 0 8px 32px rgba(0,0,0,0.06);
+  }
+}
+
 /* ─── XP Gem ─────────────────────────────────────────── */
 .xp-gem {
   width: 10px;
