@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import NeuraxisLogo from "@/components/brand/NeuraxisLogo";
+import { createClient } from "@/lib/supabase/client";
 
 // ── Nav items ──────────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
@@ -130,15 +131,6 @@ const NAV_ITEMS = [
   },
 ];
 
-const PROFILE = {
-  name: "Admin Neuraxis",
-  level: "Arquitecto de IAs",
-  avatar: "/avatar.png",
-  xp: 2840,
-  xpMax: 5000,
-  credits: 850,
-};
-
 interface AppSidebarProps {
   isOpen?: boolean;
   onClose?: () => void;
@@ -146,7 +138,28 @@ interface AppSidebarProps {
 
 export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [profileOpen, setProfileOpen] = useState(false);
+  const [userName, setUserName] = useState("Admin Neuraxis");
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        setUserEmail(user.email ?? "");
+        const fullName = user.user_metadata?.full_name;
+        setUserName(fullName || user.email?.split("@")[0] || "Admin Neuraxis");
+      }
+    });
+  }, []);
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  };
 
   const NavItem = ({ item }: { item: (typeof NAV_ITEMS)[0] }) => {
     const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
@@ -221,10 +234,15 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
         >
           {/* Avatar with glow */}
           <div
-            className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 relative"
-            style={{ boxShadow: "0 0 12px rgba(0,212,255,0.45), 0 0 24px rgba(0,212,255,0.15)" }}
+            className="w-9 h-9 rounded-full flex-shrink-0 relative flex items-center justify-center font-bold text-sm"
+            style={{
+              background: "linear-gradient(135deg, #00AAFF, #7C3AED)",
+              boxShadow: "0 0 12px rgba(0,212,255,0.45), 0 0 24px rgba(0,212,255,0.15)",
+              color: "#fff",
+              fontFamily: "var(--font-syne)",
+            }}
           >
-            <img src={PROFILE.avatar} alt={PROFILE.name} className="w-full h-full object-cover" />
+            {userName.charAt(0).toUpperCase()}
             {/* Online indicator */}
             <span
               className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2"
@@ -247,10 +265,10 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
                 backgroundClip: "text",
               }}
             >
-              {PROFILE.name}
+              {userName}
             </p>
             <p className="text-[10px] truncate" style={{ color: "var(--text-secondary)" }}>
-              {PROFILE.level}
+              {userEmail || "Arquitecto de IAs"}
             </p>
           </div>
 
@@ -286,29 +304,24 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
                     <span className="text-[10px] font-medium" style={{ color: "var(--text-secondary)" }}>
                       Neurax-Points
                     </span>
-                    <span
-                      className="text-[10px] font-bold"
-                      style={{ color: "var(--neon-cyan)" }}
-                    >
-                      {PROFILE.xp.toLocaleString()} / {PROFILE.xpMax.toLocaleString()}
+                    <span className="text-[10px] font-bold" style={{ color: "var(--neon-cyan)" }}>
+                      2.840 / 5.000
                     </span>
                   </div>
-                  {/* XP bar */}
                   <div className="w-full h-1.5 rounded-full" style={{ background: "var(--bg-input)" }}>
                     <motion.div
                       initial={{ width: 0 }}
-                      animate={{ width: `${(PROFILE.xp / PROFILE.xpMax) * 100}%` }}
+                      animate={{ width: "56.8%" }}
                       transition={{ duration: 1, ease: "easeOut" as const }}
                       className="h-full rounded-full xp-bar-fill"
                     />
                   </div>
-                  {/* Credits row */}
                   <div className="flex items-center gap-1.5 mt-2">
                     <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
                       <polygon points="7,1 12,4 12,10 7,13 2,10 2,4" fill="#00D4FF" fillOpacity="0.25" stroke="#00D4FF" strokeWidth="1" />
                     </svg>
                     <span className="text-[10px]" style={{ color: "var(--text-secondary)" }}>
-                      {PROFILE.credits} créditos disponibles
+                      850 créditos disponibles
                     </span>
                   </div>
                 </div>
@@ -332,6 +345,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
                     Config
                   </Link>
                   <button
+                    onClick={handleLogout}
                     className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] font-medium transition-colors"
                     style={{
                       color: "var(--neon-red)",
