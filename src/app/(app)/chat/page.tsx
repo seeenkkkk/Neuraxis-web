@@ -17,9 +17,11 @@ const QUICK_PROMPTS = [
 ];
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: WELCOME, ts: new Date() },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  useEffect(() => {
+    setMessages([{ role: "assistant", content: WELCOME, ts: new Date() }]);
+  }, []);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
