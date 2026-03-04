@@ -4,8 +4,8 @@ import { PLANS } from "@/lib/stripe";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   try {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
     const { planId } = await req.json();
 
     const plan = PLANS.find((p) => p.id === planId);
