@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
 import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
 
