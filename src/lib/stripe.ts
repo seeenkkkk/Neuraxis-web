@@ -1,0 +1,63 @@
+import Stripe from "stripe";
+
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+export const PLANS = [
+  {
+    id: "starter",
+    name: "Starter",
+    price: 29,
+    priceLabel: "29€",
+    period: "/mes",
+    description: "Para agencias que empiezan con IA",
+    color: "#00AAFF",
+    highlighted: false,
+    features: [
+      "2 agentes IA activos",
+      "200 conversaciones/mes",
+      "5 workflows n8n",
+      "Academia básica",
+      "Soporte por email",
+      "500 Neurax-Points",
+    ],
+  },
+  {
+    id: "pro",
+    name: "Pro",
+    price: 99,
+    priceLabel: "99€",
+    period: "/mes",
+    description: "Para agencias en crecimiento",
+    color: "#A855F7",
+    highlighted: true,
+    features: [
+      "10 agentes IA activos",
+      "2.000 conversaciones/mes",
+      "Workflows ilimitados",
+      "Academia completa",
+      "Chat IA con Claude",
+      "Soporte prioritario",
+      "2.000 Neurax-Points",
+    ],
+  },
+  {
+    id: "agency",
+    name: "Agency",
+    price: 299,
+    priceLabel: "299€",
+    period: "/mes",
+    description: "Para agencias que escalan",
+    color: "#FFD700",
+    highlighted: false,
+    features: [
+      "Agentes IA ilimitados",
+      "Conversaciones ilimitadas",
+      "Workflows premium + plantillas",
+      "Academia + mentoría grupal",
+      "API acceso completo",
+      "Soporte 24/7 dedicado",
+      "5.000 Neurax-Points",
+      "White-label disponible",
+    ],
+  },
+] as const;

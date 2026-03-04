@@ -19,29 +19,32 @@ const FEATURES = [
 
 const PLANS = [
   {
-    name: "Free",
-    price: "0€",
+    name: "Starter",
+    price: "29€",
     period: "/mes",
-    features: ["1 agente IA", "50 conversaciones/mes", "3 workflows", "Academia básica"],
-    cta: "Empezar gratis",
+    features: ["2 agentes IA activos", "200 conversaciones/mes", "5 workflows n8n", "Academia básica", "500 Neurax-Points"],
+    cta: "Empezar Starter",
+    planId: "starter",
     variant: "secondary" as const,
     highlighted: false,
   },
   {
     name: "Pro",
-    price: "17€",
+    price: "99€",
     period: "/mes",
-    features: ["5 agentes IA", "500 conversaciones/mes", "Workflows ilimitados", "Academia completa", "850 Neurax-Points"],
+    features: ["10 agentes IA activos", "2.000 conversaciones/mes", "Workflows ilimitados", "Academia completa", "Chat IA con Claude", "2.000 Neurax-Points"],
     cta: "Comenzar Pro",
+    planId: "pro",
     variant: "primary" as const,
     highlighted: true,
   },
   {
-    name: "Premium",
-    price: "30€",
+    name: "Agency",
+    price: "299€",
     period: "/mes",
-    features: ["Agentes ilimitados", "Conversaciones ilimitadas", "Workflows premium", "Soporte prioritario", "2000 Neurax-Points"],
-    cta: "Ir Premium",
+    features: ["Agentes IA ilimitados", "Conversaciones ilimitadas", "Workflows premium + plantillas", "Academia + mentoría grupal", "API acceso completo", "5.000 Neurax-Points"],
+    cta: "Ir Agency",
+    planId: "agency",
     variant: "primary" as const,
     highlighted: false,
   },
@@ -229,7 +232,7 @@ export default function LandingPage() {
                   ))}
                 </ul>
 
-                <Link href="/register" className="block">
+                <Link href="/billing" className="block">
                   <NeonButton variant={plan.variant} className="w-full justify-center">
                     {plan.cta}
                   </NeonButton>
