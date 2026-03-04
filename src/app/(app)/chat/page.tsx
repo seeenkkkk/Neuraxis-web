@@ -4,11 +4,17 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import NeonCard from "@/components/ui/NeonCard";
 import NeonBadge from "@/components/ui/NeonBadge";
-import NexMascot from "@/components/brand/NexMascot";
 
 type Message = { role: "user" | "assistant"; content: string; ts: Date };
 
-const WELCOME = "¡Hola! Soy NEX, tu asistente IA. ¿En qué puedo ayudarte hoy?";
+const WELCOME = "¡Hola! Soy Neuraxis, tu asistente IA especializado en agencias de inteligencia artificial. Puedo ayudarte con estrategias, automatizaciones n8n, prompts, y todo lo que necesitas para escalar tu agencia. ¿En qué empezamos?";
+
+const QUICK_PROMPTS = [
+  "¿Cómo capturo leads con un agente IA?",
+  "Crea un workflow de onboarding en n8n",
+  "¿Cuál es el mejor nicho para una agencia IA?",
+  "Dame una estrategia de precios para mi agencia",
+];
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([
@@ -22,22 +28,46 @@ export default function ChatPage() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const send = async () => {
-    if (!input.trim() || loading) return;
-    const userMsg: Message = { role: "user", content: input.trim(), ts: new Date() };
-    setMessages((prev) => [...prev, userMsg]);
+  const send = async (text?: string) => {
+    const content = (text ?? input).trim();
+    if (!content || loading) return;
+
+    const userMsg: Message = { role: "user", content, ts: new Date() };
+    const updatedMessages = [...messages, userMsg];
+    setMessages(updatedMessages);
     setInput("");
     setLoading(true);
 
-    // Simulated response
-    await new Promise((r) => setTimeout(r, 1200));
-    const reply: Message = {
-      role: "assistant",
-      content: `Entendido. Procesando tu consulta sobre "${userMsg.content.slice(0, 40)}..."  Esta funcionalidad conectará con tu agente IA configurado en el panel de agentes.`,
-      ts: new Date(),
-    };
-    setMessages((prev) => [...prev, reply]);
-    setLoading(false);
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: updatedMessages
+            .filter((m) => m.role === "user" || m.role === "assistant")
+            .map((m) => ({ role: m.role, content: m.content })),
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      const reply: Message = { role: "assistant", content: data.content, ts: new Date() };
+      setMessages((prev) => [...prev, reply]);
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : "Error de conexión";
+      const errorReply: Message = {
+        role: "assistant",
+        content: `⚠️ Error: ${errMsg}. Asegúrate de configurar ANTHROPIC_API_KEY en tu archivo .env.local`,
+        ts: new Date(),
+      };
+      setMessages((prev) => [...prev, errorReply]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fmtTime = (d: Date) =>
@@ -60,11 +90,11 @@ export default function ChatPage() {
         </div>
         <div>
           <p className="text-sm font-bold" style={{ color: "var(--text-primary)", fontFamily: "var(--font-syne, sans-serif)" }}>
-            NEX
+            Neuraxis
           </p>
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88]" style={{ boxShadow: "0 0 4px rgba(0,255,136,0.8)" }} />
-            <span className="text-[10px]" style={{ color: "var(--text-secondary)" }}>Agente activo · Claude 3.5</span>
+            <span className="text-[10px]" style={{ color: "var(--text-secondary)" }}>Agente activo · Claude Sonnet 4.6</span>
           </div>
         </div>
         <div className="ml-auto">
@@ -85,7 +115,12 @@ export default function ChatPage() {
             >
               {/* Avatar */}
               {msg.role === "assistant" ? (
-                <NexMascot emotion="happy" size="sm" animated={false} className="flex-shrink-0" />
+                <div
+                  className="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center text-xs font-black"
+                  style={{ background: "rgba(168,85,247,0.15)", border: "1px solid rgba(168,85,247,0.35)", color: "#A855F7", fontFamily: "var(--font-syne)" }}
+                >
+                  N
+                </div>
               ) : (
                 <div
                   className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold"
@@ -98,7 +133,7 @@ export default function ChatPage() {
               {/* Bubble */}
               <div className={`max-w-[75%] space-y-1 ${msg.role === "user" ? "items-end" : "items-start"} flex flex-col`}>
                 <div
-                  className="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed"
+                  className="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap"
                   style={{
                     background:
                       msg.role === "user"
@@ -117,26 +152,17 @@ export default function ChatPage() {
             </motion.div>
           ))}
 
-          {/* Loading indicator */}
+          {/* Loading */}
           {loading && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex gap-3 items-center"
-            >
-              <NexMascot emotion="sleeping" size="sm" animated className="flex-shrink-0" />
-              <div
-                className="px-4 py-2.5 rounded-2xl flex gap-1 items-center"
-                style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-card)" }}
-              >
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3 items-center">
+              <div className="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center text-xs font-black"
+                style={{ background: "rgba(168,85,247,0.15)", border: "1px solid rgba(168,85,247,0.35)", color: "#A855F7", fontFamily: "var(--font-syne)" }}>
+                N
+              </div>
+              <div className="px-4 py-2.5 rounded-2xl flex gap-1 items-center" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-card)" }}>
                 {[0, 1, 2].map((j) => (
-                  <motion.span
-                    key={j}
-                    className="w-1.5 h-1.5 rounded-full"
-                    style={{ background: "#A855F7" }}
-                    animate={{ opacity: [0.3, 1, 0.3] }}
-                    transition={{ repeat: Infinity, duration: 1, delay: j * 0.2 }}
-                  />
+                  <motion.span key={j} className="w-1.5 h-1.5 rounded-full" style={{ background: "#A855F7" }}
+                    animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: j * 0.2 }} />
                 ))}
               </div>
             </motion.div>
@@ -144,6 +170,22 @@ export default function ChatPage() {
         </AnimatePresence>
         <div ref={bottomRef} />
       </NeonCard>
+
+      {/* Quick prompts */}
+      {messages.length <= 1 && (
+        <div className="flex flex-wrap gap-2 flex-shrink-0">
+          {QUICK_PROMPTS.map((qp) => (
+            <button
+              key={qp}
+              onClick={() => send(qp)}
+              className="text-xs px-3 py-1.5 rounded-lg border transition-all hover:opacity-80"
+              style={{ color: "var(--neon-cyan)", borderColor: "rgba(0,212,255,0.25)", background: "rgba(0,212,255,0.05)" }}
+            >
+              {qp}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Input */}
       <div className="flex gap-2 flex-shrink-0">
@@ -155,7 +197,7 @@ export default function ChatPage() {
           onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
         />
         <button
-          onClick={send}
+          onClick={() => send()}
           disabled={!input.trim() || loading}
           className="px-4 py-2.5 rounded-xl font-medium text-sm transition-all disabled:opacity-40"
           style={{

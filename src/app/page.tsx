@@ -105,7 +105,7 @@ export default function LandingPage() {
               <NeonButton size="lg">Empezar gratis →</NeonButton>
             </Link>
             <Link href="/dashboard">
-              <NeonButton variant="secondary" size="lg">Ver demo en vivo</NeonButton>
+              <NeonButton variant="secondary" size="lg">Ver demo en vivo →</NeonButton>
             </Link>
           </div>
 
