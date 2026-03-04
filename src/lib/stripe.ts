@@ -1,7 +1,3 @@
-import Stripe from "stripe";
-
-export { Stripe };
-
 export const PLANS = [
   {
     id: "starter",
