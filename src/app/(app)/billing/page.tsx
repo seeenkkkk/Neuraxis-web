@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import GradientText from "@/components/ui/GradientText";
@@ -9,7 +9,7 @@ import NeonCard from "@/components/ui/NeonCard";
 import NeonButton from "@/components/ui/NeonButton";
 import { PLANS } from "@/lib/stripe";
 
-export default function BillingPage() {
+function BillingContent() {
   const searchParams = useSearchParams();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [loadingPortal, setLoadingPortal] = useState(false);
@@ -215,5 +215,13 @@ export default function BillingPage() {
         </NeonCard>
       </motion.div>
     </div>
+  );
+}
+
+export default function BillingPage() {
+  return (
+    <Suspense fallback={<div className="max-w-5xl mx-auto py-10 text-center" style={{ color: "var(--text-muted)" }}>Cargando...</div>}>
+      <BillingContent />
+    </Suspense>
   );
 }
