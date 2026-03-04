@@ -8,21 +8,55 @@ import NeonButton from "@/components/ui/NeonButton";
 import NeonBadge from "@/components/ui/NeonBadge";
 import GradientText from "@/components/ui/GradientText";
 
-const FEATURES = [
-  { icon: "🤖", title: "Agentes IA", desc: "Automatiza ventas, soporte y onboarding con agentes 24/7" },
-  { icon: "⚡", title: "Workflows n8n", desc: "10+ automatizaciones listas para desplegar en minutos" },
-  { icon: "🎓", title: "Academia", desc: "Roadmap de 6 pasos para construir tu agencia de IA" },
-  { icon: "📊", title: "Excel IA", desc: "Genera reportes y análisis con inteligencia artificial" },
-  { icon: "📅", title: "Calendly Pro", desc: "Gestión de citas integrada con tus agentes de ventas" },
-  { icon: "⭐", title: "Neurax-Points", desc: "Sistema de XP gamificado para acelerar tu aprendizaje" },
+const LAYERS = [
+  {
+    num: "01",
+    tag: "APRENDE",
+    title: "Aprende IA",
+    desc: "Cursos, prompts y workflows listos para usar. Aprende a tu ritmo con un roadmap gamificado.",
+    items: ["Cursos de IA paso a paso", "50+ prompts premium", "Workflows n8n listos", "Neurax-Points & certificados"],
+    color: "#A855F7",
+    cta: "Ver cursos",
+    href: "/register",
+  },
+  {
+    num: "02",
+    tag: "CONSTRUYE",
+    title: "Construye Agentes",
+    desc: "Despliega agentes de IA propios. Desde un agente básico hasta integraciones enterprise completas.",
+    items: ["Agentes IA 24/7", "Chat con Claude", "Excel IA + Contenido", "Integraciones avanzadas"],
+    color: "#00AAFF",
+    cta: "Empezar gratis",
+    href: "/register",
+  },
+  {
+    num: "03",
+    tag: "DELEGA",
+    title: "Delega a Expertos",
+    desc: "Implementación llave en mano. Nuestro equipo construye, configura y mantiene tu sistema de IA.",
+    items: ["Consultoría estratégica", "Setup completo con agentes", "Integraciones a medida", "Soporte dedicado"],
+    color: "#00FF88",
+    cta: "Hablar con equipo",
+    href: "/register",
+  },
 ];
 
 const PLANS = [
   {
+    name: "Free",
+    price: "0€",
+    period: "/mes",
+    features: ["1 agente IA básico", "20 mensajes/día", "Acceso a Aprende (fundamentos)", "Prompts básicos"],
+    cta: "Empezar gratis",
+    planId: "free",
+    variant: "secondary" as const,
+    highlighted: false,
+  },
+  {
     name: "Starter",
     price: "29€",
     period: "/mes",
-    features: ["2 agentes IA activos", "200 conversaciones/mes", "5 workflows n8n", "Academia básica", "500 Neurax-Points"],
+    features: ["2 agentes IA completos", "200 conversaciones/mes", "5 workflows n8n", "Aprende completo", "500 Neurax-Points"],
     cta: "Empezar Starter",
     planId: "starter",
     variant: "secondary" as const,
@@ -32,18 +66,18 @@ const PLANS = [
     name: "Pro",
     price: "99€",
     period: "/mes",
-    features: ["10 agentes IA activos", "2.000 conversaciones/mes", "Workflows ilimitados", "Academia completa", "Chat IA con Claude", "2.000 Neurax-Points"],
+    features: ["10 agentes con integraciones", "2.000 conversaciones/mes", "Workflows ilimitados", "Chat IA con Claude", "2.000 Neurax-Points"],
     cta: "Comenzar Pro",
     planId: "pro",
     variant: "primary" as const,
     highlighted: true,
   },
   {
-    name: "Agency",
+    name: "Enterprise",
     price: "299€",
     period: "/mes",
-    features: ["Agentes IA ilimitados", "Conversaciones ilimitadas", "Workflows premium + plantillas", "Academia + mentoría grupal", "API acceso completo", "5.000 Neurax-Points"],
-    cta: "Ir Agency",
+    features: ["Agentes IA ilimitados", "Conversaciones ilimitadas", "Implementación completa", "API acceso total", "Soporte 24/7 dedicado"],
+    cta: "Ir Enterprise",
     planId: "agency",
     variant: "primary" as const,
     highlighted: false,
@@ -99,8 +133,9 @@ export default function LandingPage() {
           </h1>
 
           <p className="text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-            Agentes IA, workflows n8n, academia gamificada y herramientas de automatización.
-            Todo lo que necesitas para escalar tu agencia de inteligencia artificial.
+            <strong style={{ color: "var(--text-primary)" }}>Aprende</strong> con cursos y prompts.{" "}
+            <strong style={{ color: "var(--text-primary)" }}>Construye</strong> agentes IA propios.{" "}
+            <strong style={{ color: "var(--text-primary)" }}>Delega</strong> la implementación a expertos.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
@@ -123,7 +158,7 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* ── Features ── */}
+      {/* ── 3 Capas de Valor ── */}
       <section className="py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <motion.div {...fadeUp(0.1)} className="text-center mb-12">
@@ -131,34 +166,50 @@ export default function LandingPage() {
               className="text-3xl font-black mb-3"
               style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}
             >
-              Todo lo que necesita tu <GradientText>agencia de IA</GradientText>
+              Un sistema de <GradientText>3 capas de valor</GradientText>
             </h2>
             <p style={{ color: "var(--text-secondary)" }}>
-              Una plataforma completa. Sin dispersión.
+              Empieza donde estás. Escala cuando quieras.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {FEATURES.map((feat, i) => (
+          <div className="grid md:grid-cols-3 gap-6">
+            {LAYERS.map((layer, i) => (
               <motion.div
                 key={i}
-                {...fadeUp(0.05 * i)}
-                className="p-5 rounded-2xl border group transition-all duration-200 hover:-translate-y-1"
+                {...fadeUp(0.08 * i)}
+                className="p-6 rounded-2xl flex flex-col gap-4 transition-all duration-200 hover:-translate-y-1"
                 style={{
                   background: "var(--bg-card)",
-                  border: "1px solid var(--border-card)",
+                  border: `1px solid ${layer.color}30`,
+                  boxShadow: `0 0 20px ${layer.color}10`,
                 }}
               >
-                <span className="text-3xl mb-3 block">{feat.icon}</span>
-                <h3
-                  className="font-bold mb-1.5"
-                  style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}
-                >
-                  {feat.title}
-                </h3>
-                <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
-                  {feat.desc}
-                </p>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-black px-2 py-0.5 rounded-md" style={{ background: `${layer.color}20`, color: layer.color }}>
+                    {layer.tag}
+                  </span>
+                  <span className="text-xs font-bold" style={{ color: "var(--text-muted)" }}>{layer.num}</span>
+                </div>
+                <div>
+                  <h3 className="font-black text-lg mb-1.5" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}>
+                    {layer.title}
+                  </h3>
+                  <p className="text-sm" style={{ color: "var(--text-secondary)" }}>{layer.desc}</p>
+                </div>
+                <ul className="space-y-1.5 flex-1">
+                  {layer.items.map((item) => (
+                    <li key={item} className="flex items-center gap-2 text-xs" style={{ color: "var(--text-secondary)" }}>
+                      <span style={{ color: layer.color }} className="font-bold">✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <Link href={layer.href}>
+                  <NeonButton variant="ghost" className="w-full justify-center text-xs" style={{ borderColor: `${layer.color}40`, color: layer.color }}>
+                    {layer.cta} →
+                  </NeonButton>
+                </Link>
               </motion.div>
             ))}
           </div>
@@ -167,17 +218,20 @@ export default function LandingPage() {
 
       {/* ── Plans ── */}
       <section className="py-20 px-6">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <motion.div {...fadeUp(0.1)} className="text-center mb-12">
             <h2
               className="text-3xl font-black mb-3"
               style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}
             >
-              Planes simples y <GradientText>transparentes</GradientText>
+              Capa 2 — <GradientText>Construye</GradientText>: elige tu plan
             </h2>
+            <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+              Acceso a Aprende incluido en todos los planes · Delega disponible por consulta
+            </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {PLANS.map((plan, i) => (
               <motion.div
                 key={i}
@@ -232,7 +286,7 @@ export default function LandingPage() {
                   ))}
                 </ul>
 
-                <Link href="/billing" className="block">
+                <Link href={plan.planId === "free" ? "/register" : "/billing"} className="block">
                   <NeonButton variant={plan.variant} className="w-full justify-center">
                     {plan.cta}
                   </NeonButton>

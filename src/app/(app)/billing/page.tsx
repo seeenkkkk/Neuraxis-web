@@ -63,10 +63,11 @@ export default function BillingPage() {
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
         <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}>
-          Planes y <GradientText>Facturación</GradientText>
+          Capa 2 — <GradientText>Construye</GradientText>
         </h1>
         <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
-          Elige el plan que mejor se adapta a tu agencia
+          Elige tu plan · Acceso a <strong>Aprende</strong> incluido · ¿Quieres que lo hagamos por ti?{" "}
+          <a href="/delegate" className="underline" style={{ color: "var(--neon-cyan)" }}>Ver Delega →</a>
         </p>
       </motion.div>
 

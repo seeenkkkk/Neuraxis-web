@@ -8,7 +8,11 @@ import NeuraxisLogo from "@/components/brand/NeuraxisLogo";
 import { createClient } from "@/lib/supabase/client";
 
 // ── Nav items ──────────────────────────────────────────────────────────────────
-const NAV_ITEMS = [
+type NavItem =
+  | { type?: undefined; label: string; href: string; icon: React.ReactNode; badge?: string }
+  | { type: "section"; label: string };
+
+const NAV_ITEMS: NavItem[] = [
   {
     label: "Dashboard",
     href: "/dashboard",
@@ -31,23 +35,24 @@ const NAV_ITEMS = [
     ),
     badge: "6 pasos",
   },
+  { type: "section", label: "Aprende" },
   {
-    label: "Agentes IA",
-    href: "/agents",
+    label: "Aprende",
+    href: "/academy",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <circle cx="12" cy="8" r="4" />
-        <path d="M8 8H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h1M16 8h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-1" />
-        <path d="M9 14h6l1 6H8l1-6z" />
+        <path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M6 12v5c3 3 9 3 12 0v-5" />
       </svg>
     ),
   },
   {
-    label: "Chat IA",
-    href: "/chat",
+    label: "Prompts",
+    href: "/prompts",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        <polyline points="4 17 10 11 4 5" />
+        <line x1="12" y1="19" x2="20" y2="19" />
       </svg>
     ),
   },
@@ -64,23 +69,24 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
+  { type: "section", label: "Construye" },
   {
-    label: "Academia",
-    href: "/academy",
+    label: "Construye",
+    href: "/agents",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M6 12v5c3 3 9 3 12 0v-5" />
+        <circle cx="12" cy="8" r="4" />
+        <path d="M8 8H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h1M16 8h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-1" />
+        <path d="M9 14h6l1 6H8l1-6z" />
       </svg>
     ),
   },
   {
-    label: "Prompts",
-    href: "/prompts",
+    label: "Chat IA",
+    href: "/chat",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <polyline points="4 17 10 11 4 5" />
-        <line x1="12" y1="19" x2="20" y2="19" />
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
       </svg>
     ),
   },
@@ -103,6 +109,18 @@ const NAV_ITEMS = [
         <line x1="8" y1="13" x2="16" y2="13" />
         <line x1="8" y1="17" x2="16" y2="17" />
         <line x1="10" y1="9" x2="8" y2="9" />
+      </svg>
+    ),
+  },
+  { type: "section", label: "Delega" },
+  {
+    label: "Delega",
+    href: "/delegate",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
     ),
   },
@@ -171,7 +189,8 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
     router.refresh();
   };
 
-  const NavItem = ({ item }: { item: (typeof NAV_ITEMS)[0] }) => {
+  type NavLinkItem = Extract<NavItem, { href: string }>;
+  const NavItem = ({ item }: { item: NavLinkItem }) => {
     const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
     return (
       <Link
@@ -224,9 +243,23 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
-        {NAV_ITEMS.map((item) => (
-          <NavItem key={item.href} item={item} />
-        ))}
+        {NAV_ITEMS.map((item, i) =>
+          item.type === "section" ? (
+            <div
+              key={`section-${i}`}
+              className="px-3 pt-4 pb-1"
+            >
+              <span
+                className="text-[9px] font-black uppercase tracking-widest"
+                style={{ color: "var(--text-muted)" }}
+              >
+                {item.label}
+              </span>
+            </div>
+          ) : (
+            <NavItem key={item.href} item={item} />
+          )
+        )}
       </nav>
 
       {/* Divider */}
