@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import NeonCard from "@/components/ui/NeonCard";
 import NeonBadge from "@/components/ui/NeonBadge";
@@ -109,7 +110,12 @@ function AgentCard({ agent, onEdit }: AgentCardProps) {
 }
 
 export default function AgentsPage() {
+  const router = useRouter();
   const [creating, setCreating] = useState(false);
+
+  function goCreate() {
+    router.push("/agents/create");
+  }
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
@@ -131,7 +137,7 @@ export default function AgentsPage() {
             {AGENTS.length} agentes configurados · {AGENTS.filter((a) => a.status === "active").length} activos
           </p>
         </div>
-        <NeonButton onClick={() => setCreating(true)}>
+        <NeonButton onClick={goCreate}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="12" y1="5" x2="12" y2="19" />
             <line x1="5" y1="12" x2="19" y2="12" />
@@ -160,7 +166,7 @@ export default function AgentsPage() {
           transition={{ delay: 0.05 * AGENTS.length, ease: "easeOut" as const }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => setCreating(true)}
+          onClick={goCreate}
           className="min-h-[220px] rounded-xl flex flex-col items-center justify-center gap-3 border-2 border-dashed transition-colors"
           style={{ borderColor: "var(--border-card)", color: "var(--text-muted)" }}
         >
