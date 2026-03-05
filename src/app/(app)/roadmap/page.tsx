@@ -928,19 +928,25 @@ export default function RoadmapPage() {
   }, [projectId]);
 
   async function saveAndAdvance(stepId: number, data: Record<string, unknown>) {
-    const pid = await getOrCreateProject();
-    if (!pid) return;
+    // Advance UI immediately — never block on DB
     const isLast = stepId === 6;
     const nextStep = isLast ? 6 : stepId + 1;
-    const supabase = createClient();
-    await supabase.from("agent_projects").update({
-      ...data,
-      current_step: nextStep,
-      status: isLast ? "completed" : "in_progress",
-      ...(isLast ? { completed_at: new Date().toISOString() } : {}),
-    }).eq("id", pid);
-    setProject((prev) => ({ ...prev, id: pid, ...data, current_step: nextStep }));
+    setProject((prev) => ({ ...prev, ...data, current_step: nextStep }));
     if (!isLast) setCurrentStep(nextStep);
+
+    // Persist to Supabase in background
+    try {
+      const pid = await getOrCreateProject();
+      if (!pid) return;
+      const supabase = createClient();
+      await supabase.from("agent_projects").update({
+        ...data,
+        current_step: nextStep,
+        status: isLast ? "completed" : "in_progress",
+        ...(isLast ? { completed_at: new Date().toISOString() } : {}),
+      }).eq("id", pid);
+      setProject((prev) => ({ ...prev, id: pid }));
+    } catch { /* DB optional — UI already advanced */ }
   }
 
   const color = STEP_COLORS[currentStep - 1];
