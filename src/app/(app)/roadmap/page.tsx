@@ -172,14 +172,72 @@ function Step1Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
   );
 }
 
+// ═══ STEP 2 — TAG SUGGESTIONS MAP ════════════════════════════════════════════
+
+const TAG_SUGGESTIONS: Record<string, Suggestion[]> = {
+  "Pierdo tiempo en tareas repetitivas": [
+    { title: "Agente automatizador de tareas", description: "Detecta y automatiza las tareas repetitivas de tu flujo de trabajo con IA.", approach: "Automatización con n8n + IA" },
+    { title: "Workflow n8n repetitivo", description: "Crea flujos n8n que ejecuten tus procesos recurrentes sin intervención humana.", approach: "Workflow n8n" },
+    { title: "Bot de gestión interna", description: "Un bot interno que gestiona solicitudes, recordatorios y procesos del equipo.", approach: "Bot interno con IA" },
+  ],
+  "Mi equipo no escala": [
+    { title: "Agente de onboarding automático", description: "Incorpora nuevos miembros o clientes de forma automatizada sin carga manual.", approach: "Onboarding IA" },
+    { title: "Delegador de tareas IA", description: "Distribuye y asigna tareas al equipo según prioridades y carga de trabajo.", approach: "Delegación inteligente" },
+    { title: "Sistema de documentación automática", description: "Genera y mantiene documentación actualizada sin esfuerzo manual.", approach: "Documentación con IA" },
+  ],
+  "No tengo sistema de ventas": [
+    { title: "Agente cualificador de leads", description: "Evalúa y prioriza leads automáticamente según criterios de compra definidos.", approach: "Lead scoring IA" },
+    { title: "Secuencia email automática", description: "Envía emails personalizados en el momento justo para convertir leads.", approach: "Email automation" },
+    { title: "CRM con IA", description: "Gestiona contactos, seguimientos y oportunidades de venta con IA integrada.", approach: "CRM automatizado" },
+  ],
+  "Atención al cliente lenta": [
+    { title: "Chatbot 24/7", description: "Responde consultas de clientes en tiempo real sin importar la hora.", approach: "Chatbot IA" },
+    { title: "Agente de soporte automático", description: "Resuelve tickets y solicitudes comunes sin intervención del equipo.", approach: "Soporte IA" },
+    { title: "Sistema de tickets IA", description: "Clasifica, prioriza y responde tickets de soporte automáticamente.", approach: "Ticketing IA" },
+  ],
+  "No genero contenido suficiente": [
+    { title: "Agente redactor de contenido", description: "Genera artículos, posts y copys de calidad a partir de tus briefings.", approach: "Generación de contenido" },
+    { title: "Autoposter redes sociales", description: "Planifica y publica contenido en redes sociales de forma automática.", approach: "Social media automation" },
+    { title: "Generador de emails", description: "Crea newsletters y secuencias de email personalizadas con IA.", approach: "Email copywriting IA" },
+  ],
+  "Gestión de citas y reservas": [
+    { title: "Agente de agendamiento", description: "Gestiona reservas y citas automáticamente sin llamadas ni emails manuales.", approach: "Agendamiento IA" },
+    { title: "Integración Calendly automática", description: "Conecta tu calendario con recordatorios y seguimientos automáticos.", approach: "Calendly + automatización" },
+    { title: "Recordatorios automáticos", description: "Envía recordatorios personalizados para reducir cancelaciones y no-shows.", approach: "Recordatorios IA" },
+  ],
+  "Seguimiento de leads": [
+    { title: "Agente de seguimiento automático", description: "Contacta leads en el momento óptimo con mensajes personalizados.", approach: "Follow-up IA" },
+    { title: "Secuencia nurturing", description: "Nutre leads con contenido relevante hasta que estén listos para comprar.", approach: "Lead nurturing" },
+    { title: "CRM automatizado", description: "Actualiza automáticamente el estado de cada lead según sus interacciones.", approach: "CRM con IA" },
+  ],
+  "Soporte técnico saturado": [
+    { title: "Bot de soporte técnico", description: "Responde dudas técnicas comunes con respuestas precisas y actualizadas.", approach: "Soporte técnico IA" },
+    { title: "Base de conocimiento IA", description: "Crea una base de conocimiento que se actualiza sola con cada caso resuelto.", approach: "Knowledge base IA" },
+    { title: "Sistema escalado automático", description: "Filtra y escala los tickets críticos al equipo humano adecuado.", approach: "Escalado inteligente" },
+  ],
+};
+
+const DEFAULT_SUGGESTIONS: Suggestion[] = [
+  { title: "Agente de automatización general", description: "Automatiza flujos de trabajo clave para liberar tiempo del equipo.", approach: "Automatización con IA" },
+  { title: "Chatbot de atención", description: "Responde consultas frecuentes de clientes de forma automática.", approach: "Chatbot IA" },
+  { title: "Agente de seguimiento", description: "Hace seguimiento automático de leads y oportunidades de venta.", approach: "Follow-up IA" },
+];
+
 // ═══ STEP 2 FORM ══════════════════════════════════════════════════════════════
 
 function Step2Form({ project, onSave }: { project: ProjectData; onSave: (d: Record<string, unknown>) => Promise<void> }) {
-  const [suggestions, setSuggestions] = useState<Suggestion[]>((project.ai_suggestions as Suggestion[]) ?? []);
-  const [loadingAI, setLoadingAI] = useState(false);
+  const suggestions: Suggestion[] = (() => {
+    const tags = project.pain_tags ?? [];
+    if (tags.length > 0 && TAG_SUGGESTIONS[tags[0]]) return TAG_SUGGESTIONS[tags[0]];
+    for (const tag of tags) {
+      if (TAG_SUGGESTIONS[tag]) return TAG_SUGGESTIONS[tag];
+    }
+    return DEFAULT_SUGGESTIONS;
+  })();
+
   const [selected, setSelected] = useState<number | null>(() => {
-    if (!project.ai_approach || !Array.isArray(project.ai_suggestions)) return null;
-    const idx = (project.ai_suggestions as Suggestion[]).findIndex((s) => s.title === project.ai_approach);
+    if (!project.ai_approach) return null;
+    const idx = suggestions.findIndex((s) => s.title === project.ai_approach);
     return idx >= 0 ? idx : null;
   });
   const [useCustom, setUseCustom] = useState(!!(project.ai_approach && !suggestions.find((s) => s.title === project.ai_approach)));
@@ -187,36 +245,11 @@ function Step2Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
     if (project.ai_approach && !suggestions.find((s) => s.title === project.ai_approach)) return project.ai_approach;
     return "";
   });
-  const [aiError, setAiError] = useState("");
   const [saving, setSaving] = useState(false);
 
   const COLORS = ["#00AAFF", "#A855F7", "#00FF88"];
   const chosenApproach = useCustom ? customIdea.trim() : selected !== null ? suggestions[selected]?.title : "";
   const isValid = chosenApproach.length > 0;
-
-  useEffect(() => {
-    if (suggestions.length === 0 && project.problem_statement) {
-      void fetchSuggestions();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  async function fetchSuggestions() {
-    setLoadingAI(true); setAiError("");
-    try {
-      const res = await fetch("/api/wizard/suggest", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ problem_statement: project.problem_statement, pain_tags: project.pain_tags ?? [] }),
-      });
-      const data = await res.json() as { suggestions?: Suggestion[]; error?: string };
-      if (data.error) throw new Error(data.error);
-      if (data.suggestions) setSuggestions(data.suggestions);
-    } catch (e) {
-      setAiError(e instanceof Error ? e.message : "Error al generar sugerencias");
-    } finally {
-      setLoadingAI(false);
-    }
-  }
 
   return (
     <div className="space-y-5">
@@ -228,52 +261,33 @@ function Step2Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
       )}
 
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <label className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>Sugerencias generadas por IA</label>
-          {!loadingAI && suggestions.length > 0 && (
-            <button type="button" onClick={() => void fetchSuggestions()} className="text-[10px] transition-opacity hover:opacity-70" style={{ color: "var(--neon-blue)" }}>↻ Regenerar</button>
-          )}
-        </div>
+        <label className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>
+          Soluciones recomendadas{project.pain_tags?.[0] ? ` para "${project.pain_tags[0]}"` : ""}
+        </label>
 
-        {loadingAI && (
-          <div className="space-y-3">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="rounded-2xl animate-pulse" style={{ height: 80, background: "var(--bg-elevated)", border: "1px solid var(--border-card)" }} />
-            ))}
-          </div>
-        )}
-
-        {!loadingAI && suggestions.length > 0 && (
-          <div className="space-y-3">
-            {suggestions.map((s, i) => {
-              const color = COLORS[i];
-              const isSel = selected === i && !useCustom;
-              return (
-                <button key={i} type="button" onClick={() => { setSelected(i); setUseCustom(false); }}
-                  className="w-full rounded-2xl p-4 text-left transition-all duration-150"
-                  style={{ background: isSel ? `${color}10` : "var(--bg-elevated)", border: `1px solid ${isSel ? color + "60" : "var(--border-card)"}`, boxShadow: isSel ? `0 0 14px ${color}20` : "none" }}>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-[10px] font-bold mt-0.5"
-                      style={{ background: isSel ? color : "var(--bg-card)", border: `1.5px solid ${isSel ? color : "var(--border-subtle)"}`, color: isSel ? "#000" : "var(--text-muted)" }}>
-                      {isSel ? "✓" : i + 1}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold mb-0.5" style={{ color: isSel ? color : "var(--text-primary)" }}>{s.title}</p>
-                      <p className="text-xs leading-relaxed mb-1" style={{ color: "var(--text-secondary)" }}>{s.description}</p>
-                      <span className="text-[10px] px-2 py-0.5 rounded-md" style={{ background: `${color}15`, color, border: `1px solid ${color}30` }}>{s.approach}</span>
-                    </div>
+        <div className="space-y-3">
+          {suggestions.map((s, i) => {
+            const color = COLORS[i];
+            const isSel = selected === i && !useCustom;
+            return (
+              <button key={i} type="button" onClick={() => { setSelected(i); setUseCustom(false); }}
+                className="w-full rounded-2xl p-4 text-left transition-all duration-150"
+                style={{ background: isSel ? `${color}10` : "var(--bg-elevated)", border: `1px solid ${isSel ? color + "60" : "var(--border-card)"}`, boxShadow: isSel ? `0 0 14px ${color}20` : "none" }}>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-[10px] font-bold mt-0.5"
+                    style={{ background: isSel ? color : "var(--bg-card)", border: `1.5px solid ${isSel ? color : "var(--border-subtle)"}`, color: isSel ? "#000" : "var(--text-muted)" }}>
+                    {isSel ? "✓" : i + 1}
                   </div>
-                </button>
-              );
-            })}
-          </div>
-        )}
-
-        {aiError && !loadingAI && (
-          <p className="text-xs p-3 rounded-xl" style={{ background: "rgba(255,68,68,0.08)", color: "var(--neon-red)", border: "1px solid rgba(255,68,68,0.2)" }}>
-            {aiError} — <button type="button" onClick={() => void fetchSuggestions()} className="underline">Reintentar</button>
-          </p>
-        )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold mb-0.5" style={{ color: isSel ? color : "var(--text-primary)" }}>{s.title}</p>
+                    <p className="text-xs leading-relaxed mb-1" style={{ color: "var(--text-secondary)" }}>{s.description}</p>
+                    <span className="text-[10px] px-2 py-0.5 rounded-md" style={{ background: `${color}15`, color, border: `1px solid ${color}30` }}>{s.approach}</span>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
 
         <div className="space-y-2">
           <button type="button" onClick={() => { setUseCustom(!useCustom); setSelected(null); }}
@@ -285,13 +299,9 @@ function Step2Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
             </div>
             Tengo mi propia idea
           </button>
-          <AnimatePresence>
-            {useCustom && (
-              <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                <SInput placeholder="Describe tu idea de solución con IA..." value={customIdea} onChange={(e) => setCustomIdea(e.target.value)} autoFocus />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {useCustom && (
+            <SInput placeholder="Describe tu idea de solución con IA..." value={customIdea} onChange={(e) => setCustomIdea(e.target.value)} autoFocus />
+          )}
         </div>
       </div>
 
@@ -951,26 +961,16 @@ export default function RoadmapPage() {
                   </button>
 
                   {/* Expanded content */}
-                  <AnimatePresence>
-                    {isExpanded && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="px-5 pb-5 pt-1" style={{ borderTop: `1px solid ${step.color}20` }}>
-                          {step.id === 1 && <Step1Form project={project} onSave={(d) => saveStep(1, d)} />}
-                          {step.id === 2 && <Step2Form project={project} onSave={(d) => saveStep(2, d)} />}
-                          {step.id === 3 && <Step3Form project={project} onSave={(d) => saveStep(3, d)} />}
-                          {step.id === 4 && <Step4Form project={project} onSave={(d) => saveStep(4, d)} />}
-                          {step.id === 5 && <Step5Form project={project} onSave={(d) => saveStep(5, d)} />}
-                          {step.id === 6 && <Step6Form project={project} onSave={(d) => saveStep(6, d)} />}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {isExpanded && (
+                    <div className="px-5 pb-5 pt-1" style={{ borderTop: `1px solid ${step.color}20` }}>
+                      {step.id === 1 && <Step1Form project={project} onSave={(d) => saveStep(1, d)} />}
+                      {step.id === 2 && <Step2Form project={project} onSave={(d) => saveStep(2, d)} />}
+                      {step.id === 3 && <Step3Form project={project} onSave={(d) => saveStep(3, d)} />}
+                      {step.id === 4 && <Step4Form project={project} onSave={(d) => saveStep(4, d)} />}
+                      {step.id === 5 && <Step5Form project={project} onSave={(d) => saveStep(5, d)} />}
+                      {step.id === 6 && <Step6Form project={project} onSave={(d) => saveStep(6, d)} />}
+                    </div>
+                  )}
 
                   {isCompleted && !isExpanded && (
                     <div className="h-0.5 w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(0,255,136,0.3), transparent)" }} />
