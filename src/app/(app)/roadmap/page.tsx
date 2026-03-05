@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 import GradientText from "@/components/ui/GradientText";
 import NeonButton from "@/components/ui/NeonButton";
-import Link from "next/link";
 
 // ═══ CONSTANTS ════════════════════════════════════════════════════════════════
 
@@ -57,14 +56,25 @@ const LANDING_PLATFORMS = [
   { id: "webflow", name: "Webflow", desc: "Control total + CMS integrado", url: "https://webflow.com/templates", color: "#A855F7" },
 ];
 
-const STEPS_CONFIG = [
-  { id: 1, title: "Identificar el Problema", subtitle: "Define el dolor específico que tu agente resolverá", color: "#00FF88" },
-  { id: 2, title: "Soluciones con IA", subtitle: "Mapea qué enfoque de IA resuelve mejor el problema", color: "#00AAFF" },
-  { id: 3, title: "Definir tu Nicho", subtitle: "Especialízate para dominar un segmento del mercado", color: "#A855F7" },
-  { id: 4, title: "Pricing y Paquetes", subtitle: "Diseña tu modelo de negocio y precios", color: "#FFD700" },
-  { id: 5, title: "Landing Page", subtitle: "Crea tu presencia digital que convierte", color: "#FF6B35" },
-  { id: 6, title: "Design Core", subtitle: "Tipo de agente + prompt + workflow n8n", color: "#7C3AED" },
+const STEP_TITLES = [
+  "Identificar el Problema",
+  "Soluciones con IA",
+  "Definir tu Nicho",
+  "Pricing y Paquetes",
+  "Landing Page",
+  "Agente + Pago",
 ];
+
+const STEP_SUBTITLES = [
+  "Define el dolor específico que tu agente resolverá",
+  "Elige el enfoque de IA que mejor resuelve el problema",
+  "Especialízate para dominar un segmento del mercado",
+  "Diseña tu modelo de negocio y precios",
+  "Crea tu presencia digital que convierte",
+  "Tu agente configurado listo para activar",
+];
+
+const STEP_COLORS = ["#00FF88", "#00AAFF", "#A855F7", "#FFD700", "#FF6B35", "#7C3AED"];
 
 // ═══ TYPES ════════════════════════════════════════════════════════════════════
 
@@ -776,13 +786,106 @@ function Step6Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
   );
 }
 
+// ═══ STEP INDICATOR ═══════════════════════════════════════════════════════════
+
+const STEP_LABELS = ["Problema", "Solución", "Nicho", "Pricing", "Landing", "Agente"];
+
+function StepIndicator({ current }: { current: number }) {
+  return (
+    <div className="flex items-center">
+      {STEP_LABELS.map((label, i) => {
+        const n = i + 1;
+        const done = n < current;
+        const active = n === current;
+        const color = done ? "#00FF88" : active ? STEP_COLORS[i] : "var(--border-subtle)";
+        return (
+          <div key={n} className="flex items-center">
+            <div className="flex flex-col items-center gap-1">
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300"
+                style={{
+                  background: done ? "#00FF8818" : active ? `${STEP_COLORS[i]}18` : "var(--bg-elevated)",
+                  border: `1.5px solid ${color}`,
+                  color: done ? "#00FF88" : active ? STEP_COLORS[i] : "var(--text-muted)",
+                }}
+              >
+                {done ? "✓" : n}
+              </div>
+              <span className="text-[9px] hidden sm:block font-medium" style={{ color: active ? STEP_COLORS[i] : "var(--text-muted)" }}>
+                {label}
+              </span>
+            </div>
+            {n < 6 && (
+              <div
+                className="w-6 sm:w-8 h-px mb-4 transition-all duration-500"
+                style={{ background: done ? "#00FF8840" : "var(--border-subtle)" }}
+              />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ═══ AGENT SUMMARY CARD (shown in step 6) ═════════════════════════════════════
+
+function AgentSummaryCard({ project }: { project: ProjectData }) {
+  const tier = project.pricing_tiers?.tiers?.[0];
+  const sym = project.pricing_tiers?.currency === "USD" ? "$" : project.pricing_tiers?.currency === "GBP" ? "£" : "€";
+  return (
+    <div className="rounded-2xl p-5 space-y-4" style={{ background: "linear-gradient(135deg, rgba(0,170,255,0.06), rgba(124,58,237,0.06))", border: "1px solid rgba(124,58,237,0.3)" }}>
+      <div className="flex items-center gap-2">
+        <span className="text-xl">🤖</span>
+        <p className="font-bold text-sm" style={{ color: "var(--text-primary)", fontFamily: "var(--font-syne, sans-serif)" }}>
+          Tu Agente IA — Configuración completa
+        </p>
+        <span className="ml-auto text-[10px] font-semibold px-2 py-0.5 rounded-md" style={{ background: "rgba(0,255,136,0.1)", color: "#00FF88", border: "1px solid rgba(0,255,136,0.3)" }}>
+          ✓ Listo
+        </span>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        {project.problem_statement && (
+          <div className="col-span-2 rounded-xl p-3" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-subtle)" }}>
+            <p className="text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Problema que resuelve</p>
+            <p className="text-xs leading-relaxed line-clamp-2" style={{ color: "var(--text-secondary)" }}>{project.problem_statement}</p>
+          </div>
+        )}
+        {project.ai_approach && (
+          <div className="rounded-xl p-3" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-subtle)" }}>
+            <p className="text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Enfoque IA</p>
+            <p className="text-xs font-medium" style={{ color: "#00AAFF" }}>{project.ai_approach}</p>
+          </div>
+        )}
+        {project.niche_sector && (
+          <div className="rounded-xl p-3" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-subtle)" }}>
+            <p className="text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Nicho</p>
+            <p className="text-xs font-medium" style={{ color: "#A855F7" }}>{project.niche_sector}{project.company_size ? ` · ${project.company_size}` : ""}</p>
+          </div>
+        )}
+        {tier && (
+          <div className="rounded-xl p-3" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-subtle)" }}>
+            <p className="text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Precio base</p>
+            <p className="text-xs font-bold" style={{ color: "#FFD700" }}>{sym}{tier.price}/{project.pricing_tiers?.billing === "annual" ? "año" : "mes"}</p>
+          </div>
+        )}
+        {project.landing_platform && project.landing_platform !== "skip" && (
+          <div className="rounded-xl p-3" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-subtle)" }}>
+            <p className="text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Landing page</p>
+            <p className="text-xs font-medium capitalize" style={{ color: "#FF6B35" }}>{project.landing_platform}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ═══ MAIN PAGE ════════════════════════════════════════════════════════════════
 
 export default function RoadmapPage() {
   const [loading, setLoading] = useState(true);
-  const [projectId, setProjectId] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(1);
-  const [expandedStep, setExpandedStep] = useState<number | null>(1);
+  const [projectId, setProjectId] = useState<string | null>(null);
   const [project, setProject] = useState<ProjectData>({});
 
   useEffect(() => { void loadProject(); }, []);
@@ -792,7 +895,6 @@ export default function RoadmapPage() {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { setLoading(false); return; }
-
       const { data } = await supabase
         .from("agent_projects")
         .select("*")
@@ -801,16 +903,12 @@ export default function RoadmapPage() {
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
-
       if (data) {
-        setProjectId(data.id);
-        setCurrentStep(data.current_step ?? 1);
+        setProjectId(data.id as string);
+        setCurrentStep(Math.min((data.current_step as number) ?? 1, 6));
         setProject(data as ProjectData);
-        setExpandedStep(data.current_step ?? 1);
-      } else {
-        setExpandedStep(1);
       }
-    } catch { /* silencioso */ } finally { setLoading(false); }
+    } catch { /* silent */ } finally { setLoading(false); }
   }
 
   const getOrCreateProject = useCallback(async (): Promise<string | null> => {
@@ -819,181 +917,110 @@ export default function RoadmapPage() {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return null;
-      const { data } = await supabase.from("agent_projects").insert({ user_id: user.id, current_step: 1, status: "draft" }).select("id").single();
+      const { data } = await supabase
+        .from("agent_projects")
+        .insert({ user_id: user.id, current_step: 1, status: "draft" })
+        .select("id")
+        .single();
       if (data?.id) { setProjectId(data.id as string); return data.id as string; }
-    } catch { /* silencioso */ }
+    } catch { /* silent */ }
     return null;
   }, [projectId]);
 
-  async function saveStep(stepId: number, data: Record<string, unknown>) {
+  async function saveAndAdvance(stepId: number, data: Record<string, unknown>) {
     const pid = await getOrCreateProject();
     if (!pid) return;
-
     const isLast = stepId === 6;
-    const newCurrentStep = stepId >= currentStep ? stepId + 1 : currentStep;
+    const nextStep = isLast ? 6 : stepId + 1;
     const supabase = createClient();
-
     await supabase.from("agent_projects").update({
       ...data,
-      current_step: isLast ? 6 : newCurrentStep,
+      current_step: nextStep,
       status: isLast ? "completed" : "in_progress",
       ...(isLast ? { completed_at: new Date().toISOString() } : {}),
     }).eq("id", pid);
-
-    setProject((prev) => ({ ...prev, id: pid, ...data, current_step: newCurrentStep }));
-    setCurrentStep(newCurrentStep);
-    setExpandedStep(stepId < 6 ? stepId + 1 : null);
+    setProject((prev) => ({ ...prev, id: pid, ...data, current_step: nextStep }));
+    if (!isLast) setCurrentStep(nextStep);
   }
 
-  const getStepStatus = (stepId: number) => {
-    if (!projectId && stepId > 1) return "pending";
-    if (stepId < currentStep) return "completed";
-    if (stepId === currentStep) return "active";
-    return "pending";
-  };
+  const color = STEP_COLORS[currentStep - 1];
 
-  const completedCount = STEPS_CONFIG.filter((s) => getStepStatus(s.id) === "completed").length;
+  if (loading) {
+    return (
+      <div className="max-w-2xl mx-auto space-y-6">
+        <div className="h-8 w-48 rounded-xl animate-pulse" style={{ background: "var(--bg-card)" }} />
+        <div className="h-12 rounded-2xl animate-pulse" style={{ background: "var(--bg-card)" }} />
+        <div className="h-80 rounded-2xl animate-pulse" style={{ background: "var(--bg-card)" }} />
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-6">
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+      <div>
         <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}>
           Roadmap del <GradientText>Arquitecto IA</GradientText>
         </h1>
         <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
           6 pasos para construir y escalar tu agencia de IA
         </p>
-      </motion.div>
+      </div>
 
-      {/* Progress */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
-        className="p-4 rounded-2xl" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>Progreso general</span>
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-lg" style={{ background: "rgba(0,170,255,0.1)", color: "var(--neon-blue)", border: "1px solid rgba(0,170,255,0.2)" }}>
-            {completedCount}/{STEPS_CONFIG.length} pasos
+      {/* Step indicator */}
+      <div className="flex justify-center py-2">
+        <StepIndicator current={currentStep} />
+      </div>
+
+      {/* Current step card */}
+      <div className="rounded-2xl overflow-hidden" style={{ background: "var(--bg-card)", border: `1px solid ${color}30`, boxShadow: `0 0 24px ${color}08` }}>
+        {/* Step header */}
+        <div className="px-6 py-4 flex items-center gap-3" style={{ borderBottom: `1px solid ${color}20` }}>
+          <div
+            className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0"
+            style={{ background: `${color}20`, border: `1.5px solid ${color}`, color }}
+          >
+            {currentStep}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-bold text-sm" style={{ color: "var(--text-primary)", fontFamily: "var(--font-syne, sans-serif)" }}>
+              {STEP_TITLES[currentStep - 1]}
+            </p>
+            <p className="text-xs" style={{ color: "var(--text-muted)" }}>{STEP_SUBTITLES[currentStep - 1]}</p>
+          </div>
+          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md flex-shrink-0" style={{ background: `${color}12`, color, border: `1px solid ${color}30` }}>
+            {currentStep}/6
           </span>
         </div>
-        <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: "var(--bg-input)" }}>
-          <motion.div
-            animate={{ width: `${(completedCount / STEPS_CONFIG.length) * 100}%` }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="h-full rounded-full"
-            style={{ background: "linear-gradient(90deg, #00AAFF, #A855F7)" }}
-          />
+
+        {/* Step form */}
+        <div className="p-6 space-y-5">
+          {currentStep === 6 && <AgentSummaryCard project={project} />}
+          {currentStep === 1 && <Step1Form project={project} onSave={(d) => saveAndAdvance(1, d)} />}
+          {currentStep === 2 && <Step2Form project={project} onSave={(d) => saveAndAdvance(2, d)} />}
+          {currentStep === 3 && <Step3Form project={project} onSave={(d) => saveAndAdvance(3, d)} />}
+          {currentStep === 4 && <Step4Form project={project} onSave={(d) => saveAndAdvance(4, d)} />}
+          {currentStep === 5 && <Step5Form project={project} onSave={(d) => saveAndAdvance(5, d)} />}
+          {currentStep === 6 && <Step6Form project={project} onSave={(d) => saveAndAdvance(6, d)} />}
         </div>
-      </motion.div>
+      </div>
 
-      {/* Steps accordion */}
-      {loading ? (
-        <div className="space-y-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-16 rounded-2xl animate-pulse" style={{ background: "var(--bg-card)" }} />
-          ))}
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {STEPS_CONFIG.map((step, i) => {
-            const status = getStepStatus(step.id);
-            const isExpanded = expandedStep === step.id;
-            const isCompleted = status === "completed";
-            const isActive = status === "active";
-            const isPending = status === "pending";
-
-            return (
-              <motion.div key={step.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 * i }}>
-                <div
-                  className="rounded-2xl overflow-hidden"
-                  style={{
-                    background: "var(--bg-card)",
-                    border: `1px solid ${isExpanded ? step.color + "40" : isCompleted ? "rgba(0,255,136,0.2)" : "var(--border-card)"}`,
-                    boxShadow: isExpanded ? `0 0 20px ${step.color}10` : "none",
-                  }}
-                >
-                  {/* Header row */}
-                  <button
-                    type="button"
-                    className="w-full flex items-center gap-4 p-4 text-left group"
-                    onClick={() => setExpandedStep(isExpanded ? null : step.id)}
-                  >
-                    {/* Step number / check */}
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-bold transition-all"
-                      style={{
-                        background: isCompleted ? "#00FF8820" : isActive || isExpanded ? `${step.color}20` : "var(--bg-elevated)",
-                        border: `1.5px solid ${isCompleted ? "#00FF88" : isActive || isExpanded ? step.color : "var(--border-subtle)"}`,
-                        color: isCompleted ? "#00FF88" : isActive || isExpanded ? step.color : "var(--text-muted)",
-                      }}
-                    >
-                      {isCompleted ? "✓" : step.id}
-                    </div>
-
-                    {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm" style={{
-                        fontFamily: "var(--font-syne, sans-serif)",
-                        color: isCompleted ? "var(--neon-green)" : isActive || isExpanded ? step.color : "var(--text-primary)",
-                        textDecoration: isCompleted ? "line-through" : "none",
-                        opacity: isCompleted ? 0.7 : 1,
-                      }}>
-                        {step.title}
-                      </p>
-                      <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>{step.subtitle}</p>
-                    </div>
-
-                    {/* Status + chevron */}
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      {!isPending && (
-                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md hidden sm:block"
-                          style={{ background: isCompleted ? "rgba(0,255,136,0.08)" : `${step.color}15`, color: isCompleted ? "var(--neon-green)" : step.color, border: `1px solid ${isCompleted ? "rgba(0,255,136,0.3)" : step.color + "30"}` }}>
-                          {isCompleted ? "Completado" : "En progreso"}
-                        </span>
-                      )}
-                      <svg
-                        width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                        className="transition-transform duration-200"
-                        style={{ color: "var(--text-muted)", transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)" }}
-                      >
-                        <polyline points="6 9 12 15 18 9" />
-                      </svg>
-                    </div>
-                  </button>
-
-                  {/* Expanded content */}
-                  {isExpanded && (
-                    <div className="px-5 pb-5 pt-1" style={{ borderTop: `1px solid ${step.color}20` }}>
-                      {step.id === 1 && <Step1Form project={project} onSave={(d) => saveStep(1, d)} />}
-                      {step.id === 2 && <Step2Form project={project} onSave={(d) => saveStep(2, d)} />}
-                      {step.id === 3 && <Step3Form project={project} onSave={(d) => saveStep(3, d)} />}
-                      {step.id === 4 && <Step4Form project={project} onSave={(d) => saveStep(4, d)} />}
-                      {step.id === 5 && <Step5Form project={project} onSave={(d) => saveStep(5, d)} />}
-                      {step.id === 6 && <Step6Form project={project} onSave={(d) => saveStep(6, d)} />}
-                    </div>
-                  )}
-
-                  {isCompleted && !isExpanded && (
-                    <div className="h-0.5 w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(0,255,136,0.3), transparent)" }} />
-                  )}
-                </div>
-              </motion.div>
-            );
-          })}
+      {/* Back navigation */}
+      {currentStep > 1 && (
+        <div className="flex justify-start">
+          <button
+            type="button"
+            onClick={() => setCurrentStep((s) => s - 1)}
+            className="flex items-center gap-1.5 text-xs transition-opacity hover:opacity-70"
+            style={{ color: "var(--text-muted)" }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+            Volver al paso anterior
+          </button>
         </div>
       )}
-
-      {/* Bottom CTA */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
-        className="flex items-center justify-between p-4 rounded-2xl"
-        style={{ background: "rgba(0,170,255,0.04)", border: "1px solid var(--border-neon)" }}>
-        <div>
-          <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>¿Quieres un agente ya construido?</p>
-          <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>Usa el creador rápido sin pasos</p>
-        </div>
-        <Link href="/agents/create">
-          <NeonButton size="sm">Crear agente →</NeonButton>
-        </Link>
-      </motion.div>
     </div>
   );
 }
