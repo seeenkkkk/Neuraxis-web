@@ -1,182 +1,848 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import NeonBadge from "@/components/ui/NeonBadge";
-import GradientText from "@/components/ui/GradientText";
+import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
+import GradientText from "@/components/ui/GradientText";
+import NeonButton from "@/components/ui/NeonButton";
+import Link from "next/link";
 
-// ─── Datos de los pasos ────────────────────────────────────────
-const STEPS_DATA = [
-  {
-    id: 1,
-    title: "Identificar Problemas",
-    subtitle: "Define los pain points de tus clientes objetivo",
-    xp: 300,
-    color: "#00FF88",
-    cta: "Definir problema",
-  },
-  {
-    id: 2,
-    title: "Soluciones con IA",
-    subtitle: "Mapea qué herramientas IA resuelven cada problema",
-    xp: 400,
-    color: "#00AAFF",
-    cta: "Explorar soluciones",
-  },
-  {
-    id: 3,
-    title: "Definir tu Nicho",
-    subtitle: "Especialízate para dominar un segmento del mercado",
-    xp: 500,
-    color: "#A855F7",
-    cta: "Elegir nicho",
-  },
-  {
-    id: 4,
-    title: "Pricing y Paquetes",
-    subtitle: "Diseña tu modelo de negocio y precios",
-    xp: 450,
-    color: "#FFD700",
-    cta: "Crear pricing",
-  },
-  {
-    id: 5,
-    title: "Landing Page",
-    subtitle: "Crea tu presencia digital que convierte",
-    xp: 600,
-    color: "#FF6B35",
-    cta: "Crear landing",
-  },
-  {
-    id: 6,
-    title: "Design Core",
-    subtitle: "Tipo de agente + prompt + workflow n8n",
-    xp: 800,
-    color: "#7C3AED",
-    cta: "Generar agente",
-  },
+// ═══ CONSTANTS ════════════════════════════════════════════════════════════════
+
+const PAIN_TAGS = [
+  "Pierdo tiempo en tareas repetitivas",
+  "Mi equipo no escala",
+  "No tengo sistema de ventas",
+  "Atención al cliente lenta",
+  "No genero contenido suficiente",
+  "Gestión de citas y reservas",
+  "Seguimiento de leads",
+  "Soporte técnico saturado",
 ];
 
-type StepStatus = "completed" | "active" | "pending" | "locked";
+const SECTORS = [
+  "SaaS", "E-commerce", "Consultoría", "Salud", "Legal",
+  "Inmobiliaria", "Educación", "Hostelería", "Finanzas",
+  "Fitness", "Belleza", "Construcción", "Otro",
+];
 
-const STATUS_CONFIG: Record<StepStatus, { label: string; badge: "green" | "blue" | "purple" | "orange" }> = {
-  completed: { label: "Completado",  badge: "green"  },
-  active:    { label: "En progreso", badge: "blue"   },
-  pending:   { label: "Pendiente",   badge: "purple" },
-  locked:    { label: "Bloqueado",   badge: "orange" },
+const COMPANY_SIZES = [
+  { value: "freelance", label: "Freelance / Solo" },
+  { value: "1-10", label: "1–10 empleados" },
+  { value: "11-50", label: "11–50 empleados" },
+  { value: "51-200", label: "51–200 empleados" },
+  { value: "200+", label: "Más de 200" },
+];
+
+const AGENT_TYPES = [
+  { id: "email_outreach", emoji: "📧", label: "Email Outreach" },
+  { id: "chatbot_web", emoji: "💬", label: "Chatbot Web" },
+  { id: "content_writer", emoji: "📝", label: "Content Writer" },
+  { id: "data_analyst", emoji: "📊", label: "Data Analyst" },
+  { id: "lead_qualifier", emoji: "🔔", label: "Lead Qualifier" },
+  { id: "scheduler", emoji: "📅", label: "Scheduler" },
+  { id: "invoice_manager", emoji: "🧾", label: "Invoice Manager" },
+  { id: "research_agent", emoji: "🔍", label: "Research Agent" },
+  { id: "ecommerce_helper", emoji: "🛒", label: "E-commerce Helper" },
+  { id: "social_media", emoji: "📣", label: "Social Media" },
+  { id: "hr_screener", emoji: "🧑‍💼", label: "HR Screener" },
+  { id: "project_manager", emoji: "🏗️", label: "Project Manager" },
+  { id: "onboarding_bot", emoji: "🎓", label: "Onboarding Bot" },
+  { id: "tech_support", emoji: "🔧", label: "Tech Support" },
+  { id: "custom_webhook", emoji: "⚡", label: "Custom Webhook" },
+];
+
+const LANDING_PLATFORMS = [
+  { id: "framer", name: "Framer", desc: "Diseño visual + animaciones premium", url: "https://framer.com/templates", color: "#00AAFF" },
+  { id: "webflow", name: "Webflow", desc: "Control total + CMS integrado", url: "https://webflow.com/templates", color: "#A855F7" },
+];
+
+const STEPS_CONFIG = [
+  { id: 1, title: "Identificar el Problema", subtitle: "Define el dolor específico que tu agente resolverá", color: "#00FF88" },
+  { id: 2, title: "Soluciones con IA", subtitle: "Mapea qué enfoque de IA resuelve mejor el problema", color: "#00AAFF" },
+  { id: 3, title: "Definir tu Nicho", subtitle: "Especialízate para dominar un segmento del mercado", color: "#A855F7" },
+  { id: 4, title: "Pricing y Paquetes", subtitle: "Diseña tu modelo de negocio y precios", color: "#FFD700" },
+  { id: 5, title: "Landing Page", subtitle: "Crea tu presencia digital que convierte", color: "#FF6B35" },
+  { id: 6, title: "Design Core", subtitle: "Tipo de agente + prompt + workflow n8n", color: "#7C3AED" },
+];
+
+// ═══ TYPES ════════════════════════════════════════════════════════════════════
+
+interface Suggestion { title: string; description: string; approach: string; }
+interface PricingTier { name: string; price: string; features: string[]; }
+interface ProjectData {
+  id?: string;
+  current_step?: number;
+  status?: string;
+  problem_statement?: string | null;
+  pain_tags?: string[] | null;
+  ai_approach?: string | null;
+  ai_suggestions?: Suggestion[] | null;
+  niche_sector?: string | null;
+  company_size?: string | null;
+  buyer_persona?: string | null;
+  pricing_tiers?: { tiers: PricingTier[]; currency: string; billing: string } | null;
+  landing_platform?: string | null;
+  agent_type?: string | null;
+  generated_prompt?: string | null;
+  n8n_json?: unknown;
+}
+
+// ═══ SHARED INPUT STYLES ══════════════════════════════════════════════════════
+
+const iBase: React.CSSProperties = {
+  background: "#0F0F1C", borderRadius: "10px", color: "#F0F0FF",
+  padding: "9px 12px", fontSize: "13px", width: "100%", outline: "none",
+  transition: "border-color 0.15s", fontFamily: "inherit",
 };
 
-type ProjectRow = {
-  id: string;
-  current_step: number;
-  status: string;
-};
+function SInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
+  const [f, setF] = useState(false);
+  return <input {...props} style={{ ...iBase, border: `1px solid ${f ? "#00AAFF" : "rgba(255,255,255,0.06)"}` }} onFocus={() => setF(true)} onBlur={() => setF(false)} />;
+}
+function STextarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  const [f, setF] = useState(false);
+  return <textarea {...props} style={{ ...iBase, border: `1px solid ${f ? "#00AAFF" : "rgba(255,255,255,0.06)"}`, resize: "vertical", minHeight: 90 }} onFocus={() => setF(true)} onBlur={() => setF(false)} />;
+}
+function SSelect(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
+  const [f, setF] = useState(false);
+  return <select {...props} style={{ ...iBase, border: `1px solid ${f ? "#00AAFF" : "rgba(255,255,255,0.06)"}`, appearance: "none", cursor: "pointer" }} onFocus={() => setF(true)} onBlur={() => setF(false)} />;
+}
 
-export default function RoadmapPage() {
-  const router = useRouter();
-  const [projectId, setProjectId] = useState<string | null>(null);
-  const [currentStep, setCurrentStep] = useState<number>(1);
-  const [planTier, setPlanTier] = useState<string>("free");
-  const [loading, setLoading] = useState(true);
-  const [navigatingStep, setNavigatingStep] = useState<number | null>(null);
+// ═══ STEP 1 FORM ══════════════════════════════════════════════════════════════
 
-  // Cargar proyecto y plan del usuario
+function Step1Form({ project, onSave }: { project: ProjectData; onSave: (d: Record<string, unknown>) => Promise<void> }) {
+  const [statement, setStatement] = useState(project.problem_statement ?? "");
+  const [tags, setTags] = useState<string[]>(project.pain_tags ?? []);
+  const [saving, setSaving] = useState(false);
+  const isValid = statement.trim().length >= 50;
+
+  const toggleTag = (tag: string) =>
+    setTags((p) => p.includes(tag) ? p.filter((t) => t !== tag) : [...p, tag]);
+
+  return (
+    <div className="space-y-5">
+      <div className="space-y-2">
+        <label className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>
+          ¿Qué problema resuelves con tu agente?
+        </label>
+        <STextarea
+          value={statement}
+          onChange={(e) => setStatement(e.target.value)}
+          placeholder="Ej: Mis clientes tardan días en recibir respuesta porque el equipo de soporte está saturado. Perdemos leads porque nadie los contacta en las primeras 24h..."
+          rows={4}
+        />
+        <div className="flex items-center justify-between">
+          <p className="text-[10px]" style={{ color: isValid ? "var(--neon-green)" : "var(--text-muted)" }}>
+            {statement.length}/50 caracteres mínimo
+          </p>
+          {!isValid && statement.length > 0 && (
+            <p className="text-[10px]" style={{ color: "#FF6B35" }}>
+              {50 - statement.length} más
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <label className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>
+          Pain points relacionados <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>(selecciona los que aplican)</span>
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {PAIN_TAGS.map((tag) => {
+            const sel = tags.includes(tag);
+            return (
+              <button key={tag} type="button" onClick={() => toggleTag(tag)}
+                className="text-xs px-3 py-1.5 rounded-lg border transition-all duration-150"
+                style={{ background: sel ? "rgba(0,170,255,0.08)" : "var(--bg-elevated)", border: `1px solid ${sel ? "rgba(0,170,255,0.4)" : "var(--border-subtle)"}`, color: sel ? "#00AAFF" : "var(--text-secondary)" }}>
+                {sel ? "✓ " : ""}{tag}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="flex justify-end">
+        <NeonButton disabled={!isValid || saving} loading={saving}
+          onClick={async () => { setSaving(true); await onSave({ problem_statement: statement.trim(), pain_tags: tags }); setSaving(false); }}>
+          Guardar y continuar →
+        </NeonButton>
+      </div>
+    </div>
+  );
+}
+
+// ═══ STEP 2 FORM ══════════════════════════════════════════════════════════════
+
+function Step2Form({ project, onSave }: { project: ProjectData; onSave: (d: Record<string, unknown>) => Promise<void> }) {
+  const [suggestions, setSuggestions] = useState<Suggestion[]>((project.ai_suggestions as Suggestion[]) ?? []);
+  const [loadingAI, setLoadingAI] = useState(false);
+  const [selected, setSelected] = useState<number | null>(() => {
+    if (!project.ai_approach || !Array.isArray(project.ai_suggestions)) return null;
+    const idx = (project.ai_suggestions as Suggestion[]).findIndex((s) => s.title === project.ai_approach);
+    return idx >= 0 ? idx : null;
+  });
+  const [useCustom, setUseCustom] = useState(!!(project.ai_approach && !suggestions.find((s) => s.title === project.ai_approach)));
+  const [customIdea, setCustomIdea] = useState(() => {
+    if (project.ai_approach && !suggestions.find((s) => s.title === project.ai_approach)) return project.ai_approach;
+    return "";
+  });
+  const [aiError, setAiError] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const COLORS = ["#00AAFF", "#A855F7", "#00FF88"];
+  const chosenApproach = useCustom ? customIdea.trim() : selected !== null ? suggestions[selected]?.title : "";
+  const isValid = chosenApproach.length > 0;
+
   useEffect(() => {
-    const init = async () => {
-      try {
-        const supabase = createClient();
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) { setLoading(false); return; }
-
-        const [{ data: project }, { data: profile }] = await Promise.all([
-          supabase
-            .from("agent_projects")
-            .select("id, current_step, status")
-            .eq("user_id", user.id)
-            .in("status", ["draft", "in_progress"])
-            .order("created_at", { ascending: false })
-            .limit(1)
-            .maybeSingle(),
-          supabase
-            .from("profiles")
-            .select("plan_tier")
-            .eq("id", user.id)
-            .single(),
-        ]);
-
-        if (project) {
-          setProjectId((project as ProjectRow).id);
-          setCurrentStep((project as ProjectRow).current_step ?? 1);
-        }
-        if (profile && profile.plan_tier) {
-          setPlanTier(profile.plan_tier as string);
-        }
-      } catch {
-        // Silencioso — muestra roadmap sin progreso
-      } finally {
-        setLoading(false);
-      }
-    };
-    void init();
+    if (suggestions.length === 0 && project.problem_statement) {
+      void fetchSuggestions();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Crear proyecto si no existe
+  async function fetchSuggestions() {
+    setLoadingAI(true); setAiError("");
+    try {
+      const res = await fetch("/api/wizard/suggest", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ problem_statement: project.problem_statement, pain_tags: project.pain_tags ?? [] }),
+      });
+      const data = await res.json() as { suggestions?: Suggestion[]; error?: string };
+      if (data.error) throw new Error(data.error);
+      if (data.suggestions) setSuggestions(data.suggestions);
+    } catch (e) {
+      setAiError(e instanceof Error ? e.message : "Error al generar sugerencias");
+    } finally {
+      setLoadingAI(false);
+    }
+  }
+
+  return (
+    <div className="space-y-5">
+      {project.problem_statement && (
+        <div className="rounded-xl px-4 py-3" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-subtle)" }}>
+          <p className="text-[10px] uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Problema (paso 1)</p>
+          <p className="text-xs leading-relaxed line-clamp-2" style={{ color: "var(--text-secondary)" }}>{project.problem_statement}</p>
+        </div>
+      )}
+
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>Sugerencias generadas por IA</label>
+          {!loadingAI && suggestions.length > 0 && (
+            <button type="button" onClick={() => void fetchSuggestions()} className="text-[10px] transition-opacity hover:opacity-70" style={{ color: "var(--neon-blue)" }}>↻ Regenerar</button>
+          )}
+        </div>
+
+        {loadingAI && (
+          <div className="space-y-3">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="rounded-2xl animate-pulse" style={{ height: 80, background: "var(--bg-elevated)", border: "1px solid var(--border-card)" }} />
+            ))}
+          </div>
+        )}
+
+        {!loadingAI && suggestions.length > 0 && (
+          <div className="space-y-3">
+            {suggestions.map((s, i) => {
+              const color = COLORS[i];
+              const isSel = selected === i && !useCustom;
+              return (
+                <button key={i} type="button" onClick={() => { setSelected(i); setUseCustom(false); }}
+                  className="w-full rounded-2xl p-4 text-left transition-all duration-150"
+                  style={{ background: isSel ? `${color}10` : "var(--bg-elevated)", border: `1px solid ${isSel ? color + "60" : "var(--border-card)"}`, boxShadow: isSel ? `0 0 14px ${color}20` : "none" }}>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-[10px] font-bold mt-0.5"
+                      style={{ background: isSel ? color : "var(--bg-card)", border: `1.5px solid ${isSel ? color : "var(--border-subtle)"}`, color: isSel ? "#000" : "var(--text-muted)" }}>
+                      {isSel ? "✓" : i + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold mb-0.5" style={{ color: isSel ? color : "var(--text-primary)" }}>{s.title}</p>
+                      <p className="text-xs leading-relaxed mb-1" style={{ color: "var(--text-secondary)" }}>{s.description}</p>
+                      <span className="text-[10px] px-2 py-0.5 rounded-md" style={{ background: `${color}15`, color, border: `1px solid ${color}30` }}>{s.approach}</span>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {aiError && !loadingAI && (
+          <p className="text-xs p-3 rounded-xl" style={{ background: "rgba(255,68,68,0.08)", color: "var(--neon-red)", border: "1px solid rgba(255,68,68,0.2)" }}>
+            {aiError} — <button type="button" onClick={() => void fetchSuggestions()} className="underline">Reintentar</button>
+          </p>
+        )}
+
+        <div className="space-y-2">
+          <button type="button" onClick={() => { setUseCustom(!useCustom); setSelected(null); }}
+            className="flex items-center gap-2 text-xs transition-opacity hover:opacity-80"
+            style={{ color: useCustom ? "var(--neon-purple)" : "var(--text-muted)" }}>
+            <div className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0"
+              style={{ background: useCustom ? "rgba(168,85,247,0.15)" : "var(--bg-elevated)", border: `1px solid ${useCustom ? "#A855F7" : "var(--border-subtle)"}` }}>
+              {useCustom && <span style={{ color: "#A855F7", fontSize: 8 }}>✓</span>}
+            </div>
+            Tengo mi propia idea
+          </button>
+          <AnimatePresence>
+            {useCustom && (
+              <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                <SInput placeholder="Describe tu idea de solución con IA..." value={customIdea} onChange={(e) => setCustomIdea(e.target.value)} autoFocus />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+
+      <div className="flex justify-end">
+        <NeonButton disabled={!isValid || saving} loading={saving}
+          onClick={async () => { setSaving(true); await onSave({ ai_approach: chosenApproach, ai_suggestions: suggestions }); setSaving(false); }}>
+          Guardar y continuar →
+        </NeonButton>
+      </div>
+    </div>
+  );
+}
+
+// ═══ STEP 3 FORM ══════════════════════════════════════════════════════════════
+
+function Step3Form({ project, onSave }: { project: ProjectData; onSave: (d: Record<string, unknown>) => Promise<void> }) {
+  const [sector, setSector] = useState(project.niche_sector ?? "");
+  const [size, setSize] = useState(project.company_size ?? "");
+  const [persona, setPersona] = useState(project.buyer_persona ?? "");
+  const [saving, setSaving] = useState(false);
+  const isValid = sector && size && persona.trim().length >= 20;
+
+  return (
+    <div className="space-y-5">
+      <div className="space-y-3">
+        <label className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>Sector / Industria</label>
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+          {SECTORS.map((s) => {
+            const sel = sector === s;
+            return (
+              <button key={s} type="button" onClick={() => setSector(s)}
+                className="px-2 py-2 rounded-xl text-xs font-medium transition-all"
+                style={{ background: sel ? "rgba(168,85,247,0.12)" : "var(--bg-elevated)", border: `1px solid ${sel ? "#A855F7" : "var(--border-subtle)"}`, color: sel ? "#A855F7" : "var(--text-secondary)" }}>
+                {s}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <label className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>Tamaño de empresa objetivo</label>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {COMPANY_SIZES.map((cs) => {
+            const sel = size === cs.value;
+            return (
+              <button key={cs.value} type="button" onClick={() => setSize(cs.value)}
+                className="px-3 py-2.5 rounded-xl text-xs font-medium text-left transition-all"
+                style={{ background: sel ? "rgba(168,85,247,0.12)" : "var(--bg-elevated)", border: `1px solid ${sel ? "#A855F7" : "var(--border-subtle)"}`, color: sel ? "#A855F7" : "var(--text-secondary)" }}>
+                {sel && <span className="mr-1">✓</span>}{cs.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>
+          Buyer persona <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>(¿A quién le vendes?)</span>
+        </label>
+        <STextarea value={persona} onChange={(e) => setPersona(e.target.value)}
+          placeholder="Ej: Dueños de clínicas estéticas con 2-5 empleados que ya usan Instagram pero no tienen tiempo de responder DMs y pierden reservas..." rows={3} />
+        <p className="text-[10px]" style={{ color: persona.trim().length >= 20 ? "var(--neon-green)" : "var(--text-muted)" }}>
+          {persona.trim().length}/20 caracteres mínimo
+        </p>
+      </div>
+
+      <div className="flex justify-end">
+        <NeonButton disabled={!isValid || saving} loading={saving}
+          onClick={async () => { setSaving(true); await onSave({ niche_sector: sector, company_size: size, buyer_persona: persona.trim() }); setSaving(false); }}>
+          Guardar y continuar →
+        </NeonButton>
+      </div>
+    </div>
+  );
+}
+
+// ═══ STEP 4 FORM ══════════════════════════════════════════════════════════════
+
+function Step4Form({ project, onSave }: { project: ProjectData; onSave: (d: Record<string, unknown>) => Promise<void> }) {
+  const saved = project.pricing_tiers;
+  const [tiers, setTiers] = useState<PricingTier[]>(saved?.tiers ?? [{ name: "Básico", price: "497", features: ["Agente IA configurado", "Integración básica", "Soporte por email"] }]);
+  const [currency, setCurrency] = useState(saved?.currency ?? "EUR");
+  const [billing, setBilling] = useState(saved?.billing ?? "monthly");
+  const [saving, setSaving] = useState(false);
+  const sym = currency === "USD" ? "$" : currency === "GBP" ? "£" : "€";
+  const isValid = tiers.every((t) => t.name && t.price && t.features.some((f) => f.trim()));
+
+  const updateTier = (i: number, field: keyof PricingTier, value: string | string[]) =>
+    setTiers((prev) => prev.map((t, idx) => idx === i ? { ...t, [field]: value } : t));
+  const updateFeature = (ti: number, fi: number, val: string) => {
+    const updated = [...tiers[ti].features]; updated[fi] = val;
+    updateTier(ti, "features", updated);
+  };
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center gap-4 flex-wrap">
+        <div className="flex items-center gap-1 p-1 rounded-xl" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-subtle)" }}>
+          {(["monthly", "annual"] as const).map((b) => (
+            <button key={b} type="button" onClick={() => setBilling(b)}
+              className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+              style={{ background: billing === b ? "var(--neon-blue)" : "transparent", color: billing === b ? "#000" : "var(--text-muted)" }}>
+              {b === "monthly" ? "Mensual" : "Anual −20%"}
+            </button>
+          ))}
+        </div>
+        <SSelect value={currency} onChange={(e) => setCurrency(e.target.value)} style={{ width: "auto", padding: "8px 12px" }}>
+          <option value="EUR">€ EUR</option>
+          <option value="USD">$ USD</option>
+          <option value="GBP">£ GBP</option>
+        </SSelect>
+      </div>
+
+      <div className="space-y-4">
+        <AnimatePresence>
+          {tiers.map((tier, ti) => (
+            <motion.div key={ti} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, height: 0 }}
+              className="rounded-xl p-4 space-y-4" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-card)" }}>
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-bold px-2 py-0.5 rounded-md" style={{ background: "rgba(0,170,255,0.1)", color: "var(--neon-blue)", border: "1px solid rgba(0,170,255,0.2)" }}>Tier {ti + 1}</span>
+                {tiers.length > 1 && (
+                  <button type="button" onClick={() => setTiers((p) => p.filter((_, i) => i !== ti))} className="ml-auto text-[10px] hover:opacity-70" style={{ color: "var(--neon-red)" }}>Eliminar</button>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[10px] font-semibold block mb-1" style={{ color: "var(--text-muted)" }}>Nombre</label>
+                  <SInput placeholder="Básico, Pro..." value={tier.name} onChange={(e) => updateTier(ti, "name", e.target.value)} />
+                </div>
+                <div>
+                  <label className="text-[10px] font-semibold block mb-1" style={{ color: "var(--text-muted)" }}>Precio {sym}/{billing === "monthly" ? "mes" : "año"}</label>
+                  <SInput type="number" placeholder="497" value={tier.price} onChange={(e) => updateTier(ti, "price", e.target.value)} />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-semibold" style={{ color: "var(--text-muted)" }}>Features incluidas</label>
+                {tier.features.map((feat, fi) => (
+                  <div key={fi} className="flex items-center gap-2">
+                    <span style={{ color: "var(--neon-green)", fontSize: 10 }}>✓</span>
+                    <SInput value={feat} onChange={(e) => updateFeature(ti, fi, e.target.value)} placeholder={`Feature ${fi + 1}...`} style={{ padding: "6px 10px", fontSize: "12px" }} />
+                    {tier.features.length > 1 && (
+                      <button type="button" onClick={() => { const updated = tier.features.filter((_, i) => i !== fi); updateTier(ti, "features", updated.length ? updated : [""]); }} style={{ color: "var(--text-muted)" }}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <button type="button" onClick={() => updateTier(ti, "features", [...tier.features, ""])} className="text-[10px] hover:opacity-70" style={{ color: "var(--neon-blue)" }}>+ Añadir feature</button>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+        {tiers.length < 3 && (
+          <button type="button" onClick={() => setTiers((p) => [...p, { name: "", price: "", features: [""] }])}
+            className="w-full py-3 rounded-xl text-xs font-medium border-dashed hover:opacity-80 transition-opacity"
+            style={{ border: "1px dashed var(--border-neon)", color: "var(--neon-blue)", background: "rgba(0,170,255,0.03)" }}>
+            + Añadir tier {tiers.length + 1}
+          </button>
+        )}
+      </div>
+
+      <div className="flex justify-end">
+        <NeonButton disabled={!isValid || saving} loading={saving}
+          onClick={async () => { setSaving(true); await onSave({ pricing_tiers: { tiers, currency, billing } }); setSaving(false); }}>
+          Guardar y continuar →
+        </NeonButton>
+      </div>
+    </div>
+  );
+}
+
+// ═══ STEP 5 FORM ══════════════════════════════════════════════════════════════
+
+function Step5Form({ project, onSave }: { project: ProjectData; onSave: (d: Record<string, unknown>) => Promise<void> }) {
+  const [chosen, setChosen] = useState(project.landing_platform ?? "");
+  const [alreadyHave, setAlreadyHave] = useState(project.landing_platform === "skip");
+  const [saving, setSaving] = useState(false);
+  const isValid = chosen !== "";
+
+  const handlePlatform = (p: typeof LANDING_PLATFORMS[0]) => {
+    setAlreadyHave(false); setChosen(p.id);
+    window.open(p.url, "_blank", "noopener,noreferrer");
+  };
+
+  return (
+    <div className="space-y-5">
+      <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
+        Elige la plataforma para crear tu landing page. Se abrirá en una nueva pestaña con las plantillas disponibles.
+      </p>
+
+      <div className="grid sm:grid-cols-2 gap-4">
+        {LANDING_PLATFORMS.map((p) => {
+          const isSel = chosen === p.id && !alreadyHave;
+          return (
+            <button key={p.id} type="button" onClick={() => handlePlatform(p)}
+              className="rounded-2xl p-5 text-left flex flex-col gap-3 transition-all duration-200 group"
+              style={{ background: isSel ? `${p.color}10` : "var(--bg-elevated)", border: `1.5px solid ${isSel ? p.color : "var(--border-card)"}`, boxShadow: isSel ? `0 0 18px ${p.color}25` : "none" }}>
+              <div className="flex items-center justify-between">
+                <span className="text-2xl font-bold" style={{ color: isSel ? p.color : "var(--text-muted)", fontFamily: "var(--font-syne, sans-serif)" }}>{p.name}</span>
+                <span className="text-[10px] font-medium px-2 py-0.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: `${p.color}15`, color: p.color }}>Abrir →</span>
+              </div>
+              <p className="text-xs" style={{ color: "var(--text-secondary)" }}>{p.desc}</p>
+              {isSel && <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--neon-green)" }} /><span className="text-[10px]" style={{ color: "var(--neon-green)" }}>Seleccionada</span></div>}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="flex items-center gap-3">
+        <div className="flex-1 h-px" style={{ background: "var(--border-subtle)" }} />
+        <span className="text-xs" style={{ color: "var(--text-muted)" }}>o</span>
+        <div className="flex-1 h-px" style={{ background: "var(--border-subtle)" }} />
+      </div>
+
+      <button type="button" onClick={() => { setAlreadyHave(!alreadyHave); setChosen(!alreadyHave ? "skip" : ""); }}
+        className="flex items-center gap-3 w-full p-4 rounded-xl transition-all"
+        style={{ background: alreadyHave ? "rgba(0,255,136,0.06)" : "var(--bg-elevated)", border: `1px solid ${alreadyHave ? "rgba(0,255,136,0.35)" : "var(--border-subtle)"}` }}>
+        <div className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0" style={{ background: alreadyHave ? "var(--neon-green)" : "var(--bg-card)", border: `1.5px solid ${alreadyHave ? "var(--neon-green)" : "var(--border-subtle)"}` }}>
+          {alreadyHave && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>}
+        </div>
+        <div className="text-left">
+          <p className="text-sm font-medium" style={{ color: alreadyHave ? "var(--neon-green)" : "var(--text-primary)" }}>Ya tengo una landing page</p>
+          <p className="text-xs" style={{ color: "var(--text-muted)" }}>Marcar el paso como completado</p>
+        </div>
+      </button>
+
+      {chosen && !alreadyHave && (
+        <p className="text-xs text-center px-4 py-2 rounded-xl" style={{ background: "rgba(0,170,255,0.05)", color: "var(--text-secondary)", border: "1px solid var(--border-neon)" }}>
+          Se abrió {LANDING_PLATFORMS.find((p) => p.id === chosen)?.name} en una nueva pestaña. Cuando termines, guarda el paso.
+        </p>
+      )}
+
+      <div className="flex justify-end">
+        <NeonButton disabled={!isValid || saving} loading={saving}
+          onClick={async () => { setSaving(true); await onSave({ landing_platform: chosen, landing_redirect_at: chosen !== "skip" ? new Date().toISOString() : null }); setSaving(false); }}>
+          Guardar y continuar →
+        </NeonButton>
+      </div>
+    </div>
+  );
+}
+
+// ═══ STEP 6 FORM ══════════════════════════════════════════════════════════════
+
+function Step6Form({ project, onSave }: { project: ProjectData; onSave: (d: Record<string, unknown>) => Promise<void> }) {
+  const [selectedType, setSelectedType] = useState(project.agent_type ?? "");
+  const [generating, setGenerating] = useState(false);
+  const [result, setResult] = useState<{ generated_prompt: string; n8n_json: unknown } | null>(
+    project.generated_prompt ? { generated_prompt: project.generated_prompt, n8n_json: project.n8n_json } : null
+  );
+  const [genError, setGenError] = useState("");
+  const [copied, setCopied] = useState<"prompt" | "json" | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [loadingSingle, setLoadingSingle] = useState(false);
+  const [loadingStarter, setLoadingStarter] = useState(false);
+  const [payError, setPayError] = useState("");
+  const [hasAccess, setHasAccess] = useState<boolean | null>(null);
+
+  // Check access on mount
+  useEffect(() => {
+    void checkAccess();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function checkAccess() {
+    if (!project.id) { setHasAccess(false); return; }
+    try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { setHasAccess(false); return; }
+      const { data: profile } = await supabase.from("profiles").select("plan_tier, subscription_status").eq("id", user.id).single();
+      const paidTiers = ["starter", "pro", "enterprise"];
+      if (profile && paidTiers.includes(profile.plan_tier) && profile.subscription_status === "active") {
+        setHasAccess(true); return;
+      }
+      const { data: purchase } = await supabase.from("agent_purchases").select("id").eq("user_id", user.id).eq("agent_project_id", project.id).eq("purchase_type", "single").eq("status", "paid").maybeSingle();
+      setHasAccess(!!purchase);
+    } catch { setHasAccess(false); }
+  }
+
+  async function handleSelectType(typeId: string) {
+    if (!hasAccess) return;
+    setSelectedType(typeId); setResult(null); setGenError(""); setGenerating(true);
+    try {
+      const res = await fetch("/api/wizard/generate", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ agentProjectId: project.id, agent_type: typeId, problem_statement: project.problem_statement, niche_sector: project.niche_sector, company_size: project.company_size, buyer_persona: project.buyer_persona, ai_approach: project.ai_approach }),
+      });
+      const data = await res.json() as { generated_prompt?: string; n8n_json?: unknown; error?: string };
+      if (data.error) throw new Error(data.error);
+      if (data.generated_prompt) setResult({ generated_prompt: data.generated_prompt, n8n_json: data.n8n_json });
+    } catch (e) {
+      setGenError(e instanceof Error ? e.message : "Error al generar");
+    } finally { setGenerating(false); }
+  }
+
+  async function handleCopy(type: "prompt" | "json") {
+    if (!result) return;
+    await navigator.clipboard.writeText(type === "prompt" ? result.generated_prompt : JSON.stringify(result.n8n_json, null, 2));
+    setCopied(type); setTimeout(() => setCopied(null), 2000);
+  }
+
+  function handleDownload() {
+    if (!result) return;
+    const blob = new Blob([JSON.stringify(result.n8n_json, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = `${selectedType}_workflow.json`; a.click(); URL.revokeObjectURL(url);
+  }
+
+  async function handlePayment(type: "single" | "starter") {
+    setPayError("");
+    if (type === "single") setLoadingSingle(true); else setLoadingStarter(true);
+    try {
+      const res = await fetch("/api/stripe/wizard-checkout", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type, agentProjectId: project.id }),
+      });
+      const data = await res.json() as { url?: string; error?: string };
+      if (data.error) throw new Error(data.error);
+      if (data.url) window.location.href = data.url;
+    } catch (e) {
+      setPayError(e instanceof Error ? e.message : "Error al iniciar pago");
+      setLoadingSingle(false); setLoadingStarter(false);
+    }
+  }
+
+  if (hasAccess === null) {
+    return <div className="flex justify-center py-8"><div className="w-6 h-6 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: "#7C3AED", borderTopColor: "transparent" }} /></div>;
+  }
+
+  const CHECK = <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>;
+
+  return (
+    <div className="space-y-5">
+      <div className="rounded-2xl p-5 space-y-4" style={{ background: "var(--bg-elevated)", border: `1px solid ${hasAccess ? "var(--border-card)" : "var(--border-purple)"}` }}>
+        <p className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>Selecciona el tipo de agente</p>
+        <div className="relative">
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2" style={{ filter: hasAccess ? "none" : "blur(3px)", pointerEvents: hasAccess ? "auto" : "none" }}>
+            {AGENT_TYPES.map((agent) => {
+              const isSel = selectedType === agent.id;
+              return (
+                <button key={agent.id} type="button" onClick={() => void handleSelectType(agent.id)}
+                  className="flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all duration-150"
+                  style={{ background: isSel ? "rgba(124,58,237,0.12)" : "var(--bg-card)", border: `1px solid ${isSel ? "#7C3AED" : "var(--border-subtle)"}`, boxShadow: isSel ? "0 0 12px rgba(124,58,237,0.25)" : "none" }}>
+                  <span className="text-xl leading-none">{agent.emoji}</span>
+                  <span className="text-[9px] font-medium text-center leading-tight" style={{ color: isSel ? "#A855F7" : "var(--text-secondary)" }}>{agent.label}</span>
+                </button>
+              );
+            })}
+          </div>
+          {!hasAccess && (
+            <div className="absolute inset-0 flex items-center justify-center rounded-xl" style={{ background: "rgba(13,13,20,0.75)", backdropFilter: "blur(2px)" }}>
+              <div className="text-center space-y-2">
+                <span className="text-3xl">🔒</span>
+                <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>Desbloquea el paso 6</p>
+                <p className="text-xs" style={{ color: "var(--text-muted)" }}>Necesitas un plan de pago</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {generating && (
+        <div className="flex items-center gap-3 p-4 rounded-2xl" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
+          <span className="w-5 h-5 rounded-full border-2 border-t-transparent animate-spin flex-shrink-0" style={{ borderColor: "#7C3AED", borderTopColor: "transparent" }} />
+          <div>
+            <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>Generando con Claude IA...</p>
+            <p className="text-xs" style={{ color: "var(--text-muted)" }}>Creando prompt personalizado + workflow n8n</p>
+          </div>
+        </div>
+      )}
+
+      {genError && !generating && (
+        <p className="text-xs p-3 rounded-xl" style={{ background: "rgba(255,68,68,0.08)", color: "var(--neon-red)", border: "1px solid rgba(255,68,68,0.2)" }}>
+          {genError} — <button type="button" onClick={() => void handleSelectType(selectedType)} className="underline">Reintentar</button>
+        </p>
+      )}
+
+      <AnimatePresence>
+        {result && !generating && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
+            <div className="rounded-2xl p-4 space-y-3" style={{ background: "var(--bg-card)", border: "1px solid var(--border-neon)" }}>
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--neon-blue)" }}>System Prompt</p>
+                <button type="button" onClick={() => void handleCopy("prompt")}
+                  className="flex items-center gap-1.5 text-xs px-3 py-1 rounded-lg transition-all"
+                  style={{ background: copied === "prompt" ? "rgba(0,255,136,0.1)" : "var(--bg-elevated)", color: copied === "prompt" ? "var(--neon-green)" : "var(--text-secondary)", border: `1px solid ${copied === "prompt" ? "rgba(0,255,136,0.3)" : "var(--border-subtle)"}` }}>
+                  {copied === "prompt" ? "✓ Copiado" : "Copiar"}
+                </button>
+              </div>
+              <pre className="text-xs leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto" style={{ color: "var(--text-secondary)", fontFamily: "monospace" }}>
+                {result.generated_prompt}
+              </pre>
+            </div>
+
+            <div className="rounded-2xl p-4 space-y-3" style={{ background: "var(--bg-card)", border: "1px solid rgba(0,255,136,0.25)" }}>
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--neon-green)" }}>JSON n8n Workflow</p>
+                <div className="flex items-center gap-2">
+                  <button type="button" onClick={() => void handleCopy("json")}
+                    className="flex items-center gap-1.5 text-xs px-3 py-1 rounded-lg"
+                    style={{ background: copied === "json" ? "rgba(0,255,136,0.1)" : "var(--bg-elevated)", color: copied === "json" ? "var(--neon-green)" : "var(--text-secondary)", border: `1px solid ${copied === "json" ? "rgba(0,255,136,0.3)" : "var(--border-subtle)"}` }}>
+                    {copied === "json" ? "✓ Copiado" : "Copiar"}
+                  </button>
+                  <button type="button" onClick={handleDownload} className="text-xs px-3 py-1 rounded-lg" style={{ background: "var(--bg-elevated)", color: "var(--neon-blue)", border: "1px solid var(--border-neon)" }}>Descargar</button>
+                </div>
+              </div>
+              <pre className="text-xs leading-relaxed whitespace-pre-wrap max-h-40 overflow-y-auto" style={{ color: "var(--neon-green)", fontFamily: "monospace", opacity: 0.85 }}>
+                {JSON.stringify(result.n8n_json, null, 2).slice(0, 400)}...
+              </pre>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {!hasAccess && (
+        <div className="space-y-4">
+          <p className="text-xs font-semibold text-center" style={{ color: "var(--text-secondary)" }}>Desbloquea el Design Core</p>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="rounded-2xl p-5 space-y-4" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-card)" }}>
+              <div>
+                <p className="text-2xl font-black" style={{ color: "var(--text-primary)", fontFamily: "var(--font-syne, sans-serif)" }}>10€</p>
+                <p className="text-xs" style={{ color: "var(--text-muted)" }}>Solo este agente · Para siempre</p>
+              </div>
+              <ul className="space-y-1.5">
+                {["Prompt completo", "JSON n8n para importar", "Agente en dashboard"].map((f) => (
+                  <li key={f} className="flex items-center gap-2"><span style={{ color: "var(--neon-green)" }}>{CHECK}</span><span className="text-xs" style={{ color: "var(--text-secondary)" }}>{f}</span></li>
+                ))}
+              </ul>
+              <button type="button" onClick={() => void handlePayment("single")} disabled={loadingSingle || loadingStarter}
+                className="w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                style={{ background: "var(--bg-card)", border: "1px solid var(--border-neon)", color: "var(--neon-blue)" }}>
+                {loadingSingle && <span className="w-3.5 h-3.5 rounded-full border-2 border-current border-t-transparent animate-spin" />}
+                Pagar 10€ →
+              </button>
+            </div>
+            <div className="rounded-2xl p-5 space-y-4 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-neon)", boxShadow: "var(--glow-blue)" }}>
+              <div className="absolute top-0 right-0 px-3 py-1 text-[10px] font-black uppercase rounded-bl-xl" style={{ background: "var(--grad-primary)", color: "#fff" }}>Recomendado</div>
+              <div>
+                <p className="text-2xl font-black" style={{ background: "var(--grad-primary)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", fontFamily: "var(--font-syne, sans-serif)" }}>
+                  29€<span className="text-base font-medium" style={{ WebkitTextFillColor: "var(--text-muted)" }}>/mes</span>
+                </p>
+                <p className="text-xs" style={{ color: "var(--text-muted)" }}>Starter · Cancela cuando quieras</p>
+              </div>
+              <ul className="space-y-1.5">
+                {["Agentes ilimitados", "Academia completa", "Chat IA con Claude", "Soporte prioritario"].map((f) => (
+                  <li key={f} className="flex items-center gap-2"><span style={{ color: "var(--neon-blue)" }}>{CHECK}</span><span className="text-xs" style={{ color: "var(--text-secondary)" }}>{f}</span></li>
+                ))}
+              </ul>
+              <button type="button" onClick={() => void handlePayment("starter")} disabled={loadingSingle || loadingStarter}
+                className="w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 disabled:opacity-50"
+                style={{ background: "var(--grad-primary)", color: "#fff", boxShadow: "0 0 16px rgba(0,170,255,0.3)" }}>
+                {loadingStarter && <span className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />}
+                Empezar Starter →
+              </button>
+            </div>
+          </div>
+          {payError && <p className="text-xs text-center" style={{ color: "var(--neon-red)" }}>{payError}</p>}
+        </div>
+      )}
+
+      {hasAccess && result && (
+        <div className="flex justify-end">
+          <NeonButton disabled={!result || saving} loading={saving}
+            onClick={async () => { setSaving(true); await onSave({ agent_type: selectedType, generated_prompt: result.generated_prompt, n8n_json: result.n8n_json }); setSaving(false); }}>
+            Completar roadmap →
+          </NeonButton>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═══ MAIN PAGE ════════════════════════════════════════════════════════════════
+
+export default function RoadmapPage() {
+  const [loading, setLoading] = useState(true);
+  const [projectId, setProjectId] = useState<string | null>(null);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [expandedStep, setExpandedStep] = useState<number | null>(1);
+  const [project, setProject] = useState<ProjectData>({});
+
+  useEffect(() => { void loadProject(); }, []);
+
+  async function loadProject() {
+    try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { setLoading(false); return; }
+
+      const { data } = await supabase
+        .from("agent_projects")
+        .select("*")
+        .eq("user_id", user.id)
+        .in("status", ["draft", "in_progress"])
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (data) {
+        setProjectId(data.id);
+        setCurrentStep(data.current_step ?? 1);
+        setProject(data as ProjectData);
+        setExpandedStep(data.current_step ?? 1);
+      } else {
+        setExpandedStep(1);
+      }
+    } catch { /* silencioso */ } finally { setLoading(false); }
+  }
+
   const getOrCreateProject = useCallback(async (): Promise<string | null> => {
     if (projectId) return projectId;
     try {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return null;
-
-      const { data } = await supabase
-        .from("agent_projects")
-        .insert({ user_id: user.id, current_step: 1, status: "draft" })
-        .select("id")
-        .single();
-
-      if (data?.id) {
-        setProjectId(data.id as string);
-        return data.id as string;
-      }
+      const { data } = await supabase.from("agent_projects").insert({ user_id: user.id, current_step: 1, status: "draft" }).select("id").single();
+      if (data?.id) { setProjectId(data.id as string); return data.id as string; }
     } catch { /* silencioso */ }
     return null;
   }, [projectId]);
 
-  // Clic en un paso
-  const handleStepClick = async (stepId: number, status: StepStatus) => {
-    if (status === "locked") return;
-
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      router.push(`/login?next=/roadmap`);
-      return;
-    }
-
-    setNavigatingStep(stepId);
+  async function saveStep(stepId: number, data: Record<string, unknown>) {
     const pid = await getOrCreateProject();
-    if (!pid) { setNavigatingStep(null); return; }
+    if (!pid) return;
 
-    router.push(`/wizard/${pid}/${stepId}`);
-  };
+    const isLast = stepId === 6;
+    const newCurrentStep = stepId >= currentStep ? stepId + 1 : currentStep;
+    const supabase = createClient();
 
-  // Calcular estado de cada paso
-  const getStatus = (stepId: number): StepStatus => {
-    if (loading) return "pending";
-    if (stepId === 6 && planTier === "free") return "locked";
-    if (!projectId) return stepId === 1 ? "active" : "pending";
+    await supabase.from("agent_projects").update({
+      ...data,
+      current_step: isLast ? 6 : newCurrentStep,
+      status: isLast ? "completed" : "in_progress",
+      ...(isLast ? { completed_at: new Date().toISOString() } : {}),
+    }).eq("id", pid);
+
+    setProject((prev) => ({ ...prev, id: pid, ...data, current_step: newCurrentStep }));
+    setCurrentStep(newCurrentStep);
+    setExpandedStep(stepId < 6 ? stepId + 1 : null);
+  }
+
+  const getStepStatus = (stepId: number) => {
+    if (!projectId && stepId > 1) return "pending";
     if (stepId < currentStep) return "completed";
     if (stepId === currentStep) return "active";
     return "pending";
   };
 
-  const steps = STEPS_DATA.map((s) => ({ ...s, status: getStatus(s.id) }));
-  const completedCount = steps.filter((s) => s.status === "completed").length;
-  const totalXP = steps.filter((s) => s.status === "completed").reduce((a, s) => a + s.xp, 0);
-  const progressPct = (completedCount / STEPS_DATA.length) * 100;
+  const completedCount = STEPS_CONFIG.filter((s) => getStepStatus(s.id) === "completed").length;
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -190,168 +856,144 @@ export default function RoadmapPage() {
         </p>
       </motion.div>
 
-      {/* Progress bar */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.1 }}
-        className="p-4 rounded-2xl"
-        style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}
-      >
+      {/* Progress */}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
+        className="p-4 rounded-2xl" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>Progreso general</span>
-          <div className="flex items-center gap-2">
-            <NeonBadge color="cyan">{completedCount}/{STEPS_DATA.length} pasos</NeonBadge>
-            <NeonBadge color="gold">+{totalXP.toLocaleString()} XP</NeonBadge>
-          </div>
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-lg" style={{ background: "rgba(0,170,255,0.1)", color: "var(--neon-blue)", border: "1px solid rgba(0,170,255,0.2)" }}>
+            {completedCount}/{STEPS_CONFIG.length} pasos
+          </span>
         </div>
-        <div className="w-full h-2 rounded-full" style={{ background: "var(--bg-input)" }}>
+        <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: "var(--bg-input)" }}>
           <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${progressPct}%` }}
-            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-            className="h-full rounded-full xp-bar-fill"
+            animate={{ width: `${(completedCount / STEPS_CONFIG.length) * 100}%` }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="h-full rounded-full"
+            style={{ background: "linear-gradient(90deg, #00AAFF, #A855F7)" }}
           />
         </div>
-        {completedCount > 0 && (
-          <p className="text-[10px] mt-2" style={{ color: "var(--text-muted)" }}>
-            {completedCount === STEPS_DATA.length
-              ? "🎉 ¡Roadmap completo! Tu agencia de IA está lista para escalar."
-              : `${STEPS_DATA.length - completedCount} pasos restantes para completar el roadmap`}
-          </p>
-        )}
       </motion.div>
 
-      {/* Steps */}
-      <div className="space-y-3">
-        {steps.map((step, i) => {
-          const sc = STATUS_CONFIG[step.status];
-          const isLocked = step.status === "locked";
-          const isCompleted = step.status === "completed";
-          const isNavigating = navigatingStep === step.id;
+      {/* Steps accordion */}
+      {loading ? (
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-16 rounded-2xl animate-pulse" style={{ background: "var(--bg-card)" }} />
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {STEPS_CONFIG.map((step, i) => {
+            const status = getStepStatus(step.id);
+            const isExpanded = expandedStep === step.id;
+            const isCompleted = status === "completed";
+            const isActive = status === "active";
+            const isPending = status === "pending";
 
-          return (
-            <motion.div
-              key={step.id}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.05 * i }}
-            >
-              <div
-                className="rounded-2xl overflow-hidden transition-all duration-200"
-                style={{
-                  background: "var(--bg-card)",
-                  border: `1px solid ${step.status === "active" ? step.color + "40" : isCompleted ? "rgba(0,255,136,0.2)" : "var(--border-card)"}`,
-                  boxShadow: step.status === "active" ? `0 0 20px ${step.color}12` : "none",
-                  opacity: isLocked ? 0.5 : 1,
-                }}
-              >
-                <button
-                  className="w-full flex items-center gap-4 p-4 text-left group"
-                  onClick={() => void handleStepClick(step.id, step.status)}
-                  disabled={isLocked || isNavigating}
+            return (
+              <motion.div key={step.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 * i }}>
+                <div
+                  className="rounded-2xl overflow-hidden"
+                  style={{
+                    background: "var(--bg-card)",
+                    border: `1px solid ${isExpanded ? step.color + "40" : isCompleted ? "rgba(0,255,136,0.2)" : "var(--border-card)"}`,
+                    boxShadow: isExpanded ? `0 0 20px ${step.color}10` : "none",
+                  }}
                 >
-                  {/* Step number / check */}
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-bold transition-all"
-                    style={{
-                      background: isCompleted
-                        ? "#00FF8820"
-                        : step.status === "active"
-                        ? `${step.color}20`
-                        : "var(--bg-elevated)",
-                      border: `1.5px solid ${isCompleted ? "#00FF88" : step.status === "active" ? step.color : "var(--border-subtle)"}`,
-                      color: isCompleted ? "#00FF88" : step.status === "active" ? step.color : "var(--text-muted)",
-                    }}
+                  {/* Header row */}
+                  <button
+                    type="button"
+                    className="w-full flex items-center gap-4 p-4 text-left group"
+                    onClick={() => setExpandedStep(isExpanded ? null : step.id)}
                   >
-                    {isCompleted ? "✓" : step.id}
-                  </div>
-
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                      <span
-                        className="font-semibold text-sm"
-                        style={{
-                          fontFamily: "var(--font-syne, sans-serif)",
-                          color: isCompleted ? "var(--neon-green)" : step.status === "active" ? step.color : "var(--text-primary)",
-                          textDecoration: isCompleted ? "line-through" : "none",
-                          opacity: isCompleted ? 0.7 : 1,
-                        }}
-                      >
-                        {step.title}
-                      </span>
-                      <NeonBadge color={sc.badge} size="sm">{sc.label}</NeonBadge>
-                      <NeonBadge color="gold" size="sm">+{step.xp} XP</NeonBadge>
+                    {/* Step number / check */}
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-bold transition-all"
+                      style={{
+                        background: isCompleted ? "#00FF8820" : isActive || isExpanded ? `${step.color}20` : "var(--bg-elevated)",
+                        border: `1.5px solid ${isCompleted ? "#00FF88" : isActive || isExpanded ? step.color : "var(--border-subtle)"}`,
+                        color: isCompleted ? "#00FF88" : isActive || isExpanded ? step.color : "var(--text-muted)",
+                      }}
+                    >
+                      {isCompleted ? "✓" : step.id}
                     </div>
-                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
-                      {step.subtitle}
-                    </p>
-                  </div>
 
-                  {/* Right action */}
-                  <div className="flex-shrink-0 flex items-center gap-2">
-                    {isLocked ? (
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: "#A855F7" }}>
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm" style={{
+                        fontFamily: "var(--font-syne, sans-serif)",
+                        color: isCompleted ? "var(--neon-green)" : isActive || isExpanded ? step.color : "var(--text-primary)",
+                        textDecoration: isCompleted ? "line-through" : "none",
+                        opacity: isCompleted ? 0.7 : 1,
+                      }}>
+                        {step.title}
+                      </p>
+                      <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>{step.subtitle}</p>
+                    </div>
+
+                    {/* Status + chevron */}
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {!isPending && (
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md hidden sm:block"
+                          style={{ background: isCompleted ? "rgba(0,255,136,0.08)" : `${step.color}15`, color: isCompleted ? "var(--neon-green)" : step.color, border: `1px solid ${isCompleted ? "rgba(0,255,136,0.3)" : step.color + "30"}` }}>
+                          {isCompleted ? "Completado" : "En progreso"}
+                        </span>
+                      )}
+                      <svg
+                        width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                        className="transition-transform duration-200"
+                        style={{ color: "var(--text-muted)", transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)" }}
+                      >
+                        <polyline points="6 9 12 15 18 9" />
                       </svg>
-                    ) : isNavigating ? (
-                      <span className="w-4 h-4 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: step.color, borderTopColor: "transparent" }} />
-                    ) : isCompleted ? (
-                      <span
-                        className="text-xs px-2.5 py-1 rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity"
-                        style={{ background: "rgba(0,255,136,0.08)", color: "var(--neon-green)", border: "1px solid rgba(0,255,136,0.2)" }}
+                    </div>
+                  </button>
+
+                  {/* Expanded content */}
+                  <AnimatePresence>
+                    {isExpanded && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        className="overflow-hidden"
                       >
-                        Revisar
-                      </span>
-                    ) : (
-                      <span
-                        className="text-xs px-2.5 py-1 rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity"
-                        style={{ background: `${step.color}15`, color: step.color, border: `1px solid ${step.color}30` }}
-                      >
-                        {step.cta} →
-                      </span>
+                        <div className="px-5 pb-5 pt-1" style={{ borderTop: `1px solid ${step.color}20` }}>
+                          {step.id === 1 && <Step1Form project={project} onSave={(d) => saveStep(1, d)} />}
+                          {step.id === 2 && <Step2Form project={project} onSave={(d) => saveStep(2, d)} />}
+                          {step.id === 3 && <Step3Form project={project} onSave={(d) => saveStep(3, d)} />}
+                          {step.id === 4 && <Step4Form project={project} onSave={(d) => saveStep(4, d)} />}
+                          {step.id === 5 && <Step5Form project={project} onSave={(d) => saveStep(5, d)} />}
+                          {step.id === 6 && <Step6Form project={project} onSave={(d) => saveStep(6, d)} />}
+                        </div>
+                      </motion.div>
                     )}
-                  </div>
-                </button>
+                  </AnimatePresence>
 
-                {/* Completed bottom bar */}
-                {isCompleted && (
-                  <div className="h-0.5 w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(0,255,136,0.3), transparent)" }} />
-                )}
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-
-      {/* Bottom info for locked step 6 */}
-      {planTier === "free" && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="flex items-center justify-between p-4 rounded-2xl"
-          style={{ background: "rgba(168,85,247,0.05)", border: "1px solid var(--border-purple)" }}
-        >
-          <div>
-            <p className="text-sm font-semibold" style={{ color: "#A855F7" }}>
-              🔒 Design Core — Plan de pago
-            </p>
-            <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
-              El paso 6 genera el prompt + workflow n8n. Requiere Starter (29€/mes) o pago único (10€).
-            </p>
-          </div>
-          <button
-            onClick={() => router.push("/billing")}
-            className="flex-shrink-0 ml-4 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all"
-            style={{ background: "var(--grad-primary)", color: "#fff" }}
-          >
-            Ver planes →
-          </button>
-        </motion.div>
+                  {isCompleted && !isExpanded && (
+                    <div className="h-0.5 w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(0,255,136,0.3), transparent)" }} />
+                  )}
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
       )}
+
+      {/* Bottom CTA */}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
+        className="flex items-center justify-between p-4 rounded-2xl"
+        style={{ background: "rgba(0,170,255,0.04)", border: "1px solid var(--border-neon)" }}>
+        <div>
+          <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>¿Quieres un agente ya construido?</p>
+          <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>Usa el creador rápido sin pasos</p>
+        </div>
+        <Link href="/agents/create">
+          <NeonButton size="sm">Crear agente →</NeonButton>
+        </Link>
+      </motion.div>
     </div>
   );
 }

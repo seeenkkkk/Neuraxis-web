@@ -132,12 +132,6 @@ export default function Step2Solutions({ project }: Props) {
           >
             Soluciones con IA
           </h2>
-          <span
-            className="text-[10px] font-bold px-2 py-0.5 rounded-md"
-            style={{ background: "rgba(255,215,0,0.1)", color: "#FFD700", border: "1px solid rgba(255,215,0,0.25)" }}
-          >
-            +400 XP
-          </span>
         </div>
         <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
           Elige el enfoque de IA para resolver el problema
@@ -322,7 +316,7 @@ export default function Step2Solutions({ project }: Props) {
           {submitting && (
             <span className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
           )}
-          Completar paso · +400 XP →
+          Completar paso →
         </button>
       </div>
     </motion.div>

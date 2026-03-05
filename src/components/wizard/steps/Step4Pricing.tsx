@@ -88,8 +88,7 @@ export default function Step4Pricing({ project }: Props) {
         <div className="flex items-center gap-2 mb-1">
           <span className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ background: "#FFD700", color: "#000" }}>4</span>
           <h2 className="text-lg font-bold" style={{ color: "var(--text-primary)", fontFamily: "var(--font-syne, sans-serif)" }}>Pricing y Paquetes</h2>
-          <span className="text-[10px] font-bold px-2 py-0.5 rounded-md" style={{ background: "rgba(255,215,0,0.1)", color: "#FFD700", border: "1px solid rgba(255,215,0,0.25)" }}>+450 XP</span>
-        </div>
+                  </div>
         <p className="text-sm" style={{ color: "var(--text-secondary)" }}>Diseña tu modelo de precios para clientes</p>
       </div>
 
@@ -206,7 +205,7 @@ export default function Step4Pricing({ project }: Props) {
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-40"
           style={{ background: isValid ? "linear-gradient(135deg, #00AAFF, #7C3AED)" : "var(--bg-elevated)", color: isValid ? "#fff" : "var(--text-muted)", boxShadow: isValid ? "0 0 16px rgba(0,170,255,0.3)" : "none" }}>
           {submitting && <span className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />}
-          Completar paso · +450 XP →
+          Completar paso →
         </button>
       </div>
     </motion.div>
