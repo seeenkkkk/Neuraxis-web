@@ -1,102 +1,58 @@
 "use client";
 
-import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { useWizardStore } from "@/store/wizardStore";
+import Step1Problem from "./steps/Step1Problem";
+import Step2Solutions from "./steps/Step2Solutions";
+import Step3Niche from "./steps/Step3Niche";
+import Step4Pricing from "./steps/Step4Pricing";
+import Step5Landing from "./steps/Step5Landing";
+import Step6Agent from "./steps/Step6Agent";
 
+// Tipo compartido del proyecto (campos usados por algún paso)
 type AgentProject = {
   id: string;
   current_step: number;
+  problem_statement?: string | null;
+  pain_tags?: string[] | null;
+  ai_approach?: string | null;
+  ai_suggestions?: unknown;
+  niche_sector?: string | null;
+  company_size?: string | null;
+  buyer_persona?: string | null;
+  pricing_tiers?: unknown;
+  landing_platform?: string | null;
+  agent_type?: string | null;
+  generated_prompt?: string | null;
+  n8n_json?: unknown;
 };
 
 interface WizardStepClientProps {
   step: number;
   project: AgentProject;
+  hasStep6Access: boolean;
 }
 
-const STEP_META = [
-  { label: "Define el Problema", desc: "¿Qué dolor de negocio resuelve tu agente?", sprint: "Sprint 2" },
-  { label: "Enfoque de IA", desc: "¿Qué modelo y arquitectura vas a usar?", sprint: "Sprint 2" },
-  { label: "Nicho y Mercado", desc: "Sector, buyer persona y estructura de precios", sprint: "Sprint 2" },
-  { label: "Landing Page", desc: "Elige la plataforma para tu página de venta", sprint: "Sprint 2" },
-  { label: "Configura tu Agente", desc: "Tipo de agente, nombre y parámetros", sprint: "Sprint 3" },
-  { label: "Exportar Agente", desc: "Prompt completo + JSON n8n", sprint: "Sprint 3" },
-];
-
-export default function WizardStepClient({ step, project }: WizardStepClientProps) {
-  const { loadProject, setCurrentStep } = useWizardStore();
-
-  useEffect(() => {
-    void loadProject(project.id);
-    setCurrentStep(step);
-  }, [project.id, step, loadProject, setCurrentStep]);
-
-  const meta = STEP_META[step - 1];
+export default function WizardStepClient({ step, project, hasStep6Access }: WizardStepClientProps) {
+  const renderStep = () => {
+    switch (step) {
+      case 1: return <Step1Problem project={project} />;
+      case 2: return <Step2Solutions project={project} />;
+      case 3: return <Step3Niche project={project} />;
+      case 4: return <Step4Pricing project={project} />;
+      case 5: return <Step5Landing project={project} />;
+      case 6: return <Step6Agent project={project} hasAccess={hasStep6Access} />;
+      default: return null;
+    }
+  };
 
   return (
     <motion.div
       key={step}
       initial={{ opacity: 0, x: 16 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.28, ease: "easeOut" }}
-      className="rounded-2xl p-8 flex flex-col items-center justify-center gap-6 min-h-[340px]"
-      style={{
-        background: "var(--bg-card)",
-        border: "1px solid var(--border-card)",
-      }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
     >
-      {/* Step badge */}
-      <div
-        className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
-        style={{
-          background: "rgba(0,170,255,0.08)",
-          border: "1px solid var(--border-neon)",
-          color: "var(--neon-blue)",
-        }}
-      >
-        <span
-          className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold"
-          style={{ background: "var(--neon-blue)", color: "#000" }}
-        >
-          {step}
-        </span>
-        {meta?.sprint ?? ""}
-      </div>
-
-      {/* Title */}
-      <div className="text-center space-y-2">
-        <h2
-          className="text-xl font-bold"
-          style={{
-            color: "var(--text-primary)",
-            fontFamily: "var(--font-syne, sans-serif)",
-          }}
-        >
-          {meta?.label ?? `Paso ${step}`}
-        </h2>
-        <p className="text-sm max-w-xs" style={{ color: "var(--text-secondary)" }}>
-          {meta?.desc}
-        </p>
-      </div>
-
-      {/* Placeholder construction banner */}
-      <div
-        className="flex items-center gap-3 px-4 py-3 rounded-xl"
-        style={{
-          background: "rgba(255,215,0,0.05)",
-          border: "1px solid rgba(255,215,0,0.2)",
-        }}
-      >
-        <span className="text-lg">🚧</span>
-        <div>
-          <p className="text-xs font-semibold" style={{ color: "#FFD700" }}>
-            En construcción — {meta?.sprint}
-          </p>
-          <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>
-            La UI de este paso llegará en el siguiente sprint
-          </p>
-        </div>
-      </div>
+      {renderStep()}
     </motion.div>
   );
 }
