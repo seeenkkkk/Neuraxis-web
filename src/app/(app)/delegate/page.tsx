@@ -13,7 +13,7 @@ const SERVICES = [
     desc: "Sesión 1:1 de 1h para definir tu hoja de ruta de IA. Diagnóstico, priorización y plan de acción.",
     price: "97€",
     tag: "Pago único",
-    color: "#A855F7",
+    color: "#9B30FF",
   },
   {
     icon: "⚡",
@@ -21,7 +21,7 @@ const SERVICES = [
     desc: "Implementamos 3 agentes IA, configuramos workflows n8n e integramos con tus herramientas actuales.",
     price: "497€",
     tag: "Proyecto",
-    color: "#00AAFF",
+    color: "#007AFF",
   },
   {
     icon: "🚀",

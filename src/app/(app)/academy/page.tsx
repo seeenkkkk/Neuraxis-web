@@ -41,7 +41,7 @@ const COURSES = [
     duration: "5h 10min",
     xp: 800,
     progress: 65,
-    color: "#00AAFF",
+    color: "#007AFF",
     description: "Domina n8n para construir automatizaciones profesionales que conecten tus agentes IA con el resto de tu stack.",
     lessonList: [
       { title: "Introducción a n8n: instalación y primeros pasos", duration: "20 min", done: true },
@@ -72,7 +72,7 @@ const COURSES = [
     duration: "4h 30min",
     xp: 700,
     progress: 30,
-    color: "#A855F7",
+    color: "#9B30FF",
     description: "Técnicas avanzadas para extraer el máximo rendimiento de los LLMs. Desde few-shot hasta prompts constitucionales.",
     lessonList: [
       { title: "Fundamentos: cómo piensan los LLMs", duration: "22 min", done: true },
@@ -100,7 +100,7 @@ const COURSES = [
     duration: "6h 45min",
     xp: 1200,
     progress: 0,
-    color: "#7C3AED",
+    color: "#7B2FFF",
     locked: true,
     description: "Construye agentes complejos con LangChain y LangGraph. Orquestación multi-agente, memoria persistente y despliegue en producción.",
     lessonList: [

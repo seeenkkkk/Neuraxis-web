@@ -131,7 +131,7 @@ export default function Step4Pricing({ project }: Props) {
                 style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-card)" }}
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-xs font-bold px-2 py-0.5 rounded-md" style={{ background: "rgba(0,170,255,0.1)", color: "var(--neon-blue)", border: "1px solid rgba(0,170,255,0.2)" }}>
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-md" style={{ background: "rgba(0,122,255,0.1)", color: "var(--neon-blue)", border: "1px solid rgba(0,122,255,0.2)" }}>
                     Tier {ti + 1}
                   </span>
                   {tiers.length > 1 && (
@@ -187,7 +187,7 @@ export default function Step4Pricing({ project }: Props) {
           {tiers.length < 3 && (
             <button onClick={addTier}
               className="w-full py-3 rounded-xl text-xs font-medium transition-all hover:opacity-80 border-dashed"
-              style={{ border: "1px dashed var(--border-neon)", color: "var(--neon-blue)", background: "rgba(0,170,255,0.03)" }}>
+              style={{ border: "1px dashed var(--border-neon)", color: "var(--neon-blue)", background: "rgba(0,122,255,0.03)" }}>
               + Añadir tier {tiers.length + 1}
             </button>
           )}
@@ -203,7 +203,7 @@ export default function Step4Pricing({ project }: Props) {
         </Link>
         <button onClick={handleSubmit} disabled={!isValid || submitting}
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-40"
-          style={{ background: isValid ? "linear-gradient(135deg, #00AAFF, #7C3AED)" : "var(--bg-elevated)", color: isValid ? "#fff" : "var(--text-muted)", boxShadow: isValid ? "0 0 16px rgba(0,170,255,0.3)" : "none" }}>
+          style={{ background: isValid ? "linear-gradient(135deg, #007AFF, #7B2FFF)" : "var(--bg-elevated)", color: isValid ? "#fff" : "var(--text-muted)", boxShadow: isValid ? "0 0 16px rgba(0,122,255,0.3)" : "none" }}>
           {submitting && <span className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />}
           Completar paso →
         </button>

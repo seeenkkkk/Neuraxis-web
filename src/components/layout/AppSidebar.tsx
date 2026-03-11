@@ -199,7 +199,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
         className="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 group"
         style={{
           color: isActive ? "var(--neon-blue)" : "var(--text-secondary)",
-          background: isActive ? "rgba(0,170,255,0.08)" : "transparent",
+          background: isActive ? "rgba(0,122,255,0.07)" : "transparent",
           borderLeft: isActive ? "2px solid var(--neon-blue)" : "2px solid transparent",
         }}
       >
@@ -215,8 +215,8 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
             className="ml-auto text-[10px] px-1.5 py-0.5 rounded-md border"
             style={{
               color: "var(--neon-purple)",
-              background: "rgba(168,85,247,0.1)",
-              borderColor: "rgba(168,85,247,0.25)",
+              background: "rgba(155,48,255,0.08)",
+              borderColor: "rgba(155,48,255,0.25)",
             }}
           >
             {item.badge}
@@ -227,7 +227,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
           <motion.div
             layoutId="sidebar-active-glow"
             className="absolute inset-0 rounded-xl pointer-events-none"
-            style={{ background: "rgba(0,170,255,0.04)" }}
+            style={{ background: "rgba(0,122,255,0.04)" }}
           />
         )}
       </Link>
@@ -271,7 +271,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
           onClick={() => setProfileOpen(!profileOpen)}
           className="w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-150"
           style={{
-            background: profileOpen ? "rgba(0,170,255,0.06)" : "transparent",
+            background: profileOpen ? "rgba(0,122,255,0.06)" : "transparent",
             border: "1px solid " + (profileOpen ? "var(--border-neon)" : "transparent"),
           }}
         >
@@ -279,8 +279,8 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
           <div
             className="w-9 h-9 rounded-full flex-shrink-0 relative flex items-center justify-center font-bold text-sm"
             style={{
-              background: "linear-gradient(135deg, #00AAFF, #7C3AED)",
-              boxShadow: "0 0 12px rgba(0,212,255,0.45), 0 0 24px rgba(0,212,255,0.15)",
+              background: "linear-gradient(135deg, #007AFF, #9B30FF)",
+              boxShadow: "0 0 12px rgba(0,122,255,0.40), 0 0 24px rgba(155,48,255,0.20)",
               color: "#fff",
               fontFamily: "var(--font-syne)",
             }}
@@ -302,7 +302,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
             <p
               className="text-xs font-bold truncate"
               style={{
-                background: "linear-gradient(90deg, #00D4FF, #A855F7)",
+                background: "linear-gradient(90deg, #007AFF, #9B30FF)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -361,7 +361,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
                   </div>
                   <div className="flex items-center gap-1.5 mt-2">
                     <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-                      <polygon points="7,1 12,4 12,10 7,13 2,10 2,4" fill="#00D4FF" fillOpacity="0.25" stroke="#00D4FF" strokeWidth="1" />
+                      <polygon points="7,1 12,4 12,10 7,13 2,10 2,4" fill="#007AFF" fillOpacity="0.20" stroke="#007AFF" strokeWidth="1" />
                     </svg>
                     <span className="text-[10px]" style={{ color: "var(--text-secondary)" }}>
                       850 créditos disponibles

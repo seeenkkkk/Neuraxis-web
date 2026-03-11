@@ -76,8 +76,8 @@ function Face({ emotion }: { emotion: Emotion }) {
           {/* Wide-open eyes */}
           <circle cx="40" cy="34" r="5.5" fill="#F0F0FF" fillOpacity="0.95" />
           <circle cx="60" cy="34" r="5.5" fill="#F0F0FF" fillOpacity="0.95" />
-          <circle cx="40" cy="34" r="3" fill="#7C3AED" />
-          <circle cx="60" cy="34" r="3" fill="#7C3AED" />
+          <circle cx="40" cy="34" r="3" fill="#9B30FF" />
+          <circle cx="60" cy="34" r="3" fill="#9B30FF" />
           <circle cx="41" cy="33" r="1.2" fill="#000" />
           <circle cx="61" cy="33" r="1.2" fill="#000" />
           {/* Eye shine */}
@@ -112,7 +112,7 @@ function Arms({ emotion, animated }: { emotion: Emotion; animated: boolean }) {
           <path d="M36,76 Q24,64 18,54" stroke="url(#nex-main)" {...A} />
           <circle cx="18" cy="54" r="4.5" fill="#00AAFF" fillOpacity="0.7" />
           <path d="M64,76 Q76,64 82,54" stroke="url(#nex-main)" {...A} />
-          <circle cx="82" cy="54" r="4.5" fill="#7C3AED" fillOpacity="0.7" />
+          <circle cx="82" cy="54" r="4.5" fill="#9B30FF" fillOpacity="0.7" />
         </g>
       );
     case "waving":
@@ -128,7 +128,7 @@ function Arms({ emotion, animated }: { emotion: Emotion; animated: boolean }) {
             transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" as const }}
           >
             <path d="M64,76 Q74,63 80,56" stroke="url(#nex-main)" {...A} />
-            <circle cx="80" cy="56" r="4.5" fill="#7C3AED" fillOpacity="0.7" />
+            <circle cx="80" cy="56" r="4.5" fill="#9B30FF" fillOpacity="0.7" />
           </motion.g>
         </g>
       );
@@ -157,11 +157,11 @@ function Arms({ emotion, animated }: { emotion: Emotion; animated: boolean }) {
         <g>
           {/* Arms out to sides */}
           <path d="M36,76 Q26,72 18,72" stroke="url(#nex-main)" {...A} />
-          <circle cx="18" cy="72" r="4.5" fill="#7C3AED" fillOpacity="0.7" />
+          <circle cx="18" cy="72" r="4.5" fill="#9B30FF" fillOpacity="0.7" />
           {/* Left lightning bolt */}
           <path d="M18,67 L14,73 L19,73 L15,79" stroke="#FFD700" strokeWidth="1.5" strokeLinecap="round" fill="none" />
           <path d="M64,76 Q74,72 82,72" stroke="url(#nex-main)" {...A} />
-          <circle cx="82" cy="72" r="4.5" fill="#7C3AED" fillOpacity="0.7" />
+          <circle cx="82" cy="72" r="4.5" fill="#9B30FF" fillOpacity="0.7" />
           {/* Right lightning bolt */}
           <path d="M82,67 L86,73 L81,73 L85,79" stroke="#FFD700" strokeWidth="1.5" strokeLinecap="round" fill="none" />
         </g>
@@ -174,7 +174,7 @@ function Arms({ emotion, animated }: { emotion: Emotion; animated: boolean }) {
           <path d="M36,76 Q30,82 26,90" stroke="url(#nex-main)" {...A} strokeOpacity={0.5} />
           <circle cx="26" cy="90" r="4.5" fill="#00AAFF" fillOpacity="0.35" />
           <path d="M64,76 Q70,82 74,90" stroke="url(#nex-main)" {...A} strokeOpacity={0.5} />
-          <circle cx="74" cy="90" r="4.5" fill="#7C3AED" fillOpacity="0.35" />
+          <circle cx="74" cy="90" r="4.5" fill="#9B30FF" fillOpacity="0.35" />
         </g>
       );
   }
@@ -220,7 +220,7 @@ function Extras({ emotion, animated }: { emotion: Emotion; animated: boolean }) 
           animate={animated ? { y: [0, -4, 0], opacity: [0.5, 0.9, 0.5] } : {}}
           transition={{ repeat: Infinity, duration: 2.3, delay: 0.4, ease: "easeInOut" as const }}
         >
-          <text x="74" y="10" fontSize="8" fontWeight="bold" fill="#7C3AED" fontFamily="monospace">Z</text>
+          <text x="74" y="10" fontSize="8" fontWeight="bold" fill="#9B30FF" fontFamily="monospace">Z</text>
         </motion.g>
         <motion.g
           animate={animated ? { y: [0, -5, 0], opacity: [0.3, 0.7, 0.3] } : {}}
@@ -344,12 +344,12 @@ export default function NexMascot({
         >
           <defs>
             <linearGradient id="nex-main" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#00AAFF" />
-              <stop offset="100%" stopColor="#7C3AED" />
+              <stop offset="0%" stopColor="#007AFF" />
+              <stop offset="100%" stopColor="#9B30FF" />
             </linearGradient>
             <linearGradient id="nex-body-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#1A1A2E" />
-              <stop offset="100%" stopColor="#0F0F1C" />
+              <stop offset="0%" stopColor="#1a1a40" />
+              <stop offset="100%" stopColor="#0d0d2e" />
             </linearGradient>
             <filter id="nex-glow-f">
               <feGaussianBlur stdDeviation="1.2" result="blur" />
@@ -381,7 +381,7 @@ export default function NexMascot({
           <circle cx="50" cy="10" r="2.2" fill="#00D4FF" filter="url(#nex-glow-f)" />
 
           {/* Face screen */}
-          <rect x="30" y="24" width="40" height="24" rx="5" fill="#0F0F1C" fillOpacity="0.92" />
+          <rect x="30" y="24" width="40" height="24" rx="5" fill="#0d0d2e" fillOpacity="0.92" />
           <rect
             x="30"
             y="24"

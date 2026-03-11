@@ -52,8 +52,8 @@ const AGENT_TYPES = [
 ];
 
 const LANDING_PLATFORMS = [
-  { id: "framer", name: "Framer", desc: "Diseño visual + animaciones premium", url: "https://framer.com/templates", color: "#00AAFF" },
-  { id: "webflow", name: "Webflow", desc: "Control total + CMS integrado", url: "https://webflow.com/templates", color: "#A855F7" },
+  { id: "framer", name: "Framer", desc: "Diseño visual + animaciones premium", url: "https://framer.com/templates", color: "#007AFF" },
+  { id: "webflow", name: "Webflow", desc: "Control total + CMS integrado", url: "https://webflow.com/templates", color: "#9B30FF" },
 ];
 
 const STEP_TITLES = [
@@ -74,7 +74,7 @@ const STEP_SUBTITLES = [
   "Tu agente configurado listo para activar",
 ];
 
-const STEP_COLORS = ["#00FF88", "#00AAFF", "#A855F7", "#FFD700", "#FF6B35", "#7C3AED"];
+const STEP_COLORS = ["#00FF88", "#007AFF", "#9B30FF", "#FFD700", "#FF6B35", "#7B2FFF"];
 
 // ═══ TYPES ════════════════════════════════════════════════════════════════════
 
@@ -101,22 +101,22 @@ interface ProjectData {
 // ═══ SHARED INPUT STYLES ══════════════════════════════════════════════════════
 
 const iBase: React.CSSProperties = {
-  background: "#0F0F1C", borderRadius: "10px", color: "#F0F0FF",
+  background: "#f5f7ff", borderRadius: "10px", color: "#0D0D1A",
   padding: "9px 12px", fontSize: "13px", width: "100%", outline: "none",
   transition: "border-color 0.15s", fontFamily: "inherit",
 };
 
 function SInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
   const [f, setF] = useState(false);
-  return <input {...props} style={{ ...iBase, border: `1px solid ${f ? "#00AAFF" : "rgba(255,255,255,0.06)"}` }} onFocus={() => setF(true)} onBlur={() => setF(false)} />;
+  return <input {...props} style={{ ...iBase, border: `1px solid ${f ? "#007AFF" : "rgba(0,0,0,0.08)"}` }} onFocus={() => setF(true)} onBlur={() => setF(false)} />;
 }
 function STextarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   const [f, setF] = useState(false);
-  return <textarea {...props} style={{ ...iBase, border: `1px solid ${f ? "#00AAFF" : "rgba(255,255,255,0.06)"}`, resize: "vertical", minHeight: 90 }} onFocus={() => setF(true)} onBlur={() => setF(false)} />;
+  return <textarea {...props} style={{ ...iBase, border: `1px solid ${f ? "#007AFF" : "rgba(0,0,0,0.08)"}`, resize: "vertical", minHeight: 90 }} onFocus={() => setF(true)} onBlur={() => setF(false)} />;
 }
 function SSelect(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
   const [f, setF] = useState(false);
-  return <select {...props} style={{ ...iBase, border: `1px solid ${f ? "#00AAFF" : "rgba(255,255,255,0.06)"}`, appearance: "none", cursor: "pointer" }} onFocus={() => setF(true)} onBlur={() => setF(false)} />;
+  return <select {...props} style={{ ...iBase, border: `1px solid ${f ? "#007AFF" : "rgba(0,0,0,0.08)"}`, appearance: "none", cursor: "pointer" }} onFocus={() => setF(true)} onBlur={() => setF(false)} />;
 }
 
 // ═══ STEP 1 FORM ══════════════════════════════════════════════════════════════
@@ -164,7 +164,7 @@ function Step1Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
             return (
               <button key={tag} type="button" onClick={() => toggleTag(tag)}
                 className="text-xs px-3 py-1.5 rounded-lg border transition-all duration-150"
-                style={{ background: sel ? "rgba(0,170,255,0.08)" : "var(--bg-elevated)", border: `1px solid ${sel ? "rgba(0,170,255,0.4)" : "var(--border-subtle)"}`, color: sel ? "#00AAFF" : "var(--text-secondary)" }}>
+                style={{ background: sel ? "rgba(0,122,255,0.08)" : "var(--bg-elevated)", border: `1px solid ${sel ? "rgba(0,122,255,0.4)" : "var(--border-subtle)"}`, color: sel ? "#007AFF" : "var(--text-secondary)" }}>
                 {sel ? "✓ " : ""}{tag}
               </button>
             );
@@ -257,7 +257,7 @@ function Step2Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
   });
   const [saving, setSaving] = useState(false);
 
-  const COLORS = ["#00AAFF", "#A855F7", "#00FF88"];
+  const COLORS = ["#007AFF", "#9B30FF", "#00FF88"];
   const chosenApproach = useCustom ? customIdea.trim() : selected !== null ? suggestions[selected]?.title : "";
   const isValid = chosenApproach.length > 0;
 
@@ -304,8 +304,8 @@ function Step2Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
             className="flex items-center gap-2 text-xs transition-opacity hover:opacity-80"
             style={{ color: useCustom ? "var(--neon-purple)" : "var(--text-muted)" }}>
             <div className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0"
-              style={{ background: useCustom ? "rgba(168,85,247,0.15)" : "var(--bg-elevated)", border: `1px solid ${useCustom ? "#A855F7" : "var(--border-subtle)"}` }}>
-              {useCustom && <span style={{ color: "#A855F7", fontSize: 8 }}>✓</span>}
+              style={{ background: useCustom ? "rgba(155,48,255,0.15)" : "var(--bg-elevated)", border: `1px solid ${useCustom ? "#9B30FF" : "var(--border-subtle)"}` }}>
+              {useCustom && <span style={{ color: "#9B30FF", fontSize: 8 }}>✓</span>}
             </div>
             Tengo mi propia idea
           </button>
@@ -344,7 +344,7 @@ function Step3Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
             return (
               <button key={s} type="button" onClick={() => setSector(s)}
                 className="px-2 py-2 rounded-xl text-xs font-medium transition-all"
-                style={{ background: sel ? "rgba(168,85,247,0.12)" : "var(--bg-elevated)", border: `1px solid ${sel ? "#A855F7" : "var(--border-subtle)"}`, color: sel ? "#A855F7" : "var(--text-secondary)" }}>
+                style={{ background: sel ? "rgba(155,48,255,0.12)" : "var(--bg-elevated)", border: `1px solid ${sel ? "#9B30FF" : "var(--border-subtle)"}`, color: sel ? "#9B30FF" : "var(--text-secondary)" }}>
                 {s}
               </button>
             );
@@ -360,7 +360,7 @@ function Step3Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
             return (
               <button key={cs.value} type="button" onClick={() => setSize(cs.value)}
                 className="px-3 py-2.5 rounded-xl text-xs font-medium text-left transition-all"
-                style={{ background: sel ? "rgba(168,85,247,0.12)" : "var(--bg-elevated)", border: `1px solid ${sel ? "#A855F7" : "var(--border-subtle)"}`, color: sel ? "#A855F7" : "var(--text-secondary)" }}>
+                style={{ background: sel ? "rgba(155,48,255,0.12)" : "var(--bg-elevated)", border: `1px solid ${sel ? "#9B30FF" : "var(--border-subtle)"}`, color: sel ? "#9B30FF" : "var(--text-secondary)" }}>
                 {sel && <span className="mr-1">✓</span>}{cs.label}
               </button>
             );
@@ -432,7 +432,7 @@ function Step4Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
             <motion.div key={ti} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, height: 0 }}
               className="rounded-xl p-4 space-y-4" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-card)" }}>
               <div className="flex items-center gap-3">
-                <span className="text-xs font-bold px-2 py-0.5 rounded-md" style={{ background: "rgba(0,170,255,0.1)", color: "var(--neon-blue)", border: "1px solid rgba(0,170,255,0.2)" }}>Tier {ti + 1}</span>
+                <span className="text-xs font-bold px-2 py-0.5 rounded-md" style={{ background: "rgba(0,122,255,0.1)", color: "var(--neon-blue)", border: "1px solid rgba(0,122,255,0.2)" }}>Tier {ti + 1}</span>
                 {tiers.length > 1 && (
                   <button type="button" onClick={() => setTiers((p) => p.filter((_, i) => i !== ti))} className="ml-auto text-[10px] hover:opacity-70" style={{ color: "var(--neon-red)" }}>Eliminar</button>
                 )}
@@ -468,7 +468,7 @@ function Step4Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
         {tiers.length < 3 && (
           <button type="button" onClick={() => setTiers((p) => [...p, { name: "", price: "", features: [""] }])}
             className="w-full py-3 rounded-xl text-xs font-medium border-dashed hover:opacity-80 transition-opacity"
-            style={{ border: "1px dashed var(--border-neon)", color: "var(--neon-blue)", background: "rgba(0,170,255,0.03)" }}>
+            style={{ border: "1px dashed var(--border-neon)", color: "var(--neon-blue)", background: "rgba(0,122,255,0.03)" }}>
             + Añadir tier {tiers.length + 1}
           </button>
         )}
@@ -540,7 +540,7 @@ function Step5Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
       </button>
 
       {chosen && !alreadyHave && (
-        <p className="text-xs text-center px-4 py-2 rounded-xl" style={{ background: "rgba(0,170,255,0.05)", color: "var(--text-secondary)", border: "1px solid var(--border-neon)" }}>
+        <p className="text-xs text-center px-4 py-2 rounded-xl" style={{ background: "rgba(0,122,255,0.05)", color: "var(--text-secondary)", border: "1px solid var(--border-neon)" }}>
           Se abrió {LANDING_PLATFORMS.find((p) => p.id === chosen)?.name} en una nueva pestaña. Cuando termines, guarda el paso.
         </p>
       )}
@@ -640,7 +640,7 @@ function Step6Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
   }
 
   if (hasAccess === null) {
-    return <div className="flex justify-center py-8"><div className="w-6 h-6 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: "#7C3AED", borderTopColor: "transparent" }} /></div>;
+    return <div className="flex justify-center py-8"><div className="w-6 h-6 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: "#7B2FFF", borderTopColor: "transparent" }} /></div>;
   }
 
   const CHECK = <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>;
@@ -656,9 +656,9 @@ function Step6Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
               return (
                 <button key={agent.id} type="button" onClick={() => void handleSelectType(agent.id)}
                   className="flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all duration-150"
-                  style={{ background: isSel ? "rgba(124,58,237,0.12)" : "var(--bg-card)", border: `1px solid ${isSel ? "#7C3AED" : "var(--border-subtle)"}`, boxShadow: isSel ? "0 0 12px rgba(124,58,237,0.25)" : "none" }}>
+                  style={{ background: isSel ? "rgba(123,47,255,0.12)" : "var(--bg-card)", border: `1px solid ${isSel ? "#7B2FFF" : "var(--border-subtle)"}`, boxShadow: isSel ? "0 0 12px rgba(123,47,255,0.25)" : "none" }}>
                   <span className="text-xl leading-none">{agent.emoji}</span>
-                  <span className="text-[9px] font-medium text-center leading-tight" style={{ color: isSel ? "#A855F7" : "var(--text-secondary)" }}>{agent.label}</span>
+                  <span className="text-[9px] font-medium text-center leading-tight" style={{ color: isSel ? "#9B30FF" : "var(--text-secondary)" }}>{agent.label}</span>
                 </button>
               );
             })}
@@ -677,7 +677,7 @@ function Step6Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
 
       {generating && (
         <div className="flex items-center gap-3 p-4 rounded-2xl" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
-          <span className="w-5 h-5 rounded-full border-2 border-t-transparent animate-spin flex-shrink-0" style={{ borderColor: "#7C3AED", borderTopColor: "transparent" }} />
+          <span className="w-5 h-5 rounded-full border-2 border-t-transparent animate-spin flex-shrink-0" style={{ borderColor: "#7B2FFF", borderTopColor: "transparent" }} />
           <div>
             <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>Generando con Claude IA...</p>
             <p className="text-xs" style={{ color: "var(--text-muted)" }}>Creando prompt personalizado + workflow n8n</p>
@@ -764,7 +764,7 @@ function Step6Form({ project, onSave }: { project: ProjectData; onSave: (d: Reco
               </ul>
               <button type="button" onClick={() => void handlePayment("starter")} disabled={loadingSingle || loadingStarter}
                 className="w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 disabled:opacity-50"
-                style={{ background: "var(--grad-primary)", color: "#fff", boxShadow: "0 0 16px rgba(0,170,255,0.3)" }}>
+                style={{ background: "var(--grad-primary)", color: "#fff", boxShadow: "0 0 16px rgba(0,122,255,0.3)" }}>
                 {loadingStarter && <span className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />}
                 Empezar Starter →
               </button>
@@ -834,7 +834,7 @@ function AgentSummaryCard({ project }: { project: ProjectData }) {
   const tier = project.pricing_tiers?.tiers?.[0];
   const sym = project.pricing_tiers?.currency === "USD" ? "$" : project.pricing_tiers?.currency === "GBP" ? "£" : "€";
   return (
-    <div className="rounded-2xl p-5 space-y-4" style={{ background: "linear-gradient(135deg, rgba(0,170,255,0.06), rgba(124,58,237,0.06))", border: "1px solid rgba(124,58,237,0.3)" }}>
+    <div className="rounded-2xl p-5 space-y-4" style={{ background: "linear-gradient(135deg, rgba(0,122,255,0.06), rgba(123,47,255,0.06))", border: "1px solid rgba(123,47,255,0.3)" }}>
       <div className="flex items-center gap-2">
         <span className="text-xl">🤖</span>
         <p className="font-bold text-sm" style={{ color: "var(--text-primary)", fontFamily: "var(--font-syne, sans-serif)" }}>
@@ -854,13 +854,13 @@ function AgentSummaryCard({ project }: { project: ProjectData }) {
         {project.ai_approach && (
           <div className="rounded-xl p-3" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-subtle)" }}>
             <p className="text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Enfoque IA</p>
-            <p className="text-xs font-medium" style={{ color: "#00AAFF" }}>{project.ai_approach}</p>
+            <p className="text-xs font-medium" style={{ color: "#007AFF" }}>{project.ai_approach}</p>
           </div>
         )}
         {project.niche_sector && (
           <div className="rounded-xl p-3" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-subtle)" }}>
             <p className="text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Nicho</p>
-            <p className="text-xs font-medium" style={{ color: "#A855F7" }}>{project.niche_sector}{project.company_size ? ` · ${project.company_size}` : ""}</p>
+            <p className="text-xs font-medium" style={{ color: "#9B30FF" }}>{project.niche_sector}{project.company_size ? ` · ${project.company_size}` : ""}</p>
           </div>
         )}
         {tier && (

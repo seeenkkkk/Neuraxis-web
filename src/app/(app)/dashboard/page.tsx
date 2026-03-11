@@ -56,7 +56,7 @@ const QUICK_LINKS = [
     label: "Crear Agente",
     desc: "Configura un nuevo agente IA",
     href: "/agents",
-    color: "#00AAFF",
+    color: "#007AFF",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <circle cx="12" cy="8" r="4" />
@@ -68,7 +68,7 @@ const QUICK_LINKS = [
     label: "Ir a Aprende",
     desc: "Cursos, prompts y roadmap",
     href: "/academy",
-    color: "#A855F7",
+    color: "#9B30FF",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z" strokeLinecap="round" strokeLinejoin="round" />

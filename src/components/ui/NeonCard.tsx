@@ -38,7 +38,7 @@ export default function NeonCard({
         rounded-xl overflow-hidden
         ${VARIANTS[variant]}
         ${isClickable ? "cursor-pointer" : ""}
-        ${hover ? "transition-shadow duration-200 hover:shadow-[0_0_24px_rgba(0,170,255,0.15)]" : ""}
+        ${hover ? "transition-shadow duration-200 hover:shadow-[0_0_24px_rgba(0,122,255,0.15)]" : ""}
         ${className}
       `}
       style={style}

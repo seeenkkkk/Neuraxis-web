@@ -21,9 +21,9 @@ interface CalEvent {
 }
 
 const TYPE_CONFIG: Record<EventType, { color: string; badge: "blue" | "green" | "purple" | "cyan" | "orange" }> = {
-  reunión:     { color: "#00AAFF", badge: "blue" },
+  reunión:     { color: "#007AFF", badge: "blue" },
   llamada:     { color: "#00FF88", badge: "green" },
-  demo:        { color: "#A855F7", badge: "purple" },
+  demo:        { color: "#9B30FF", badge: "purple" },
   seguimiento: { color: "#00D4FF", badge: "cyan" },
   otro:        { color: "#FF6B35", badge: "orange" },
 };
@@ -174,7 +174,7 @@ export default function CalendarPage() {
                       border: `1px solid ${isSelected ? "rgba(0,170,255,0.4)" : isToday ? "rgba(0,255,136,0.3)" : "transparent"}`,
                     }}
                   >
-                    <span className="text-xs font-medium" style={{ color: isToday ? "#00FF88" : isSelected ? "#00AAFF" : "var(--text-secondary)" }}>
+                    <span className="text-xs font-medium" style={{ color: isToday ? "#00FF88" : isSelected ? "#007AFF" : "var(--text-secondary)" }}>
                       {day}
                     </span>
                     {dayEvents.length > 0 && (

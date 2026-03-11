@@ -15,7 +15,7 @@ const LAYERS = [
     title: "Aprende IA",
     desc: "Cursos, prompts y workflows listos para usar. Aprende a tu ritmo con un roadmap gamificado.",
     items: ["Cursos de IA paso a paso", "50+ prompts premium", "Workflows n8n listos", "Neurax-Points & certificados"],
-    color: "#A855F7",
+    color: "#9B30FF",
     cta: "Ver cursos",
     href: "/register",
   },
@@ -25,7 +25,7 @@ const LAYERS = [
     title: "Construye Agentes",
     desc: "Despliega agentes de IA propios. Desde un agente básico hasta integraciones enterprise completas.",
     items: ["Agentes IA 24/7", "Chat con Claude", "Excel IA + Contenido", "Integraciones avanzadas"],
-    color: "#00AAFF",
+    color: "#007AFF",
     cta: "Empezar gratis",
     href: "/register",
   },
@@ -96,7 +96,7 @@ export default function LandingPage() {
       {/* ── Navbar ── */}
       <nav
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 h-14"
-        style={{ background: "rgba(13,13,20,0.85)", borderBottom: "1px solid var(--border-subtle)", backdropFilter: "blur(20px)" }}
+        style={{ background: "rgba(255,255,255,0.85)", borderBottom: "1px solid var(--border-subtle)", backdropFilter: "blur(20px)" }}
       >
         <NeuraxisLogo size="sm" animated />
         <div className="flex items-center gap-3">

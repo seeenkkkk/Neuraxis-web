@@ -114,9 +114,9 @@ const INITIAL: WizardData = {
 // ═══ SHARED UI ════════════════════════════════════════════════════════════════
 
 const BASE_INPUT: React.CSSProperties = {
-  background: "#0F0F1C",
+  background: "#f5f7ff",
   borderRadius: "12px",
-  color: "#F0F0FF",
+  color: "#0D0D1A",
   padding: "10px 14px",
   fontSize: "14px",
   width: "100%",
@@ -130,7 +130,7 @@ function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
       {...props}
-      style={{ ...BASE_INPUT, border: `1px solid ${focus ? "#00AAFF" : "rgba(255,255,255,0.06)"}` }}
+      style={{ ...BASE_INPUT, border: `1px solid ${focus ? "#007AFF" : "rgba(0,0,0,0.08)"}` }}
       onFocus={() => setFocus(true)}
       onBlur={() => setFocus(false)}
     />
@@ -142,7 +142,7 @@ function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <textarea
       {...props}
-      style={{ ...BASE_INPUT, border: `1px solid ${focus ? "#00AAFF" : "rgba(255,255,255,0.06)"}`, resize: "vertical", minHeight: 96 }}
+      style={{ ...BASE_INPUT, border: `1px solid ${focus ? "#007AFF" : "rgba(0,0,0,0.08)"}`, resize: "vertical", minHeight: 96 }}
       onFocus={() => setFocus(true)}
       onBlur={() => setFocus(false)}
     />
@@ -154,7 +154,7 @@ function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <select
       {...props}
-      style={{ ...BASE_INPUT, border: `1px solid ${focus ? "#00AAFF" : "rgba(255,255,255,0.06)"}`, appearance: "none", cursor: "pointer" }}
+      style={{ ...BASE_INPUT, border: `1px solid ${focus ? "#007AFF" : "rgba(0,0,0,0.08)"}`, appearance: "none", cursor: "pointer" }}
       onFocus={() => setFocus(true)}
       onBlur={() => setFocus(false)}
     />
@@ -165,14 +165,14 @@ function Toggle({ value, onChange, label }: { value: boolean; onChange: (v: bool
   return (
     <div
       className="flex items-center justify-between py-2.5 px-3 rounded-xl"
-      style={{ background: "#0F0F1C", border: "1px solid rgba(255,255,255,0.06)" }}
+      style={{ background: "#f5f7ff", border: "1px solid rgba(0,0,0,0.08)" }}
     >
-      <span className="text-sm" style={{ color: "#F0F0FF" }}>{label}</span>
+      <span className="text-sm" style={{ color: "#0D0D1A" }}>{label}</span>
       <button
         type="button"
         onClick={() => onChange(!value)}
         className="relative w-9 h-5 rounded-full transition-colors duration-200 flex-shrink-0"
-        style={{ background: value ? "#00AAFF" : "rgba(255,255,255,0.12)" }}
+        style={{ background: value ? "#007AFF" : "rgba(0,0,0,0.12)" }}
       >
         <span
           className="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform duration-200"
@@ -198,10 +198,10 @@ function Stepper({ current }: { current: number }) {
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all duration-300"
                 style={{
-                  background: done ? "#00AAFF" : active ? "rgba(0,170,255,0.12)" : "transparent",
-                  borderColor: done || active ? "#00AAFF" : "rgba(255,255,255,0.1)",
-                  color: done ? "#fff" : active ? "#00AAFF" : "#8890A4",
-                  boxShadow: active ? "0 0 14px rgba(0,170,255,0.45)" : done ? "0 0 8px rgba(0,170,255,0.2)" : "none",
+                  background: done ? "#007AFF" : active ? "rgba(0,122,255,0.12)" : "transparent",
+                  borderColor: done || active ? "#007AFF" : "rgba(0,0,0,0.10)",
+                  color: done ? "#fff" : active ? "#007AFF" : "#4B5570",
+                  boxShadow: active ? "0 0 14px rgba(0,122,255,0.45)" : done ? "0 0 8px rgba(0,122,255,0.2)" : "none",
                 }}
               >
                 {done ? (
@@ -210,14 +210,14 @@ function Stepper({ current }: { current: number }) {
                   </svg>
                 ) : step}
               </div>
-              <span className="text-[10px] hidden sm:block font-medium" style={{ color: active ? "#00AAFF" : "#8890A4" }}>
+              <span className="text-[10px] hidden sm:block font-medium" style={{ color: active ? "#007AFF" : "#4B5570" }}>
                 {label}
               </span>
             </div>
             {i < STEPS_LABELS.length - 1 && (
               <div
                 className="w-6 sm:w-10 h-px mx-1.5 mb-5 transition-all duration-300"
-                style={{ background: done ? "#00AAFF" : "rgba(255,255,255,0.08)" }}
+                style={{ background: done ? "#007AFF" : "rgba(0,0,0,0.09)" }}
               />
             )}
           </div>
@@ -237,10 +237,10 @@ function Step1({ data, up }: { data: WizardData; up: (p: Partial<WizardData>) =>
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#F0F0FF" }}>
+        <h2 className="text-xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#0D0D1A" }}>
           ¿Qué problema quieres resolver?
         </h2>
-        <p className="text-sm" style={{ color: "#8890A4" }}>
+        <p className="text-sm" style={{ color: "#4B5570" }}>
           Describe el reto principal que enfrenta tu negocio hoy.
         </p>
       </div>
@@ -253,17 +253,17 @@ function Step1({ data, up }: { data: WizardData; up: (p: Partial<WizardData>) =>
           rows={4}
         />
         <div className="flex items-center justify-between mt-2">
-          <span className="text-xs" style={{ color: data.problem.length >= 50 ? "#00AAFF" : "#8890A4" }}>
+          <span className="text-xs" style={{ color: data.problem.length >= 50 ? "#007AFF" : "#4B5570" }}>
             {data.problem.length} / 50 caracteres mínimo
           </span>
           {data.problem.length >= 50 && (
-            <span className="text-xs font-semibold" style={{ color: "#00AAFF" }}>✓ Listo</span>
+            <span className="text-xs font-semibold" style={{ color: "#007AFF" }}>✓ Listo</span>
           )}
         </div>
       </div>
 
       <div>
-        <p className="text-sm font-medium mb-3" style={{ color: "#8890A4" }}>
+        <p className="text-sm font-medium mb-3" style={{ color: "#4B5570" }}>
           O selecciona los problemas que más te identifican:
         </p>
         <div className="flex flex-wrap gap-2">
@@ -276,10 +276,10 @@ function Step1({ data, up }: { data: WizardData; up: (p: Partial<WizardData>) =>
                 onClick={() => toggleTag(tag)}
                 className="px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-150"
                 style={{
-                  background: sel ? "rgba(0,170,255,0.1)" : "transparent",
-                  borderColor: sel ? "#00AAFF" : "rgba(255,255,255,0.1)",
-                  color: sel ? "#00AAFF" : "#8890A4",
-                  boxShadow: sel ? "0 0 8px rgba(0,170,255,0.2)" : "none",
+                  background: sel ? "rgba(0,122,255,0.1)" : "transparent",
+                  borderColor: sel ? "#007AFF" : "rgba(0,0,0,0.10)",
+                  color: sel ? "#007AFF" : "#4B5570",
+                  boxShadow: sel ? "0 0 8px rgba(0,122,255,0.2)" : "none",
                 }}
               >
                 {tag}
@@ -298,10 +298,10 @@ function Step2({ data, up }: { data: WizardData; up: (p: Partial<WizardData>) =>
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#F0F0FF" }}>
+        <h2 className="text-xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#0D0D1A" }}>
           ¿En qué sector trabajas?
         </h2>
-        <p className="text-sm" style={{ color: "#8890A4" }}>
+        <p className="text-sm" style={{ color: "#4B5570" }}>
           Selecciona tu nicho para adaptar el agente a tu industria.
         </p>
       </div>
@@ -317,13 +317,13 @@ function Step2({ data, up }: { data: WizardData; up: (p: Partial<WizardData>) =>
               onClick={() => up({ niche: niche.id })}
               className="p-4 rounded-xl border flex flex-col items-center gap-2 transition-all duration-150"
               style={{
-                background: sel ? "rgba(0,170,255,0.1)" : "#1A1A2E",
-                borderColor: sel ? "#00AAFF" : "rgba(255,255,255,0.06)",
-                boxShadow: sel ? "0 0 18px rgba(0,170,255,0.28)" : "none",
+                background: sel ? "rgba(0,122,255,0.08)" : "#ffffff",
+                borderColor: sel ? "#007AFF" : "rgba(0,0,0,0.08)",
+                boxShadow: sel ? "0 0 18px rgba(0,122,255,0.25)" : "none",
               }}
             >
               <span className="text-2xl">{niche.icon}</span>
-              <span className="text-xs font-medium text-center leading-tight" style={{ color: sel ? "#00AAFF" : "#F0F0FF" }}>
+              <span className="text-xs font-medium text-center leading-tight" style={{ color: sel ? "#007AFF" : "#0D0D1A" }}>
                 {niche.label}
               </span>
             </motion.button>
@@ -343,17 +343,17 @@ function Step3({ data, up }: { data: WizardData; up: (p: Partial<WizardData>) =>
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#F0F0FF" }}>
+        <h2 className="text-xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#0D0D1A" }}>
           ¿A quién va dirigido?
         </h2>
-        <p className="text-sm" style={{ color: "#8890A4" }}>
+        <p className="text-sm" style={{ color: "#4B5570" }}>
           Define tu cliente ideal para que el agente hable su idioma.
         </p>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-medium mb-2" style={{ color: "#8890A4" }}>Tamaño de empresa</label>
+          <label className="block text-xs font-medium mb-2" style={{ color: "#4B5570" }}>Tamaño de empresa</label>
           <Select value={data.companySize} onChange={(e) => up({ companySize: e.target.value })}>
             <option value="">Seleccionar...</option>
             <option>Freelance</option>
@@ -364,7 +364,7 @@ function Step3({ data, up }: { data: WizardData; up: (p: Partial<WizardData>) =>
           </Select>
         </div>
         <div>
-          <label className="block text-xs font-medium mb-2" style={{ color: "#8890A4" }}>Tipo de cliente</label>
+          <label className="block text-xs font-medium mb-2" style={{ color: "#4B5570" }}>Tipo de cliente</label>
           <Select value={data.clientType} onChange={(e) => up({ clientType: e.target.value })}>
             <option value="">Seleccionar...</option>
             <option>B2B</option>
@@ -376,13 +376,13 @@ function Step3({ data, up }: { data: WizardData; up: (p: Partial<WizardData>) =>
 
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label className="text-xs font-medium" style={{ color: "#8890A4" }}>Buyer Persona</label>
+          <label className="text-xs font-medium" style={{ color: "#4B5570" }}>Buyer Persona</label>
           {suggestion && (
             <button
               type="button"
               onClick={() => up({ buyerPersona: suggestion })}
               className="text-xs font-medium transition-colors"
-              style={{ color: "#00AAFF" }}
+              style={{ color: "#007AFF" }}
             >
               Usar sugerencia de {nicheLabel} →
             </button>
@@ -397,13 +397,13 @@ function Step3({ data, up }: { data: WizardData; up: (p: Partial<WizardData>) =>
         {suggestion && !data.buyerPersona && (
           <div
             className="mt-2 p-3 rounded-xl text-xs"
-            style={{ background: "rgba(0,170,255,0.05)", border: "1px solid rgba(0,170,255,0.15)", color: "#8890A4" }}
+            style={{ background: "rgba(0,122,255,0.05)", border: "1px solid rgba(0,122,255,0.15)", color: "#4B5570" }}
           >
-            <span className="font-semibold" style={{ color: "#00AAFF" }}>Ejemplo {nicheLabel}: </span>
+            <span className="font-semibold" style={{ color: "#007AFF" }}>Ejemplo {nicheLabel}: </span>
             {suggestion}
           </div>
         )}
-        <span className="text-xs mt-2 block" style={{ color: data.buyerPersona.length >= 30 ? "#00AAFF" : "#8890A4" }}>
+        <span className="text-xs mt-2 block" style={{ color: data.buyerPersona.length >= 30 ? "#007AFF" : "#4B5570" }}>
           {data.buyerPersona.length} / 30 caracteres mínimo
         </span>
       </div>
@@ -419,10 +419,10 @@ function Step4({ data, up }: { data: WizardData; up: (p: Partial<WizardData>) =>
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#F0F0FF" }}>
+        <h2 className="text-xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#0D0D1A" }}>
           ¿Qué tipo de agente necesitas?
         </h2>
-        <p className="text-sm" style={{ color: "#8890A4" }}>
+        <p className="text-sm" style={{ color: "#4B5570" }}>
           Elige el agente que mejor resuelve tu problema.
         </p>
       </div>
@@ -439,13 +439,13 @@ function Step4({ data, up }: { data: WizardData; up: (p: Partial<WizardData>) =>
               onClick={() => up({ agentType: agent.id })}
               className="p-3 rounded-xl border flex flex-col items-center gap-1.5 text-center transition-all duration-150"
               style={{
-                background: sel ? "rgba(0,170,255,0.1)" : "#1A1A2E",
-                borderColor: sel ? "#00AAFF" : "rgba(255,255,255,0.06)",
-                boxShadow: sel ? "0 0 16px rgba(0,170,255,0.25)" : "none",
+                background: sel ? "rgba(0,122,255,0.08)" : "#ffffff",
+                borderColor: sel ? "#007AFF" : "rgba(0,0,0,0.08)",
+                boxShadow: sel ? "0 0 16px rgba(0,122,255,0.22)" : "none",
               }}
             >
               <span className="text-xl leading-none">{agent.icon}</span>
-              <span className="text-[10px] font-medium leading-tight" style={{ color: sel ? "#00AAFF" : "#F0F0FF" }}>
+              <span className="text-[10px] font-medium leading-tight" style={{ color: sel ? "#007AFF" : "#0D0D1A" }}>
                 {agent.label}
               </span>
             </motion.button>
@@ -461,12 +461,12 @@ function Step4({ data, up }: { data: WizardData; up: (p: Partial<WizardData>) =>
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             className="p-4 rounded-xl flex items-start gap-3"
-            style={{ background: "rgba(0,170,255,0.06)", border: "1px solid rgba(0,170,255,0.2)" }}
+            style={{ background: "rgba(0,122,255,0.06)", border: "1px solid rgba(0,122,255,0.2)" }}
           >
             <span className="text-2xl mt-0.5 flex-shrink-0">{selected.icon}</span>
             <div>
-              <p className="text-sm font-bold mb-0.5" style={{ color: "#00AAFF" }}>{selected.label}</p>
-              <p className="text-xs leading-relaxed" style={{ color: "#8890A4" }}>{selected.desc}</p>
+              <p className="text-sm font-bold mb-0.5" style={{ color: "#007AFF" }}>{selected.label}</p>
+              <p className="text-xs leading-relaxed" style={{ color: "#4B5570" }}>{selected.desc}</p>
             </div>
           </motion.div>
         )}
@@ -489,17 +489,17 @@ function Step5({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#F0F0FF" }}>
+        <h2 className="text-xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#0D0D1A" }}>
           Personaliza tu agente
         </h2>
-        <p className="text-sm" style={{ color: "#8890A4" }}>
+        <p className="text-sm" style={{ color: "#4B5570" }}>
           Dale identidad y define su comportamiento exacto.
         </p>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-medium mb-2" style={{ color: "#8890A4" }}>Nombre del agente *</label>
+          <label className="block text-xs font-medium mb-2" style={{ color: "#4B5570" }}>Nombre del agente *</label>
           <Input
             placeholder="Ej: ARIA, NEX, Luna, Max..."
             value={data.agentName}
@@ -507,7 +507,7 @@ function Step5({
           />
         </div>
         <div>
-          <label className="block text-xs font-medium mb-2" style={{ color: "#8890A4" }}>Tono de comunicación</label>
+          <label className="block text-xs font-medium mb-2" style={{ color: "#4B5570" }}>Tono de comunicación</label>
           <Select value={data.tone} onChange={(e) => up({ tone: e.target.value })}>
             <option>Profesional</option>
             <option>Amigable</option>
@@ -518,7 +518,7 @@ function Step5({
       </div>
 
       <div>
-        <label className="block text-xs font-medium mb-2" style={{ color: "#8890A4" }}>Instrucciones específicas</label>
+        <label className="block text-xs font-medium mb-2" style={{ color: "#4B5570" }}>Instrucciones específicas</label>
         <Textarea
           placeholder="Qué debe hacer y qué NO debe hacer tu agente. Ej: Siempre ofrece una cita al final de la conversación. Nunca menciones precios exactos. Redirige quejas complejas al equipo humano..."
           value={data.instructions}
@@ -529,7 +529,7 @@ function Step5({
 
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-medium mb-2" style={{ color: "#8890A4" }}>Idioma de respuesta</label>
+          <label className="block text-xs font-medium mb-2" style={{ color: "#4B5570" }}>Idioma de respuesta</label>
           <Select value={data.language} onChange={(e) => up({ language: e.target.value })}>
             <option>Español</option>
             <option>Inglés</option>
@@ -539,7 +539,7 @@ function Step5({
       </div>
 
       <div>
-        <p className="text-xs font-medium mb-3" style={{ color: "#8890A4" }}>Integraciones</p>
+        <p className="text-xs font-medium mb-3" style={{ color: "#4B5570" }}>Integraciones</p>
         <div className="space-y-2">
           <Toggle value={data.connectCalendly} onChange={(v) => up({ connectCalendly: v })} label="🗓️ Conectar con Calendly" />
           <Toggle value={data.connectWhatsApp} onChange={(v) => up({ connectWhatsApp: v })} label="💬 Conectar con WhatsApp" />
@@ -549,7 +549,7 @@ function Step5({
 
       {/* Brain selection */}
       <div>
-        <p className="text-sm font-bold mb-3" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#F0F0FF" }}>
+        <p className="text-sm font-bold mb-3" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#0D0D1A" }}>
           Elige el cerebro de tu agente *
         </p>
         <div className="grid sm:grid-cols-3 gap-3">
@@ -558,15 +558,15 @@ function Step5({
             onClick={() => up({ brain: "anthropic" })}
             className="p-4 rounded-xl border cursor-pointer transition-all duration-150"
             style={{
-              background: data.brain === "anthropic" ? "rgba(0,170,255,0.08)" : "#1A1A2E",
-              borderColor: data.brain === "anthropic" ? "#00AAFF" : "rgba(255,255,255,0.06)",
-              boxShadow: data.brain === "anthropic" ? "0 0 18px rgba(0,170,255,0.22)" : "none",
+              background: data.brain === "anthropic" ? "rgba(0,122,255,0.07)" : "#ffffff",
+              borderColor: data.brain === "anthropic" ? "#007AFF" : "rgba(0,0,0,0.08)",
+              boxShadow: data.brain === "anthropic" ? "0 0 18px rgba(0,122,255,0.20)" : "none",
             }}
           >
-            <p className="font-bold text-sm mb-1" style={{ color: data.brain === "anthropic" ? "#00AAFF" : "#F0F0FF" }}>
+            <p className="font-bold text-sm mb-1" style={{ color: data.brain === "anthropic" ? "#007AFF" : "#0D0D1A" }}>
               ⚡ Anthropic (Claude)
             </p>
-            <p className="text-xs mb-3 leading-relaxed" style={{ color: "#8890A4" }}>
+            <p className="text-xs mb-3 leading-relaxed" style={{ color: "#4B5570" }}>
               Mejor para razonamiento y conversaciones complejas
             </p>
             <a
@@ -575,7 +575,7 @@ function Step5({
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
               className="text-xs font-medium underline transition-opacity hover:opacity-80"
-              style={{ color: "#00AAFF" }}
+              style={{ color: "#007AFF" }}
             >
               Añadir créditos en Anthropic →
             </a>
@@ -586,15 +586,15 @@ function Step5({
             onClick={() => up({ brain: "openai" })}
             className="p-4 rounded-xl border cursor-pointer transition-all duration-150"
             style={{
-              background: data.brain === "openai" ? "rgba(168,85,247,0.08)" : "#1A1A2E",
-              borderColor: data.brain === "openai" ? "#A855F7" : "rgba(255,255,255,0.06)",
-              boxShadow: data.brain === "openai" ? "0 0 18px rgba(168,85,247,0.22)" : "none",
+              background: data.brain === "openai" ? "rgba(155,48,255,0.07)" : "#ffffff",
+              borderColor: data.brain === "openai" ? "#9B30FF" : "rgba(0,0,0,0.08)",
+              boxShadow: data.brain === "openai" ? "0 0 18px rgba(155,48,255,0.20)" : "none",
             }}
           >
-            <p className="font-bold text-sm mb-1" style={{ color: data.brain === "openai" ? "#A855F7" : "#F0F0FF" }}>
+            <p className="font-bold text-sm mb-1" style={{ color: data.brain === "openai" ? "#9B30FF" : "#0D0D1A" }}>
               🔮 OpenAI (GPT)
             </p>
-            <p className="text-xs mb-3 leading-relaxed" style={{ color: "#8890A4" }}>
+            <p className="text-xs mb-3 leading-relaxed" style={{ color: "#4B5570" }}>
               Mejor para velocidad y tareas creativas
             </p>
             <a
@@ -603,7 +603,7 @@ function Step5({
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
               className="text-xs font-medium underline transition-opacity hover:opacity-80"
-              style={{ color: "#A855F7" }}
+              style={{ color: "#9B30FF" }}
             >
               Añadir créditos en OpenAI →
             </a>
@@ -614,18 +614,18 @@ function Step5({
             onClick={() => up({ brain: "done_for_you" })}
             className="p-4 rounded-xl border cursor-pointer transition-all duration-150"
             style={{
-              background: data.brain === "done_for_you" ? "rgba(0,212,255,0.08)" : "#1A1A2E",
-              borderColor: data.brain === "done_for_you" ? "#00D4FF" : "rgba(255,255,255,0.06)",
-              boxShadow: data.brain === "done_for_you" ? "0 0 18px rgba(0,212,255,0.22)" : "none",
+              background: data.brain === "done_for_you" ? "rgba(0,196,255,0.07)" : "#ffffff",
+              borderColor: data.brain === "done_for_you" ? "#00C4FF" : "rgba(0,0,0,0.08)",
+              boxShadow: data.brain === "done_for_you" ? "0 0 18px rgba(0,196,255,0.22)" : "none",
             }}
           >
-            <p className="font-bold text-sm mb-1" style={{ color: data.brain === "done_for_you" ? "#00D4FF" : "#F0F0FF" }}>
+            <p className="font-bold text-sm mb-1" style={{ color: data.brain === "done_for_you" ? "#00C4FF" : "#0D0D1A" }}>
               🚀 Lo hacemos nosotros
             </p>
-            <p className="text-xs mb-2 leading-relaxed" style={{ color: "#8890A4" }}>
+            <p className="text-xs mb-2 leading-relaxed" style={{ color: "#4B5570" }}>
               Nos encargamos de toda la configuración técnica
             </p>
-            <p className="text-xs font-bold mb-3" style={{ color: "#00D4FF" }}>+49€ pago único</p>
+            <p className="text-xs font-bold mb-3" style={{ color: "#00C4FF" }}>+49€ pago único</p>
             <button
               type="button"
               onClick={(e) => {
@@ -634,7 +634,7 @@ function Step5({
                 onSetupCheckout();
               }}
               className="w-full text-xs font-semibold py-1.5 rounded-lg transition-all hover:opacity-80"
-              style={{ background: "rgba(0,212,255,0.15)", color: "#00D4FF", border: "1px solid rgba(0,212,255,0.3)" }}
+              style={{ background: "rgba(0,196,255,0.15)", color: "#00C4FF", border: "1px solid rgba(0,196,255,0.3)" }}
             >
               Quiero que lo hagáis vosotros
             </button>
@@ -668,11 +668,11 @@ function Step6({ data, generating, showModal, setShowModal, copied, onCopy, onDo
       <div className="flex flex-col items-center justify-center py-20 gap-5">
         <div
           className="w-14 h-14 rounded-full border-4 border-t-transparent animate-spin"
-          style={{ borderColor: "#00AAFF", borderTopColor: "transparent" }}
+          style={{ borderColor: "#007AFF", borderTopColor: "transparent" }}
         />
         <div className="text-center">
-          <p className="text-sm font-semibold mb-1" style={{ color: "#00AAFF" }}>Generando tu agente con IA...</p>
-          <p className="text-xs" style={{ color: "#8890A4" }}>Creando system prompt personalizado y workflow n8n</p>
+          <p className="text-sm font-semibold mb-1" style={{ color: "#007AFF" }}>Generando tu agente con IA...</p>
+          <p className="text-xs" style={{ color: "#4B5570" }}>Creando system prompt personalizado y workflow n8n</p>
         </div>
       </div>
     );
@@ -681,10 +681,10 @@ function Step6({ data, generating, showModal, setShowModal, copied, onCopy, onDo
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#F0F0FF" }}>
+        <h2 className="text-xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#0D0D1A" }}>
           Tu agente está listo
         </h2>
-        <p className="text-sm" style={{ color: "#8890A4" }}>
+        <p className="text-sm" style={{ color: "#4B5570" }}>
           Aquí tienes todo lo que necesitas para desplegarlo.
         </p>
       </div>
@@ -692,20 +692,20 @@ function Step6({ data, generating, showModal, setShowModal, copied, onCopy, onDo
       {/* Summary card */}
       <div
         className="p-5 rounded-2xl"
-        style={{ background: "#1A1A2E", border: "1px solid rgba(0,170,255,0.25)", boxShadow: "0 0 32px rgba(0,170,255,0.08)" }}
+        style={{ background: "#ffffff", border: "1px solid rgba(0,122,255,0.25)", boxShadow: "0 0 32px rgba(0,122,255,0.08)" }}
       >
         <div className="flex items-center gap-4 mb-5">
           <div
             className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
-            style={{ background: "rgba(0,170,255,0.12)", border: "1.5px solid rgba(0,170,255,0.3)" }}
+            style={{ background: "rgba(0,122,255,0.12)", border: "1.5px solid rgba(0,122,255,0.3)" }}
           >
             {agentTypeInfo?.icon}
           </div>
           <div>
-            <h3 className="text-lg font-bold" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#F0F0FF" }}>
+            <h3 className="text-lg font-bold" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#0D0D1A" }}>
               {data.agentName}
             </h3>
-            <p className="text-sm" style={{ color: "#00AAFF" }}>{agentTypeInfo?.label}</p>
+            <p className="text-sm" style={{ color: "#007AFF" }}>{agentTypeInfo?.label}</p>
           </div>
         </div>
         <div className="grid sm:grid-cols-2 gap-y-2 gap-x-4 text-sm">
@@ -717,14 +717,14 @@ function Step6({ data, generating, showModal, setShowModal, copied, onCopy, onDo
             ["Cerebro", data.brain === "anthropic" ? "Claude (Anthropic)" : data.brain === "openai" ? "GPT (OpenAI)" : "Gestionado por Neuraxis"],
           ].map(([k, v]) => (
             <div key={k} className="flex gap-2">
-              <span style={{ color: "#8890A4" }}>{k}:</span>
-              <span style={{ color: "#F0F0FF" }}>{v}</span>
+              <span style={{ color: "#4B5570" }}>{k}:</span>
+              <span style={{ color: "#0D0D1A" }}>{v}</span>
             </div>
           ))}
           {(data.connectCalendly || data.connectWhatsApp || data.connectEmail) && (
             <div className="flex gap-2 sm:col-span-2">
-              <span style={{ color: "#8890A4" }}>Integraciones:</span>
-              <span style={{ color: "#F0F0FF" }}>
+              <span style={{ color: "#4B5570" }}>Integraciones:</span>
+              <span style={{ color: "#0D0D1A" }}>
                 {[data.connectCalendly && "Calendly", data.connectWhatsApp && "WhatsApp", data.connectEmail && "Email"].filter(Boolean).join(", ")}
               </span>
             </div>
@@ -750,10 +750,10 @@ function Step6({ data, generating, showModal, setShowModal, copied, onCopy, onDo
       {/* Divider */}
       <div className="relative py-2">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full h-px" style={{ background: "rgba(255,255,255,0.08)" }} />
+          <div className="w-full h-px" style={{ background: "rgba(0,0,0,0.08)" }} />
         </div>
         <div className="relative flex justify-center">
-          <span className="px-4 text-sm font-medium" style={{ background: "#0D0D14", color: "#8890A4" }}>
+          <span className="px-4 text-sm font-medium" style={{ background: "#ffffff", color: "#4B5570" }}>
             Para usar tu agente, elige un plan
           </span>
         </div>
@@ -764,19 +764,19 @@ function Step6({ data, generating, showModal, setShowModal, copied, onCopy, onDo
         {/* Basico */}
         <div
           className="p-5 rounded-2xl flex flex-col"
-          style={{ background: "#1A1A2E", border: "1px solid rgba(255,255,255,0.08)" }}
+          style={{ background: "#f8f9ff", border: "1px solid rgba(0,0,0,0.08)" }}
         >
           <div className="mb-4">
-            <p className="text-xs font-semibold uppercase tracking-widest mb-1.5" style={{ color: "#8890A4" }}>Básico</p>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-1.5" style={{ color: "#4B5570" }}>Básico</p>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-3xl font-bold" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#F0F0FF" }}>10€</span>
-              <span className="text-sm" style={{ color: "#8890A4" }}>pago único</span>
+              <span className="text-3xl font-bold" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#0D0D1A" }}>10€</span>
+              <span className="text-sm" style={{ color: "#4B5570" }}>pago único</span>
             </div>
           </div>
           <ul className="space-y-2 mb-6 flex-1">
             {["1 agente IA configurado", "System prompt completo", "Workflow n8n incluido", "Soporte por email"].map((f) => (
-              <li key={f} className="flex items-center gap-2 text-sm" style={{ color: "#8890A4" }}>
-                <span style={{ color: "#00AAFF" }}>✓</span> {f}
+              <li key={f} className="flex items-center gap-2 text-sm" style={{ color: "#4B5570" }}>
+                <span style={{ color: "#007AFF" }}>✓</span> {f}
               </li>
             ))}
           </ul>
@@ -792,27 +792,27 @@ function Step6({ data, generating, showModal, setShowModal, copied, onCopy, onDo
         {/* Pro */}
         <div
           className="p-5 rounded-2xl flex flex-col relative"
-          style={{ background: "#1A1A2E", border: "2px solid #00AAFF", boxShadow: "0 0 32px rgba(0,170,255,0.18)" }}
+          style={{ background: "#f8f9ff", border: "2px solid #007AFF", boxShadow: "0 0 32px rgba(0,122,255,0.15)" }}
         >
           <div className="absolute -top-3.5 left-4">
             <span
               className="px-3 py-1 rounded-full text-xs font-bold"
-              style={{ background: "linear-gradient(135deg, #00AAFF, #A855F7)", color: "#fff" }}
+              style={{ background: "linear-gradient(135deg, #007AFF, #9B30FF)", color: "#fff" }}
             >
               Más popular
             </span>
           </div>
           <div className="mb-4">
-            <p className="text-xs font-semibold uppercase tracking-widest mb-1.5" style={{ color: "#8890A4" }}>Pro</p>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-1.5" style={{ color: "#4B5570" }}>Pro</p>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-3xl font-bold" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#F0F0FF" }}>29€</span>
-              <span className="text-sm" style={{ color: "#8890A4" }}>/mes</span>
+              <span className="text-3xl font-bold" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#0D0D1A" }}>29€</span>
+              <span className="text-sm" style={{ color: "#4B5570" }}>/mes</span>
             </div>
           </div>
           <ul className="space-y-2 mb-6 flex-1">
             {["5 agentes IA activos", "Workflows n8n ilimitados", "Soporte prioritario", "Actualizaciones mensuales", "Dashboard de conversaciones"].map((f) => (
-              <li key={f} className="flex items-center gap-2 text-sm" style={{ color: "#8890A4" }}>
-                <span style={{ color: "#00AAFF" }}>✓</span> {f}
+              <li key={f} className="flex items-center gap-2 text-sm" style={{ color: "#4B5570" }}>
+                <span style={{ color: "#007AFF" }}>✓</span> {f}
               </li>
             ))}
           </ul>
@@ -831,18 +831,18 @@ function Step6({ data, generating, showModal, setShowModal, copied, onCopy, onDo
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           className="p-5 rounded-2xl"
-          style={{ background: "rgba(0,212,255,0.05)", border: "1px solid rgba(0,212,255,0.25)" }}
+          style={{ background: "rgba(0,196,255,0.05)", border: "1px solid rgba(0,196,255,0.25)" }}
         >
           <div className="flex items-start justify-between gap-4 mb-4">
             <div>
-              <p className="font-bold text-sm mb-1" style={{ color: "#00D4FF" }}>🚀 Configuración completa por nosotros</p>
-              <p className="text-xs leading-relaxed" style={{ color: "#8890A4" }}>
+              <p className="font-bold text-sm mb-1" style={{ color: "#00C4FF" }}>🚀 Configuración completa por nosotros</p>
+              <p className="text-xs leading-relaxed" style={{ color: "#4B5570" }}>
                 Nos encargamos de toda la configuración técnica: API keys, integraciones, pruebas y entrega lista para usar en producción.
               </p>
             </div>
             <div className="text-right flex-shrink-0">
-              <p className="font-bold text-xl" style={{ color: "#00D4FF" }}>49€</p>
-              <p className="text-xs" style={{ color: "#8890A4" }}>único</p>
+              <p className="font-bold text-xl" style={{ color: "#00C4FF" }}>49€</p>
+              <p className="text-xs" style={{ color: "#4B5570" }}>único</p>
             </div>
           </div>
           <NeonButton
@@ -876,13 +876,13 @@ function Step6({ data, generating, showModal, setShowModal, copied, onCopy, onDo
             >
               <div
                 className="w-full max-w-2xl max-h-full flex flex-col rounded-2xl overflow-hidden"
-                style={{ background: "#1A1A2E", border: "1px solid rgba(0,170,255,0.25)" }}
+                style={{ background: "#ffffff", border: "1px solid rgba(0,122,255,0.25)" }}
               >
-                <div className="flex items-center justify-between p-5 border-b" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-                  <h3 className="font-bold" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#F0F0FF" }}>
+                <div className="flex items-center justify-between p-5 border-b" style={{ borderColor: "rgba(0,0,0,0.08)" }}>
+                  <h3 className="font-bold" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#0D0D1A" }}>
                     System Prompt — {data.agentName}
                   </h3>
-                  <button type="button" onClick={() => setShowModal(false)} style={{ color: "#8890A4" }}>
+                  <button type="button" onClick={() => setShowModal(false)} style={{ color: "#4B5570" }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M18 6L6 18M6 6l12 12" />
                     </svg>
@@ -891,12 +891,12 @@ function Step6({ data, generating, showModal, setShowModal, copied, onCopy, onDo
                 <div className="flex-1 overflow-y-auto p-5">
                   <pre
                     className="text-xs leading-relaxed whitespace-pre-wrap"
-                    style={{ color: "#8890A4", fontFamily: "monospace" }}
+                    style={{ color: "#4B5570", fontFamily: "monospace" }}
                   >
                     {data.systemPrompt || "Generando..."}
                   </pre>
                 </div>
-                <div className="p-4 border-t flex justify-end gap-2" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+                <div className="p-4 border-t flex justify-end gap-2" style={{ borderColor: "rgba(0,0,0,0.08)" }}>
                   <NeonButton variant="ghost" onClick={() => setShowModal(false)}>Cerrar</NeonButton>
                   <NeonButton variant="secondary" onClick={onCopy}>{copied ? "✓ Copiado" : "Copiar prompt"}</NeonButton>
                 </div>
@@ -1008,7 +1008,7 @@ export default function CreateAgentPage() {
         type="button"
         onClick={() => router.back()}
         className="flex items-center gap-2 text-sm mb-6 transition-opacity hover:opacity-70"
-        style={{ color: "#8890A4" }}
+        style={{ color: "#4B5570" }}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -1018,10 +1018,10 @@ export default function CreateAgentPage() {
 
       {/* Title */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#F0F0FF" }}>
+        <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#0D0D1A" }}>
           Crea tu <GradientText>Agente IA</GradientText>
         </h1>
-        <p className="text-sm" style={{ color: "#8890A4" }}>
+        <p className="text-sm" style={{ color: "#4B5570" }}>
           Configura tu agente personalizado en 6 pasos. Sin código.
         </p>
       </div>
@@ -1060,7 +1060,7 @@ export default function CreateAgentPage() {
 
       {/* Navigation */}
       {step < 6 && (
-        <div className="flex justify-between mt-8 pt-6" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="flex justify-between mt-8 pt-6" style={{ borderTop: "1px solid rgba(0,0,0,0.08)" }}>
           <NeonButton
             variant="ghost"
             onClick={() => setStep((s) => Math.max(1, s - 1))}

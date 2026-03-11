@@ -74,7 +74,7 @@ export default function RegisterPage() {
           </p>
           <Link href="/login">
             <button className="w-full py-2.5 rounded-xl text-sm font-semibold mt-2"
-              style={{ background: "linear-gradient(135deg, #00AAFF, #7C3AED)", color: "#fff" }}>
+              style={{ background: "linear-gradient(135deg, #007AFF, #7B2FFF)", color: "#fff" }}>
               Ir al login
             </button>
           </Link>
@@ -134,7 +134,7 @@ export default function RegisterPage() {
             <button
               type="submit" disabled={loading}
               className="w-full py-2.5 rounded-xl text-sm font-semibold transition-all mt-2 disabled:opacity-60 flex items-center justify-center gap-2"
-              style={{ background: "linear-gradient(135deg, #00AAFF, #7C3AED)", color: "#fff" }}
+              style={{ background: "linear-gradient(135deg, #007AFF, #7B2FFF)", color: "#fff" }}
             >
               {loading && <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />}
               {loading ? "Creando cuenta..." : "Crear cuenta"}
@@ -143,7 +143,7 @@ export default function RegisterPage() {
 
           <p className="text-center text-sm" style={{ color: "var(--text-secondary)" }}>
             ¿Ya tienes cuenta?{" "}
-            <Link href="/login" className="font-medium" style={{ color: "#00AAFF" }}>
+            <Link href="/login" className="font-medium" style={{ color: "#007AFF" }}>
               Inicia sesión
             </Link>
           </p>

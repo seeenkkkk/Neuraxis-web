@@ -71,7 +71,7 @@ export default function Topbar({
             {/* Unread dot */}
             <span
               className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full"
-              style={{ background: "#00AAFF", boxShadow: "0 0 6px rgba(0,170,255,0.8)" }}
+              style={{ background: "#007AFF", boxShadow: "0 0 6px rgba(0,122,255,0.8)" }}
             />
           </button>
         </div>
@@ -87,7 +87,7 @@ export default function Topbar({
         >
           <div
             className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0"
-            style={{ boxShadow: "0 0 8px rgba(0,212,255,0.4)" }}
+            style={{ boxShadow: "0 0 8px rgba(0,196,255,0.4)" }}
           >
             <img src={userAvatar} alt={userName} className="w-full h-full object-cover" />
           </div>

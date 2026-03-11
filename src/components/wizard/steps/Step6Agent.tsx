@@ -160,10 +160,10 @@ export default function Step6Agent({ project, hasAccess }: Props) {
       {/* Header */}
       <div>
         <div className="flex items-center gap-2 mb-1">
-          <span className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ background: "#7C3AED", color: "#fff" }}>6</span>
+          <span className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ background: "#7B2FFF", color: "#fff" }}>6</span>
           <h2 className="text-lg font-bold" style={{ color: "var(--text-primary)", fontFamily: "var(--font-syne, sans-serif)" }}>Design Core</h2>
           {!hasAccess && (
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md" style={{ background: "rgba(168,85,247,0.1)", color: "#A855F7", border: "1px solid var(--border-purple)" }}>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md" style={{ background: "rgba(155,48,255,0.1)", color: "#9B30FF", border: "1px solid var(--border-purple)" }}>
               🔒 Plan de pago
             </span>
           )}
@@ -193,13 +193,13 @@ export default function Step6Agent({ project, hasAccess }: Props) {
                   onClick={() => void handleSelectType(agent.id)}
                   className="flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all duration-150"
                   style={{
-                    background: isSelected ? "rgba(124,58,237,0.12)" : "var(--bg-elevated)",
-                    border: `1px solid ${isSelected ? "#7C3AED" : "var(--border-subtle)"}`,
-                    boxShadow: isSelected ? "0 0 12px rgba(124,58,237,0.25)" : "none",
+                    background: isSelected ? "rgba(123,47,255,0.12)" : "var(--bg-elevated)",
+                    border: `1px solid ${isSelected ? "#7B2FFF" : "var(--border-subtle)"}`,
+                    boxShadow: isSelected ? "0 0 12px rgba(123,47,255,0.25)" : "none",
                   }}
                 >
                   <span className="text-xl leading-none">{agent.emoji}</span>
-                  <span className="text-[9px] font-medium text-center leading-tight" style={{ color: isSelected ? "#A855F7" : "var(--text-secondary)" }}>
+                  <span className="text-[9px] font-medium text-center leading-tight" style={{ color: isSelected ? "#9B30FF" : "var(--text-secondary)" }}>
                     {agent.label}
                   </span>
                 </button>
@@ -211,7 +211,7 @@ export default function Step6Agent({ project, hasAccess }: Props) {
           {!hasAccess && (
             <div
               className="absolute inset-0 flex items-center justify-center rounded-xl"
-              style={{ background: "rgba(13,13,20,0.75)", backdropFilter: "blur(2px)" }}
+              style={{ background: "rgba(255,255,255,0.75)", backdropFilter: "blur(2px)" }}
             >
               <div className="text-center space-y-2">
                 <span className="text-3xl">🔒</span>
@@ -229,7 +229,7 @@ export default function Step6Agent({ project, hasAccess }: Props) {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="flex items-center gap-3 p-4 rounded-2xl"
             style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
-            <span className="w-5 h-5 rounded-full border-2 border-t-transparent animate-spin flex-shrink-0" style={{ borderColor: "#7C3AED", borderTopColor: "transparent" }} />
+            <span className="w-5 h-5 rounded-full border-2 border-t-transparent animate-spin flex-shrink-0" style={{ borderColor: "#7B2FFF", borderTopColor: "transparent" }} />
             <div>
               <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>Generando con Claude IA...</p>
               <p className="text-xs" style={{ color: "var(--text-muted)" }}>Creando prompt personalizado + workflow n8n</p>
@@ -339,7 +339,7 @@ export default function Step6Agent({ project, hasAccess }: Props) {
               </ul>
               <button onClick={() => void handlePayment("starter")} disabled={loadingSingle || loadingStarter}
                 className="w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50"
-                style={{ background: "var(--grad-primary)", color: "#fff", boxShadow: "0 0 16px rgba(0,170,255,0.3)" }}>
+                style={{ background: "var(--grad-primary)", color: "#fff", boxShadow: "0 0 16px rgba(0,122,255,0.3)" }}>
                 {loadingStarter && <span className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />}
                 Empezar Starter →
               </button>
@@ -359,7 +359,7 @@ export default function Step6Agent({ project, hasAccess }: Props) {
           </Link>
           <button onClick={() => void completeStep({ agent_type: selectedType }).then(() => setSubmitting(false))} disabled={!isValid || submitting}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-40"
-            style={{ background: isValid ? "linear-gradient(135deg, #00AAFF, #7C3AED)" : "var(--bg-elevated)", color: isValid ? "#fff" : "var(--text-muted)", boxShadow: isValid ? "0 0 16px rgba(0,170,255,0.3)" : "none" }}>
+            style={{ background: isValid ? "linear-gradient(135deg, #007AFF, #7B2FFF)" : "var(--bg-elevated)", color: isValid ? "#fff" : "var(--text-muted)", boxShadow: isValid ? "0 0 16px rgba(0,122,255,0.3)" : "none" }}>
             {submitting && <span className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />}
             Completar →
           </button>

@@ -13,7 +13,7 @@ const PROMPTS: Record<Model, { category: string; title: string; prompt: string; 
     {
       category: "Agentes de Ventas",
       title: "System prompt: Agente IA de ventas para clínicas",
-      color: "#A855F7",
+      color: "#9B30FF",
       prompt: `Eres ARIA, asistente virtual de [NOMBRE_CLÍNICA]. Tu misión es calificar prospectos interesados en tratamientos estéticos y agendar consultas de valoración gratuita.
 
 <personalidad>
@@ -44,7 +44,7 @@ Eres empática, profesional y genuinamente te importa ayudar a los pacientes a s
     {
       category: "Análisis de Negocio",
       title: "Análisis competitivo de nicho IA",
-      color: "#00AAFF",
+      color: "#007AFF",
       prompt: `Analiza el nicho de [NICHO] para una agencia de inteligencia artificial. Necesito:
 
 <análisis_requerido>
@@ -142,7 +142,7 @@ Dame 3 versiones con diferentes hooks para elegir.`,
     {
       category: "Estrategia",
       title: "Plan de 90 días para lanzar tu agencia IA",
-      color: "#00D4FF",
+      color: "#00C4FF",
       prompt: `Actúa como un mentor de negocios especializado en agencias de IA con track record de haber lanzado 10+ agencias exitosas.
 
 Crea un plan detallado de 90 días para lanzar una agencia de IA enfocada en [NICHO].
@@ -494,7 +494,7 @@ Formato: Markdown limpio, listo para Notion o Google Docs.`,
 };
 
 const MODEL_CONFIG = {
-  Claude: { color: "#A855F7", bg: "rgba(168,85,247,0.08)", border: "rgba(168,85,247,0.25)", badge: "purple" as const },
+  Claude: { color: "#9B30FF", bg: "rgba(155,48,255,0.08)", border: "rgba(155,48,255,0.25)", badge: "purple" as const },
   ChatGPT: { color: "#10A37F", bg: "rgba(16,163,127,0.08)", border: "rgba(16,163,127,0.25)", badge: "green" as const },
   Gemini: { color: "#4285F4", bg: "rgba(66,133,244,0.08)", border: "rgba(66,133,244,0.25)", badge: "blue" as const },
 };

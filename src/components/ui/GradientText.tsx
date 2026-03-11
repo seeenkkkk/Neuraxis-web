@@ -8,7 +8,7 @@ interface GradientTextProps {
 }
 
 const GRADIENTS = {
-  primary: "linear-gradient(135deg, #00AAFF, #A855F7)",
+  primary: "linear-gradient(135deg, #007AFF, #9B30FF)",
   green:   "linear-gradient(135deg, #00FF88, #00CC66)",
   gold:    "linear-gradient(135deg, #FFD700, #FF9900)",
 };

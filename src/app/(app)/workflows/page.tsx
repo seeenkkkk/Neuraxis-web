@@ -9,9 +9,9 @@ import GradientText from "@/components/ui/GradientText";
 import StatusDot from "@/components/ui/StatusDot";
 
 const ACTIVE_WORKFLOWS = [
-  { id: 1, name: "Lead Capture → CRM",        triggers: 142, status: "active"   as const, category: "Ventas",    color: "#00AAFF" },
+  { id: 1, name: "Lead Capture → CRM",        triggers: 142, status: "active"   as const, category: "Ventas",    color: "#007AFF" },
   { id: 2, name: "Onboarding Automatizado",   triggers: 38,  status: "active"   as const, category: "Clientes",  color: "#00FF88" },
-  { id: 3, name: "Nurture Email Sequence",    triggers: 89,  status: "active"   as const, category: "Marketing", color: "#A855F7" },
+  { id: 3, name: "Nurture Email Sequence",    triggers: 89,  status: "active"   as const, category: "Marketing", color: "#9B30FF" },
   { id: 4, name: "Reporte Semanal IA",        triggers: 12,  status: "loading"  as const, category: "Reportes",  color: "#FFD700" },
   { id: 5, name: "Agenda Calendly → Notion",  triggers: 27,  status: "inactive" as const, category: "Calendly",  color: "#FF6B35" },
 ];
@@ -24,7 +24,7 @@ const N8N_WORKFLOWS = [
     category: "Ventas",
     nodes: 9,
     description: "Captura leads de un formulario web, los califica con Claude IA y los guarda en un CRM (Notion/Airtable).",
-    color: "#00AAFF",
+    color: "#007AFF",
     json: {
       name: "Lead Capture + CRM con Claude",
       nodes: [
@@ -68,7 +68,7 @@ const N8N_WORKFLOWS = [
     category: "Soporte",
     nodes: 8,
     description: "Agente IA en WhatsApp Business que responde consultas, califica leads y agenda citas automáticamente.",
-    color: "#A855F7",
+    color: "#9B30FF",
     json: {
       name: "Chatbot WhatsApp con Claude",
       nodes: [
@@ -129,7 +129,7 @@ const N8N_WORKFLOWS = [
     category: "Calendly",
     nodes: 5,
     description: "Cuando se agenda una reunión en Calendly, crea el registro en Notion, notifica en Telegram y envía email de preparación.",
-    color: "#00D4FF",
+    color: "#00C4FF",
     json: {
       name: "Calendly → Notion + Email de Prep",
       nodes: [
@@ -190,7 +190,7 @@ const N8N_WORKFLOWS = [
     category: "Marketing",
     nodes: 7,
     description: "Cada semana genera y programa contenido para LinkedIn, Instagram y Twitter basado en tendencias de IA del sector.",
-    color: "#A855F7",
+    color: "#9B30FF",
     json: {
       name: "Generador de Contenido Social con IA",
       nodes: [
@@ -264,9 +264,9 @@ export default function WorkflowsPage() {
           <button key={key} onClick={() => setActiveTab(key as "active" | "templates")}
             className="px-4 py-2 rounded-xl text-sm font-semibold border transition-all"
             style={{
-              background: activeTab === key ? "rgba(0,170,255,0.12)" : "transparent",
-              borderColor: activeTab === key ? "rgba(0,170,255,0.4)" : "var(--border-subtle)",
-              color: activeTab === key ? "#00AAFF" : "var(--text-secondary)",
+              background: activeTab === key ? "rgba(0,122,255,0.12)" : "transparent",
+              borderColor: activeTab === key ? "rgba(0,122,255,0.4)" : "var(--border-subtle)",
+              color: activeTab === key ? "#007AFF" : "var(--text-secondary)",
             }}>
             {label}
           </button>

@@ -13,24 +13,24 @@ interface NeonButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const VARIANTS = {
   primary: {
-    base: "bg-gradient-to-r from-[#00AAFF] to-[#7C3AED] text-white border-transparent",
-    hover: "hover:shadow-[0_0_20px_rgba(0,170,255,0.5)]",
-    glow: "rgba(0,170,255,0.35)",
+    base: "bg-gradient-to-r from-[#007AFF] to-[#9B30FF] text-white border-transparent",
+    hover: "hover:shadow-[0_0_20px_rgba(0,122,255,0.45)]",
+    glow: "rgba(0,122,255,0.35)",
   },
   secondary: {
     base: "bg-transparent text-[--neon-blue] border-[--border-neon]",
-    hover: "hover:bg-[rgba(0,170,255,0.08)] hover:border-[--neon-blue]",
-    glow: "rgba(0,170,255,0.2)",
+    hover: "hover:bg-[rgba(0,122,255,0.07)] hover:border-[--neon-blue]",
+    glow: "rgba(0,122,255,0.20)",
   },
   ghost: {
     base: "bg-transparent text-[--text-secondary] border-[--border-subtle]",
     hover: "hover:text-[--text-primary] hover:border-[--border-card]",
-    glow: "rgba(255,255,255,0.05)",
+    glow: "rgba(0,0,0,0.04)",
   },
   danger: {
-    base: "bg-transparent text-[--neon-red] border-[rgba(255,68,68,0.3)]",
-    hover: "hover:bg-[rgba(255,68,68,0.08)]",
-    glow: "rgba(255,68,68,0.2)",
+    base: "bg-transparent text-[--neon-red] border-[rgba(239,68,68,0.3)]",
+    hover: "hover:bg-[rgba(239,68,68,0.07)]",
+    glow: "rgba(239,68,68,0.20)",
   },
 };
 

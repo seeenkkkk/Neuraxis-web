@@ -156,9 +156,9 @@ export default function Step1Problem({ project }: Props) {
           disabled={!isValid || submitting}
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-40"
           style={{
-            background: isValid ? "linear-gradient(135deg, #00AAFF, #7C3AED)" : "var(--bg-elevated)",
+            background: isValid ? "linear-gradient(135deg, #007AFF, #7B2FFF)" : "var(--bg-elevated)",
             color: isValid ? "#fff" : "var(--text-muted)",
-            boxShadow: isValid ? "0 0 16px rgba(0,170,255,0.3)" : "none",
+            boxShadow: isValid ? "0 0 16px rgba(0,122,255,0.3)" : "none",
           }}
         >
           {submitting && (

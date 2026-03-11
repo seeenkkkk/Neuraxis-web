@@ -83,7 +83,7 @@ export default function LoginPage() {
             <button
               type="submit" disabled={loading}
               className="w-full py-2.5 rounded-xl text-sm font-semibold transition-all mt-2 disabled:opacity-60 flex items-center justify-center gap-2"
-              style={{ background: "linear-gradient(135deg, #00AAFF, #7C3AED)", color: "#fff" }}
+              style={{ background: "linear-gradient(135deg, #007AFF, #7B2FFF)", color: "#fff" }}
             >
               {loading && <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />}
               {loading ? "Entrando..." : "Entrar"}
@@ -92,7 +92,7 @@ export default function LoginPage() {
 
           <p className="text-center text-sm" style={{ color: "var(--text-secondary)" }}>
             ¿No tienes cuenta?{" "}
-            <Link href="/register" className="font-medium" style={{ color: "#00AAFF" }}>
+            <Link href="/register" className="font-medium" style={{ color: "#007AFF" }}>
               Regístrate
             </Link>
           </p>

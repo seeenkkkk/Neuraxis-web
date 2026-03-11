@@ -22,7 +22,7 @@ type Props = {
   };
 };
 
-const CARD_COLORS = ["#00AAFF", "#A855F7", "#00FF88"];
+const CARD_COLORS = ["#007AFF", "#9B30FF", "#00FF88"];
 
 export default function Step2Solutions({ project }: Props) {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -262,11 +262,11 @@ export default function Step2Solutions({ project }: Props) {
             <div
               className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0"
               style={{
-                background: useCustom ? "rgba(168,85,247,0.15)" : "var(--bg-elevated)",
-                border: `1px solid ${useCustom ? "#A855F7" : "var(--border-subtle)"}`,
+                background: useCustom ? "rgba(155,48,255,0.15)" : "var(--bg-elevated)",
+                border: `1px solid ${useCustom ? "#9B30FF" : "var(--border-subtle)"}`,
               }}
             >
-              {useCustom && <span style={{ color: "#A855F7", fontSize: 8 }}>✓</span>}
+              {useCustom && <span style={{ color: "#9B30FF", fontSize: 8 }}>✓</span>}
             </div>
             Tengo otra idea propia
           </button>
@@ -308,9 +308,9 @@ export default function Step2Solutions({ project }: Props) {
           disabled={!isValid || submitting}
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-40"
           style={{
-            background: isValid ? "linear-gradient(135deg, #00AAFF, #7C3AED)" : "var(--bg-elevated)",
+            background: isValid ? "linear-gradient(135deg, #007AFF, #7B2FFF)" : "var(--bg-elevated)",
             color: isValid ? "#fff" : "var(--text-muted)",
-            boxShadow: isValid ? "0 0 16px rgba(0,170,255,0.3)" : "none",
+            boxShadow: isValid ? "0 0 16px rgba(0,122,255,0.3)" : "none",
           }}
         >
           {submitting && (

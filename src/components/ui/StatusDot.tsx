@@ -7,7 +7,7 @@ interface StatusDotProps {
 const STATUS = {
   active:   { color: "#00FF88", shadow: "rgba(0,255,136,0.7)",  label: "Activo"     },
   inactive: { color: "#4B5563", shadow: "transparent",          label: "Inactivo"   },
-  loading:  { color: "#00AAFF", shadow: "rgba(0,170,255,0.6)",  label: "Cargando"   },
+  loading:  { color: "#007AFF", shadow: "rgba(0,122,255,0.6)",  label: "Cargando"   },
   error:    { color: "#FF4444", shadow: "rgba(255,68,68,0.7)",  label: "Error"      },
 };
 

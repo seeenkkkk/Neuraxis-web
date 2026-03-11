@@ -67,7 +67,7 @@ export default function Step3Niche({ project }: Props) {
         <div className="flex items-center gap-2 mb-1">
           <span
             className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold"
-            style={{ background: "#A855F7", color: "#fff" }}
+            style={{ background: "#9B30FF", color: "#fff" }}
           >
             3
           </span>
@@ -101,9 +101,9 @@ export default function Step3Niche({ project }: Props) {
                   onClick={() => setSector(s)}
                   className="px-2 py-2 rounded-xl text-xs font-medium transition-all"
                   style={{
-                    background: selected ? "rgba(168,85,247,0.12)" : "var(--bg-elevated)",
-                    border: `1px solid ${selected ? "#A855F7" : "var(--border-subtle)"}`,
-                    color: selected ? "#A855F7" : "var(--text-secondary)",
+                    background: selected ? "rgba(155,48,255,0.12)" : "var(--bg-elevated)",
+                    border: `1px solid ${selected ? "#9B30FF" : "var(--border-subtle)"}`,
+                    color: selected ? "#9B30FF" : "var(--text-secondary)",
                   }}
                 >
                   {s}
@@ -127,9 +127,9 @@ export default function Step3Niche({ project }: Props) {
                   onClick={() => setSize(cs.value)}
                   className="px-3 py-2.5 rounded-xl text-xs font-medium text-left transition-all"
                   style={{
-                    background: selected ? "rgba(168,85,247,0.12)" : "var(--bg-elevated)",
-                    border: `1px solid ${selected ? "#A855F7" : "var(--border-subtle)"}`,
-                    color: selected ? "#A855F7" : "var(--text-secondary)",
+                    background: selected ? "rgba(155,48,255,0.12)" : "var(--bg-elevated)",
+                    border: `1px solid ${selected ? "#9B30FF" : "var(--border-subtle)"}`,
+                    color: selected ? "#9B30FF" : "var(--text-secondary)",
                   }}
                 >
                   {selected && <span className="mr-1">✓</span>}
@@ -176,9 +176,9 @@ export default function Step3Niche({ project }: Props) {
           disabled={!isValid || submitting}
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-40"
           style={{
-            background: isValid ? "linear-gradient(135deg, #00AAFF, #7C3AED)" : "var(--bg-elevated)",
+            background: isValid ? "linear-gradient(135deg, #007AFF, #7B2FFF)" : "var(--bg-elevated)",
             color: isValid ? "#fff" : "var(--text-muted)",
-            boxShadow: isValid ? "0 0 16px rgba(0,170,255,0.3)" : "none",
+            boxShadow: isValid ? "0 0 16px rgba(0,122,255,0.3)" : "none",
           }}
         >
           {submitting && (

@@ -138,7 +138,7 @@ export default function ClientsPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: "MRR Total", value: `${totalMRR.toLocaleString()}€`, color: "#00FF88", icon: "💰" },
-          { label: "Clientes Activos", value: String(activeCount), color: "#00AAFF", icon: "✅" },
+          { label: "Clientes Activos", value: String(activeCount), color: "#007AFF", icon: "✅" },
           { label: "En Trial", value: String(trialCount), color: "#A855F7", icon: "🔄" },
           { label: "Leads Activos", value: String(leadCount), color: "#FFD700", icon: "🎯" },
         ].map((stat, i) => (
@@ -169,7 +169,7 @@ export default function ClientsPage() {
               style={{
                 background: filterStatus === s ? "rgba(0,170,255,0.12)" : "transparent",
                 borderColor: filterStatus === s ? "rgba(0,170,255,0.4)" : "var(--border-subtle)",
-                color: filterStatus === s ? "#00AAFF" : "var(--text-secondary)",
+                color: filterStatus === s ? "#007AFF" : "var(--text-secondary)",
               }}>
               {s}
             </button>

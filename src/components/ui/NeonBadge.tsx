@@ -9,9 +9,9 @@ interface NeonBadgeProps {
 }
 
 const COLORS = {
-  blue:   { text: "#00AAFF", bg: "rgba(0,170,255,0.12)",   border: "rgba(0,170,255,0.3)"   },
-  purple: { text: "#A855F7", bg: "rgba(168,85,247,0.12)",  border: "rgba(168,85,247,0.3)"  },
-  cyan:   { text: "#00D4FF", bg: "rgba(0,212,255,0.12)",   border: "rgba(0,212,255,0.3)"   },
+  blue:   { text: "#007AFF", bg: "rgba(0,122,255,0.12)",   border: "rgba(0,122,255,0.3)"   },
+  purple: { text: "#9B30FF", bg: "rgba(155,48,255,0.12)",  border: "rgba(155,48,255,0.3)"  },
+  cyan:   { text: "#00C4FF", bg: "rgba(0,196,255,0.12)",   border: "rgba(0,196,255,0.3)"   },
   green:  { text: "#00FF88", bg: "rgba(0,255,136,0.12)",   border: "rgba(0,255,136,0.3)"   },
   orange: { text: "#FF6B35", bg: "rgba(255,107,53,0.12)",  border: "rgba(255,107,53,0.3)"  },
   red:    { text: "#FF4444", bg: "rgba(255,68,68,0.12)",   border: "rgba(255,68,68,0.3)"   },

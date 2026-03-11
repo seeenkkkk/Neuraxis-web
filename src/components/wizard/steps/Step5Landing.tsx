@@ -11,7 +11,7 @@ const PLATFORMS = [
     name: "Framer",
     desc: "Diseño visual + animaciones premium",
     url: "https://framer.com/templates",
-    color: "#00AAFF",
+    color: "#007AFF",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M5 5h14v7H5zM5 12l7 7 7-7" />
@@ -23,7 +23,7 @@ const PLATFORMS = [
     name: "Webflow",
     desc: "Control total + CMS integrado",
     url: "https://webflow.com/templates",
-    color: "#A855F7",
+    color: "#9B30FF",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
@@ -182,7 +182,7 @@ export default function Step5Landing({ project }: Props) {
       {/* Info */}
       {chosen && !alreadyHave && (
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-center px-4 py-2 rounded-xl"
-          style={{ background: "rgba(0,170,255,0.05)", color: "var(--text-secondary)", border: "1px solid var(--border-neon)" }}>
+          style={{ background: "rgba(0,122,255,0.05)", color: "var(--text-secondary)", border: "1px solid var(--border-neon)" }}>
           Se ha abierto {PLATFORMS.find((p) => p.id === chosen)?.name} en una nueva pestaña. Cuando termines de crear la landing, marca el paso como completado.
         </motion.p>
       )}
@@ -196,7 +196,7 @@ export default function Step5Landing({ project }: Props) {
         </Link>
         <button onClick={handleSubmit} disabled={!isValid || submitting}
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-40"
-          style={{ background: isValid ? "linear-gradient(135deg, #00AAFF, #7C3AED)" : "var(--bg-elevated)", color: isValid ? "#fff" : "var(--text-muted)", boxShadow: isValid ? "0 0 16px rgba(0,170,255,0.3)" : "none" }}>
+          style={{ background: isValid ? "linear-gradient(135deg, #007AFF, #7B2FFF)" : "var(--bg-elevated)", color: isValid ? "#fff" : "var(--text-muted)", boxShadow: isValid ? "0 0 16px rgba(0,122,255,0.3)" : "none" }}>
           {submitting && <span className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />}
           Completar paso →
         </button>

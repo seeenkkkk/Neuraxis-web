@@ -35,7 +35,7 @@ export default function SettingsPage() {
 
           {/* Avatar */}
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl overflow-hidden" style={{ boxShadow: "0 0 16px rgba(0,212,255,0.4)" }}>
+            <div className="w-16 h-16 rounded-2xl overflow-hidden" style={{ boxShadow: "0 0 16px rgba(0,196,255,0.4)" }}>
               <img src="/avatar.png" alt="Avatar" className="w-full h-full object-cover" />
             </div>
             <div>
@@ -69,8 +69,8 @@ export default function SettingsPage() {
           </h2>
           {[
             { name: "Supabase",  connected: true,  color: "#00FF88" },
-            { name: "n8n",       connected: true,  color: "#00AAFF" },
-            { name: "Calendly",  connected: false, color: "#A855F7" },
+            { name: "n8n",       connected: true,  color: "#007AFF" },
+            { name: "Calendly",  connected: false, color: "#9B30FF" },
             { name: "Stripe",    connected: false, color: "#FFD700" },
           ].map((int) => (
             <div key={int.name} className="flex items-center justify-between">

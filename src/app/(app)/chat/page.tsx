@@ -83,9 +83,9 @@ export default function ChatPage() {
           className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm"
           style={{
             fontFamily: "var(--font-syne, sans-serif)",
-            background: "rgba(168,85,247,0.15)",
-            border: "1.5px solid rgba(168,85,247,0.4)",
-            color: "#A855F7",
+            background: "rgba(155,48,255,0.15)",
+            border: "1.5px solid rgba(155,48,255,0.4)",
+            color: "#9B30FF",
           }}
         >
           N
@@ -119,14 +119,14 @@ export default function ChatPage() {
               {msg.role === "assistant" ? (
                 <div
                   className="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center text-xs font-black"
-                  style={{ background: "rgba(168,85,247,0.15)", border: "1px solid rgba(168,85,247,0.35)", color: "#A855F7", fontFamily: "var(--font-syne)" }}
+                  style={{ background: "rgba(155,48,255,0.15)", border: "1px solid rgba(155,48,255,0.35)", color: "#9B30FF", fontFamily: "var(--font-syne)" }}
                 >
                   N
                 </div>
               ) : (
                 <div
                   className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold"
-                  style={{ background: "rgba(0,170,255,0.15)", border: "1px solid rgba(0,170,255,0.3)", color: "#00AAFF" }}
+                  style={{ background: "rgba(0,122,255,0.15)", border: "1px solid rgba(0,122,255,0.3)", color: "#007AFF" }}
                 >
                   A
                 </div>
@@ -139,9 +139,9 @@ export default function ChatPage() {
                   style={{
                     background:
                       msg.role === "user"
-                        ? "linear-gradient(135deg, #00AAFF20, #7C3AED20)"
+                        ? "linear-gradient(135deg, #007AFF20, #7B2FFF20)"
                         : "var(--bg-elevated)",
-                    border: `1px solid ${msg.role === "user" ? "rgba(0,170,255,0.3)" : "var(--border-card)"}`,
+                    border: `1px solid ${msg.role === "user" ? "rgba(0,122,255,0.3)" : "var(--border-card)"}`,
                     color: "var(--text-primary)",
                   }}
                 >
@@ -158,12 +158,12 @@ export default function ChatPage() {
           {loading && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3 items-center">
               <div className="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center text-xs font-black"
-                style={{ background: "rgba(168,85,247,0.15)", border: "1px solid rgba(168,85,247,0.35)", color: "#A855F7", fontFamily: "var(--font-syne)" }}>
+                style={{ background: "rgba(155,48,255,0.15)", border: "1px solid rgba(155,48,255,0.35)", color: "#9B30FF", fontFamily: "var(--font-syne)" }}>
                 N
               </div>
               <div className="px-4 py-2.5 rounded-2xl flex gap-1 items-center" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-card)" }}>
                 {[0, 1, 2].map((j) => (
-                  <motion.span key={j} className="w-1.5 h-1.5 rounded-full" style={{ background: "#A855F7" }}
+                  <motion.span key={j} className="w-1.5 h-1.5 rounded-full" style={{ background: "#9B30FF" }}
                     animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: j * 0.2 }} />
                 ))}
               </div>
@@ -181,7 +181,7 @@ export default function ChatPage() {
               key={qp}
               onClick={() => send(qp)}
               className="text-xs px-3 py-1.5 rounded-lg border transition-all hover:opacity-80"
-              style={{ color: "var(--neon-cyan)", borderColor: "rgba(0,212,255,0.25)", background: "rgba(0,212,255,0.05)" }}
+              style={{ color: "var(--neon-cyan)", borderColor: "rgba(0,196,255,0.25)", background: "rgba(0,196,255,0.05)" }}
             >
               {qp}
             </button>
@@ -203,7 +203,7 @@ export default function ChatPage() {
           disabled={!input.trim() || loading}
           className="px-4 py-2.5 rounded-xl font-medium text-sm transition-all disabled:opacity-40"
           style={{
-            background: "linear-gradient(135deg, #00AAFF, #7C3AED)",
+            background: "linear-gradient(135deg, #007AFF, #7B2FFF)",
             color: "white",
             cursor: input.trim() && !loading ? "pointer" : "not-allowed",
           }}

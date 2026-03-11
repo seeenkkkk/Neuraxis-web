@@ -13,7 +13,7 @@ const ARTICLES = [
     category: "Agentes IA",
     readTime: "8 min",
     date: "1 Mar 2024",
-    color: "#00AAFF",
+    color: "#007AFF",
     excerpt: "Los agentes IA de ventas están revolucionando la forma en que las empresas captan y convierten clientes. En este artículo te explico paso a paso cómo construir uno desde cero.",
     content: `Los agentes IA de ventas están redefiniendo el embudo comercial moderno. Mientras un comercial humano puede gestionar 20-30 conversaciones al día, un agente IA bien configurado puede manejar miles simultáneamente, sin perder calidad.
 
@@ -129,7 +129,7 @@ Evita Zapier para agencias IA salvo para integraciones muy simples y puntuales.`
     category: "Prompt Engineering",
     readTime: "10 min",
     date: "15 Feb 2024",
-    color: "#A855F7",
+    color: "#9B30FF",
     excerpt: "Técnicas avanzadas de prompt engineering específicamente para Claude. Aprende a extraer el máximo rendimiento de los modelos de Anthropic.",
     content: `Claude es, en mi opinión, el mejor LLM para casos de uso empresariales en 2024. Su capacidad de seguir instrucciones complejas y su alineación con valores hace que sea ideal para agentes de atención al cliente, ventas y soporte.
 
@@ -383,7 +383,7 @@ export default function ContentPage() {
             style={{
               background: filter === cat ? "rgba(0,170,255,0.12)" : "transparent",
               borderColor: filter === cat ? "rgba(0,170,255,0.4)" : "var(--border-subtle)",
-              color: filter === cat ? "#00AAFF" : "var(--text-secondary)",
+              color: filter === cat ? "#007AFF" : "var(--text-secondary)",
             }}
           >
             {cat}
