@@ -927,26 +927,31 @@ export default function RoadmapPage() {
     return null;
   }, [projectId]);
 
-  async function saveAndAdvance(stepId: number, data: Record<string, unknown>) {
+  function saveAndAdvance(stepId: number, data: Record<string, unknown>): Promise<void> {
     // Advance UI immediately — never block on DB
     const isLast = stepId === 6;
     const nextStep = isLast ? 6 : stepId + 1;
     setProject((prev) => ({ ...prev, ...data, current_step: nextStep }));
     if (!isLast) setCurrentStep(nextStep);
 
-    // Persist to Supabase in background
-    try {
-      const pid = await getOrCreateProject();
-      if (!pid) return;
-      const supabase = createClient();
-      await supabase.from("agent_projects").update({
-        ...data,
-        current_step: nextStep,
-        status: isLast ? "completed" : "in_progress",
-        ...(isLast ? { completed_at: new Date().toISOString() } : {}),
-      }).eq("id", pid);
-      setProject((prev) => ({ ...prev, id: pid }));
-    } catch { /* DB optional — UI already advanced */ }
+    // Persist to Supabase in background (fire-and-forget — never blocks the UI)
+    void (async () => {
+      try {
+        const pid = await getOrCreateProject();
+        if (!pid) return;
+        const supabase = createClient();
+        await supabase.from("agent_projects").update({
+          ...data,
+          current_step: nextStep,
+          status: isLast ? "completed" : "in_progress",
+          ...(isLast ? { completed_at: new Date().toISOString() } : {}),
+        }).eq("id", pid);
+        setProject((prev) => ({ ...prev, id: pid }));
+      } catch { /* DB optional — UI already advanced */ }
+    })();
+
+    // Return resolved promise immediately so step forms reset saving=false right away
+    return Promise.resolve();
   }
 
   const color = STEP_COLORS[currentStep - 1];
@@ -966,10 +971,10 @@ export default function RoadmapPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}>
-          Roadmap del <GradientText>Arquitecto IA</GradientText>
+          <GradientText>Crear tu Agente IA</GradientText>
         </h1>
         <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
-          6 pasos para construir y escalar tu agencia de IA
+          6 pasos para construir y lanzar tu agente de IA
         </p>
       </div>
 
