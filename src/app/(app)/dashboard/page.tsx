@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import GradientText from "@/components/ui/GradientText";
 
 const STATS = [
@@ -56,7 +58,8 @@ const QUICK_LINKS = [
     label: "Crear Agente",
     desc: "Configura un nuevo agente IA",
     href: "/agents",
-    color: "#007AFF",
+    color: "#00AAFF",
+    external: false,
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <circle cx="12" cy="8" r="4" />
@@ -65,29 +68,42 @@ const QUICK_LINKS = [
     ),
   },
   {
-    label: "Ir a Aprende",
-    desc: "Cursos, prompts y roadmap",
-    href: "/academy",
-    color: "#9B30FF",
+    label: "Mi Web",
+    desc: "Tu presencia online profesional",
+    href: "/web",
+    color: "#A855F7",
+    external: false,
     icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M6 12v5c3 3 9 3 12 0v-5" />
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="2" y1="12" x2="22" y2="12" />
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
       </svg>
     ),
   },
   {
-    label: "Ver Workflows",
-    desc: "Automatizaciones n8n activas",
-    href: "/workflows",
+    label: "Revly",
+    desc: "Tu agente de ventas en WhatsApp",
+    href: "https://revly.app",
+    color: "#0d9488",
+    external: true,
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Delegar",
+    desc: "Implementación por expertos",
+    href: "/delegate",
     color: "#00FF88",
+    external: false,
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="2" y="7" width="6" height="4" rx="1" />
-        <rect x="9" y="3" width="6" height="4" rx="1" />
-        <rect x="9" y="13" width="6" height="4" rx="1" />
-        <rect x="16" y="7" width="6" height="4" rx="1" />
-        <path d="M8 9h1M15 5v2M15 15v2M15 9h1" strokeLinecap="round" />
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
     ),
   },
@@ -100,19 +116,36 @@ const fadeUp = (delay = 0) => ({
 });
 
 export default function DashboardPage() {
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        const name = user.user_metadata?.full_name || user.email?.split("@")[0] || "";
+        setUserName(name.split(" ")[0]);
+      }
+    });
+  }, []);
+
+  const today = new Date().toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
+
   return (
     <div className="max-w-4xl mx-auto space-y-8">
 
       {/* Header */}
       <motion.div {...fadeUp(0)}>
         <h1
-          className="text-xl font-bold mb-1"
+          className="text-2xl font-black mb-1"
           style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}
         >
-          <GradientText>Dashboard</GradientText>
+          Hola, <GradientText>{userName || "Arquitecto"}</GradientText> 👋
         </h1>
-        <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-          Bienvenido a Neuraxis IA
+        <p className="text-sm capitalize mb-1" style={{ color: "var(--text-muted)" }}>
+          {today}
+        </p>
+        <p className="text-sm" style={{ color: "var(--text-muted)", opacity: 0.7 }}>
+          Tu agencia IA está creciendo.
         </p>
       </motion.div>
 
@@ -122,10 +155,7 @@ export default function DashboardPage() {
           <div
             key={i}
             className="rounded-xl p-4"
-            style={{
-              background: "var(--bg-card)",
-              border: "1px solid var(--border-card)",
-            }}
+            style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}
           >
             <div
               className="w-7 h-7 rounded-lg flex items-center justify-center mb-3"
@@ -133,15 +163,10 @@ export default function DashboardPage() {
             >
               {stat.icon}
             </div>
-            <p
-              className="text-2xl font-bold mb-0.5"
-              style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}
-            >
+            <p className="text-2xl font-bold mb-0.5" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}>
               {stat.value}
             </p>
-            <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-              {stat.label}
-            </p>
+            <p className="text-xs" style={{ color: "var(--text-muted)" }}>{stat.label}</p>
           </div>
         ))}
       </motion.div>
@@ -151,14 +176,8 @@ export default function DashboardPage() {
 
         {/* Activity */}
         <motion.div {...fadeUp(0.1)} className="lg:col-span-3">
-          <div
-            className="rounded-xl p-5 h-full"
-            style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}
-          >
-            <p
-              className="text-xs font-semibold uppercase tracking-widest mb-5"
-              style={{ color: "var(--text-muted)", fontFamily: "var(--font-syne, sans-serif)" }}
-            >
+          <div className="rounded-xl p-5 h-full" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-5" style={{ color: "var(--text-muted)", fontFamily: "var(--font-syne, sans-serif)" }}>
               Actividad Reciente
             </p>
             <div className="flex flex-col items-center justify-center py-10 gap-3">
@@ -166,9 +185,7 @@ export default function DashboardPage() {
                 <circle cx="12" cy="12" r="10" />
                 <path d="M12 8v4M12 16h.01" strokeLinecap="round" />
               </svg>
-              <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-                Aún no hay actividad
-              </p>
+              <p className="text-sm" style={{ color: "var(--text-muted)" }}>Aún no hay actividad</p>
               <p className="text-xs text-center max-w-[180px]" style={{ color: "var(--text-muted)", opacity: 0.6 }}>
                 Las acciones que realices aparecerán aquí
               </p>
@@ -178,51 +195,41 @@ export default function DashboardPage() {
 
         {/* Quick access */}
         <motion.div {...fadeUp(0.12)} className="lg:col-span-2">
-          <div
-            className="rounded-xl p-5 h-full"
-            style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}
-          >
-            <p
-              className="text-xs font-semibold uppercase tracking-widest mb-5"
-              style={{ color: "var(--text-muted)", fontFamily: "var(--font-syne, sans-serif)" }}
-            >
-              Acceso Rápido
+          <div className="rounded-xl p-5 h-full" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-5" style={{ color: "var(--text-muted)", fontFamily: "var(--font-syne, sans-serif)" }}>
+              Accesos Rápidos
             </p>
             <div className="space-y-2">
-              {QUICK_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 group"
-                  style={{
-                    background: "var(--bg-elevated)",
-                    border: "1px solid var(--border-subtle)",
-                  }}
-                >
-                  <span
-                    className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-                    style={{ background: `${link.color}15`, color: link.color }}
-                  >
-                    {link.icon}
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-xs font-medium" style={{ color: "var(--text-primary)" }}>
-                      {link.label}
-                    </p>
-                    <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>
-                      {link.desc}
-                    </p>
-                  </div>
-                  <svg
-                    width="12" height="12" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" strokeWidth="2"
-                    className="ml-auto flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                    style={{ color: "var(--text-muted)" }}
-                  >
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
-                </Link>
-              ))}
+              {QUICK_LINKS.map((link) => {
+                const inner = (
+                  <>
+                    <span className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${link.color}15`, color: link.color }}>
+                      {link.icon}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-xs font-medium" style={{ color: "var(--text-primary)" }}>{link.label}</p>
+                      <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{link.desc}</p>
+                    </div>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                      className="ml-auto flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                      style={{ color: "var(--text-muted)" }}
+                    >
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                  </>
+                );
+                const sharedStyle = { background: "var(--bg-elevated)", border: "1px solid var(--border-subtle)" };
+                const sharedClass = "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 group";
+                return link.external ? (
+                  <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" className={sharedClass} style={sharedStyle}>
+                    {inner}
+                  </a>
+                ) : (
+                  <Link key={link.href} href={link.href} className={sharedClass} style={sharedStyle}>
+                    {inner}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </motion.div>
