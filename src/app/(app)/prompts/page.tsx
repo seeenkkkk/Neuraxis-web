@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import GradientText from "@/components/ui/GradientText";
-import NeonBadge from "@/components/ui/NeonBadge";
-import NeonCard from "@/components/ui/NeonCard";
+
+// ── Constants ─────────────────────────────────────────────────────────────────
+
+const BRAND_GRADIENT = "linear-gradient(135deg, #8BC34A 0%, #7B1FA2 50%, #00BCD4 100%)";
 
 type Model = "Claude" | "ChatGPT" | "Gemini";
 
@@ -13,7 +14,7 @@ const PROMPTS: Record<Model, { category: string; title: string; prompt: string; 
     {
       category: "Agentes de Ventas",
       title: "System prompt: Agente IA de ventas para clínicas",
-      color: "#9B30FF",
+      color: "#7B1FA2",
       prompt: `Eres ARIA, asistente virtual de [NOMBRE_CLÍNICA]. Tu misión es calificar prospectos interesados en tratamientos estéticos y agendar consultas de valoración gratuita.
 
 <personalidad>
@@ -44,7 +45,7 @@ Eres empática, profesional y genuinamente te importa ayudar a los pacientes a s
     {
       category: "Análisis de Negocio",
       title: "Análisis competitivo de nicho IA",
-      color: "#007AFF",
+      color: "#00BCD4",
       prompt: `Analiza el nicho de [NICHO] para una agencia de inteligencia artificial. Necesito:
 
 <análisis_requerido>
@@ -70,7 +71,7 @@ Sé específico, usa datos cuando los tengas, y prioriza información accionable
     {
       category: "Prompt Engineering",
       title: "Mejora y optimiza cualquier prompt",
-      color: "#00FF88",
+      color: "#8BC34A",
       prompt: `Actúa como un experto en prompt engineering con 5 años de experiencia optimizando LLMs para casos de uso empresariales.
 
 Voy a darte un prompt que necesito mejorar:
@@ -97,7 +98,7 @@ Usa las mejores prácticas: XML estructurado, few-shot examples si aplica, chain
     {
       category: "Automatización",
       title: "Diseña un workflow n8n completo",
-      color: "#FFD700",
+      color: "#7B1FA2",
       prompt: `Necesito diseñar un workflow de n8n para automatizar el siguiente proceso:
 
 **Proceso a automatizar**: [DESCRIBE EL PROCESO]
@@ -119,7 +120,7 @@ Incluye el pseudocódigo de los nodos de transformación de datos más complejos
     {
       category: "Contenido",
       title: "Genera contenido para LinkedIn de alto engagement",
-      color: "#FF6B35",
+      color: "#00BCD4",
       prompt: `Eres un experto en personal branding y copywriting para LinkedIn, especializado en el sector de inteligencia artificial y negocios digitales.
 
 Crea un post de LinkedIn sobre: [TEMA]
@@ -142,7 +143,7 @@ Dame 3 versiones con diferentes hooks para elegir.`,
     {
       category: "Estrategia",
       title: "Plan de 90 días para lanzar tu agencia IA",
-      color: "#00C4FF",
+      color: "#8BC34A",
       prompt: `Actúa como un mentor de negocios especializado en agencias de IA con track record de haber lanzado 10+ agencias exitosas.
 
 Crea un plan detallado de 90 días para lanzar una agencia de IA enfocada en [NICHO].
@@ -167,7 +168,7 @@ Sé específico, evita las generalizaciones. Quiero un plan que alguien pueda se
     {
       category: "GPTs Personalizados",
       title: "Instrucciones para un GPT de ventas",
-      color: "#10A37F",
+      color: "#8BC34A",
       prompt: `# Nombre del GPT
 Consultor de Ventas IA para [SECTOR]
 
@@ -194,7 +195,7 @@ Saluda al usuario y pregunta: ¿Estás buscando captar nuevos clientes, mejorar 
     {
       category: "Análisis de Datos",
       title: "Interpreta datos de negocio con Advanced Data Analysis",
-      color: "#10A37F",
+      color: "#8BC34A",
       prompt: `Analiza los datos del archivo adjunto y proporciona:
 
 1. **Resumen ejecutivo** (3-5 puntos clave, máximo 100 palabras)
@@ -219,7 +220,7 @@ Usa lenguaje de negocio, no técnico. Los insights deben ser concretos y acciona
     {
       category: "Automatización",
       title: "Genera código Python para automatización",
-      color: "#10A37F",
+      color: "#8BC34A",
       prompt: `Necesito un script de Python para automatizar el siguiente proceso:
 
 **Qué hace**: [DESCRIBE EL PROCESO]
@@ -244,7 +245,7 @@ Por favor incluye:
     {
       category: "Copywriting",
       title: "Email de prospección frío de alta conversión",
-      color: "#10A37F",
+      color: "#8BC34A",
       prompt: `Escribe una secuencia de 3 emails de prospección fría para vender servicios de IA a [TIPO DE EMPRESA].
 
 Sobre mí/mi empresa:
@@ -275,7 +276,7 @@ Tono: directo, humano, sin corporativismo.`,
     {
       category: "Estrategia",
       title: "Análisis DAFO para agencia IA",
-      color: "#10A37F",
+      color: "#8BC34A",
       prompt: `Necesito un análisis DAFO completo para mi agencia de IA con estas características:
 
 Mi agencia:
@@ -300,7 +301,7 @@ Al final: top 3 prioridades estratégicas para los próximos 6 meses.`,
     {
       category: "Productividad",
       title: "Crea un SOP completo para cualquier proceso",
-      color: "#10A37F",
+      color: "#8BC34A",
       prompt: `Crea un SOP (Standard Operating Procedure) detallado para el siguiente proceso de mi agencia:
 
 **Proceso**: [NOMBRE DEL PROCESO]
@@ -327,7 +328,7 @@ Formato: Markdown limpio, listo para pegar en Notion.`,
     {
       category: "Investigación",
       title: "Investigación de mercado con búsqueda web",
-      color: "#4285F4",
+      color: "#00BCD4",
       prompt: `Realiza una investigación exhaustiva sobre el mercado de [NICHO] en España para el año 2024.
 
 Busca y analiza:
@@ -357,7 +358,7 @@ Cita tus fuentes e indica la fecha de cada dato. Prioriza fuentes españolas o e
     {
       category: "Multimodal",
       title: "Analiza una landing page o imagen de negocio",
-      color: "#4285F4",
+      color: "#00BCD4",
       prompt: `[ADJUNTA UNA IMAGEN: landing page, web, material de marketing]
 
 Analiza esta imagen como si fueras un experto en conversión y UX con 8 años de experiencia.
@@ -388,7 +389,7 @@ Qué está bien y debe mantenerse
     {
       category: "Código",
       title: "Genera un script de Google Apps Script para Sheets",
-      color: "#4285F4",
+      color: "#00BCD4",
       prompt: `Necesito un script de Google Apps Script para Google Sheets que haga lo siguiente:
 
 **Función principal**: [DESCRIBE QUÉ DEBE HACER]
@@ -417,7 +418,7 @@ Incluye instrucciones de instalación paso a paso.`,
     {
       category: "Estrategia",
       title: "Análisis de competidores con datos actualizados",
-      color: "#4285F4",
+      color: "#00BCD4",
       prompt: `Busca información actualizada sobre los principales competidores de una agencia de IA especializada en [NICHO] en España.
 
 Para cada competidor que encuentres, analiza:
@@ -440,7 +441,7 @@ Incluye las URLs de tus fuentes y fecha de consulta.`,
     {
       category: "Creatividad",
       title: "Genera ideas de contenido viral para redes sociales",
-      color: "#4285F4",
+      color: "#00BCD4",
       prompt: `Soy fundador de una agencia de IA especializada en [NICHO]. Necesito 20 ideas de contenido para [RED SOCIAL] que puedan volverse virales o tener alto alcance orgánico.
 
 Para cada idea incluye:
@@ -462,7 +463,7 @@ Ordénalas por potencial de engagement de mayor a menor.`,
     {
       category: "Productividad",
       title: "Transcribe y resume reuniones con action items",
-      color: "#4285F4",
+      color: "#00BCD4",
       prompt: `[ADJUNTA LA TRANSCRIPCIÓN O NOTAS DE TU REUNIÓN]
 
 Procesa esta reunión y genera:
@@ -494,9 +495,9 @@ Formato: Markdown limpio, listo para Notion o Google Docs.`,
 };
 
 const MODEL_CONFIG = {
-  Claude: { color: "#9B30FF", bg: "rgba(155,48,255,0.08)", border: "rgba(155,48,255,0.25)", badge: "purple" as const },
-  ChatGPT: { color: "#10A37F", bg: "rgba(16,163,127,0.08)", border: "rgba(16,163,127,0.25)", badge: "green" as const },
-  Gemini: { color: "#4285F4", bg: "rgba(66,133,244,0.08)", border: "rgba(66,133,244,0.25)", badge: "blue" as const },
+  Claude: { color: "#7B1FA2", bg: "rgba(123,31,162,0.12)", border: "rgba(123,31,162,0.35)" },
+  ChatGPT: { color: "#8BC34A", bg: "rgba(139,195,74,0.12)", border: "rgba(139,195,74,0.35)" },
+  Gemini: { color: "#00BCD4", bg: "rgba(0,188,212,0.12)", border: "rgba(0,188,212,0.35)" },
 };
 
 export default function PromptsPage() {
@@ -513,11 +514,16 @@ export default function PromptsPage() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
+      {/* Header */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-        <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}>
-          Biblioteca de <GradientText>Prompts</GradientText>
-        </h1>
-        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+        <div className="flex items-center gap-3 mb-1">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/avatar9.png.png" alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+          <h1 className="text-2xl font-bold grad-text-brand">
+            Biblioteca de Prompts
+          </h1>
+        </div>
+        <p className="text-sm" style={{ color: "#9ca3af" }}>
           Los mejores prompts para Claude, ChatGPT y Gemini — listos para copiar y usar
         </p>
       </motion.div>
@@ -531,11 +537,11 @@ export default function PromptsPage() {
             <button
               key={model}
               onClick={() => setActiveModel(model)}
-              className="px-4 py-2 rounded-xl text-sm font-semibold transition-all border"
+              className="px-4 py-2 rounded-xl text-sm font-semibold transition-all"
               style={{
-                background: isActive ? mc.bg : "transparent",
-                borderColor: isActive ? mc.border : "var(--border-subtle)",
-                color: isActive ? mc.color : "var(--text-secondary)",
+                background: isActive ? mc.bg : "rgba(255,255,255,0.04)",
+                border: `1px solid ${isActive ? mc.border : "rgba(255,255,255,0.08)"}`,
+                color: isActive ? mc.color : "rgba(255,255,255,0.5)",
               }}
             >
               {model}
@@ -548,55 +554,72 @@ export default function PromptsPage() {
       <div className="space-y-4">
         {PROMPTS[activeModel].map((p, i) => (
           <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 * i }}>
-            <NeonCard className="p-4">
+            <div
+              className="rounded-2xl p-6 transition-all duration-200"
+              style={{
+                background: "#111827",
+                border: "1px solid rgba(255,255,255,0.08)",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.20)")}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
+            >
               <div className="flex items-start justify-between gap-4 mb-3">
-                <div className="flex items-center gap-2">
-                  <NeonBadge color={config.badge} size="sm">{p.category}</NeonBadge>
-                  <h3 className="text-sm font-semibold" style={{ color: "var(--text-primary)", fontFamily: "var(--font-syne)" }}>
-                    {p.title}
-                  </h3>
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <h3 className="text-sm font-bold text-white">{p.title}</h3>
                 </div>
-                <button
-                  onClick={() => copyPrompt(p.prompt, i)}
-                  className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-all"
-                  style={{
-                    background: copied === i ? "rgba(0,255,136,0.1)" : config.bg,
-                    borderColor: copied === i ? "rgba(0,255,136,0.4)" : config.border,
-                    color: copied === i ? "#00FF88" : config.color,
-                  }}
-                >
-                  {copied === i ? (
-                    <>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                      Copiado
-                    </>
-                  ) : (
-                    <>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                      </svg>
-                      Copiar
-                    </>
-                  )}
-                </button>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {/* Category badge */}
+                  <span
+                    className="text-[10px] font-semibold px-2 py-1 rounded-lg"
+                    style={{ background: `${p.color}18`, color: p.color, border: `1px solid ${p.color}30` }}
+                  >
+                    {p.category}
+                  </span>
+                  {/* Copy button */}
+                  <button
+                    onClick={() => copyPrompt(p.prompt, i)}
+                    className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all"
+                    style={{
+                      background: copied === i ? "rgba(139,195,74,0.12)" : "rgba(255,255,255,0.04)",
+                      border: `1px solid ${copied === i ? "rgba(139,195,74,0.4)" : "rgba(255,255,255,0.20)"}`,
+                      color: copied === i ? "#8BC34A" : "rgba(255,255,255,0.7)",
+                    }}
+                    onMouseEnter={e => { if (copied !== i) (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.40)"; }}
+                    onMouseLeave={e => { if (copied !== i) (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.20)"; }}
+                  >
+                    {copied === i ? (
+                      <>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Copiado
+                      </>
+                    ) : (
+                      <>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                        Copiar
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
 
               <pre
-                className="text-xs leading-relaxed overflow-x-auto rounded-xl p-3 whitespace-pre-wrap"
+                className="text-xs leading-relaxed overflow-x-auto rounded-xl p-4 whitespace-pre-wrap"
                 style={{
-                  background: "var(--bg-input)",
-                  border: "1px solid var(--border-subtle)",
-                  color: "var(--text-secondary)",
+                  background: "rgba(0,0,0,0.40)",
+                  border: "1px solid rgba(255,255,255,0.06)",
+                  color: "#d1d5db",
                   fontFamily: "monospace",
                   maxHeight: "200px",
                 }}
               >
                 {p.prompt}
               </pre>
-            </NeonCard>
+            </div>
           </motion.div>
         ))}
       </div>

@@ -2,8 +2,11 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import NeonCard from "@/components/ui/NeonCard";
-import NeonBadge from "@/components/ui/NeonBadge";
+
+// ── Constants ─────────────────────────────────────────────────────────────────
+
+const BRAND_GRADIENT = "linear-gradient(135deg, #8BC34A 0%, #7B1FA2 50%, #00BCD4 100%)";
+const USER_GRADIENT = "linear-gradient(135deg, #7B1FA2, #00BCD4)";
 
 type Message = { role: "user" | "assistant"; content: string; ts: Date };
 
@@ -79,33 +82,35 @@ export default function ChatPage() {
     <div className="max-w-3xl mx-auto h-[calc(100vh-96px)] flex flex-col gap-4">
       {/* Header */}
       <div className="flex items-center gap-3 flex-shrink-0">
-        <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm"
-          style={{
-            fontFamily: "var(--font-syne, sans-serif)",
-            background: "rgba(155,48,255,0.15)",
-            border: "1.5px solid rgba(155,48,255,0.4)",
-            color: "#9B30FF",
-          }}
-        >
-          N
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/logo2.png.png"
+          alt="Neuraxis"
+          className="w-8 h-8 rounded-xl object-contain flex-shrink-0"
+          style={{ background: "rgba(255,255,255,0.06)", padding: "4px" }}
+        />
         <div>
-          <p className="text-sm font-bold" style={{ color: "var(--text-primary)", fontFamily: "var(--font-syne, sans-serif)" }}>
-            Neuraxis
-          </p>
+          <p className="text-sm font-bold text-white">Neuraxis Chat</p>
           <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88]" style={{ boxShadow: "0 0 4px rgba(0,255,136,0.8)" }} />
-            <span className="text-[10px]" style={{ color: "var(--text-secondary)" }}>Agente activo · Claude Sonnet 4.6</span>
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#8BC34A", boxShadow: "0 0 4px rgba(139,195,74,0.8)" }} />
+            <span className="text-[10px]" style={{ color: "#9ca3af" }}>Powered by Claude Sonnet · Agente activo</span>
           </div>
         </div>
         <div className="ml-auto">
-          <NeonBadge color="purple" size="sm">Soporte 24/7</NeonBadge>
+          <span
+            className="text-[10px] font-semibold px-2.5 py-1 rounded-lg"
+            style={{ background: "rgba(123,31,162,0.15)", color: "#7B1FA2", border: "1px solid rgba(123,31,162,0.30)" }}
+          >
+            Soporte 24/7
+          </span>
         </div>
       </div>
 
       {/* Messages */}
-      <NeonCard className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div
+        className="flex-1 overflow-y-auto p-4 space-y-4 rounded-2xl"
+        style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.08)" }}
+      >
         <AnimatePresence initial={false}>
           {messages.map((msg, i) => (
             <motion.div
@@ -119,35 +124,33 @@ export default function ChatPage() {
               {msg.role === "assistant" ? (
                 <div
                   className="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center text-xs font-black"
-                  style={{ background: "rgba(155,48,255,0.15)", border: "1px solid rgba(155,48,255,0.35)", color: "#9B30FF", fontFamily: "var(--font-syne)" }}
+                  style={{ background: "rgba(123,31,162,0.20)", border: "1px solid rgba(123,31,162,0.35)", color: "#7B1FA2" }}
                 >
                   N
                 </div>
               ) : (
                 <div
                   className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold"
-                  style={{ background: "rgba(0,122,255,0.15)", border: "1px solid rgba(0,122,255,0.3)", color: "#007AFF" }}
+                  style={{ background: USER_GRADIENT }}
                 >
-                  A
+                  <span className="text-white">A</span>
                 </div>
               )}
 
               {/* Bubble */}
               <div className={`max-w-[75%] space-y-1 ${msg.role === "user" ? "items-end" : "items-start"} flex flex-col`}>
                 <div
-                  className="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap"
+                  className="px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap"
                   style={{
-                    background:
-                      msg.role === "user"
-                        ? "linear-gradient(135deg, #007AFF20, #7B2FFF20)"
-                        : "var(--bg-elevated)",
-                    border: `1px solid ${msg.role === "user" ? "rgba(0,122,255,0.3)" : "var(--border-card)"}`,
-                    color: "var(--text-primary)",
+                    background: msg.role === "user" ? USER_GRADIENT : "#1f2937",
+                    border: msg.role === "user" ? "none" : "1px solid rgba(255,255,255,0.08)",
+                    color: msg.role === "user" ? "#ffffff" : "#e5e7eb",
+                    borderRadius: msg.role === "user" ? "1rem 1rem 0.25rem 1rem" : "1rem 1rem 1rem 0.25rem",
                   }}
                 >
                   {msg.content}
                 </div>
-                <span className="text-[10px] px-1" style={{ color: "var(--text-muted)" }}>
+                <span className="text-[10px] px-1" style={{ color: "#6b7280" }}>
                   {fmtTime(msg.ts)}
                 </span>
               </div>
@@ -158,12 +161,13 @@ export default function ChatPage() {
           {loading && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3 items-center">
               <div className="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center text-xs font-black"
-                style={{ background: "rgba(155,48,255,0.15)", border: "1px solid rgba(155,48,255,0.35)", color: "#9B30FF", fontFamily: "var(--font-syne)" }}>
+                style={{ background: "rgba(123,31,162,0.20)", border: "1px solid rgba(123,31,162,0.35)", color: "#7B1FA2" }}>
                 N
               </div>
-              <div className="px-4 py-2.5 rounded-2xl flex gap-1 items-center" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-card)" }}>
+              <div className="px-4 py-2.5 rounded-2xl rounded-bl-sm flex gap-1 items-center"
+                style={{ background: "#1f2937", border: "1px solid rgba(255,255,255,0.08)" }}>
                 {[0, 1, 2].map((j) => (
-                  <motion.span key={j} className="w-1.5 h-1.5 rounded-full" style={{ background: "#9B30FF" }}
+                  <motion.span key={j} className="w-1.5 h-1.5 rounded-full" style={{ background: "#00BCD4" }}
                     animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: j * 0.2 }} />
                 ))}
               </div>
@@ -171,7 +175,7 @@ export default function ChatPage() {
           )}
         </AnimatePresence>
         <div ref={bottomRef} />
-      </NeonCard>
+      </div>
 
       {/* Quick prompts */}
       {messages.length <= 1 && (
@@ -180,8 +184,14 @@ export default function ChatPage() {
             <button
               key={qp}
               onClick={() => send(qp)}
-              className="text-xs px-3 py-1.5 rounded-lg border transition-all hover:opacity-80"
-              style={{ color: "var(--neon-cyan)", borderColor: "rgba(0,196,255,0.25)", background: "rgba(0,196,255,0.05)" }}
+              className="text-xs px-3 py-2 rounded-xl transition-all duration-150"
+              style={{
+                background: "#111827",
+                border: "1px solid rgba(255,255,255,0.08)",
+                color: "#d1d5db",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = "#00BCD4")}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
             >
               {qp}
             </button>
@@ -192,18 +202,24 @@ export default function ChatPage() {
       {/* Input */}
       <div className="flex gap-2 flex-shrink-0">
         <input
-          className="flex-1 input-dark"
+          className="flex-1 text-sm text-white outline-none px-4 py-3 rounded-2xl transition-all"
           placeholder="Escribe tu mensaje..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
+          style={{
+            background: "#111827",
+            border: "1px solid rgba(255,255,255,0.10)",
+          }}
+          onFocus={e => (e.currentTarget.style.borderColor = "#00BCD4")}
+          onBlur={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.10)")}
         />
         <button
           onClick={() => send()}
           disabled={!input.trim() || loading}
-          className="px-4 py-2.5 rounded-xl font-medium text-sm transition-all disabled:opacity-40"
+          className="px-4 py-3 rounded-xl font-medium text-sm transition-all disabled:opacity-40"
           style={{
-            background: "linear-gradient(135deg, #007AFF, #7B2FFF)",
+            background: BRAND_GRADIENT,
             color: "white",
             cursor: input.trim() && !loading ? "pointer" : "not-allowed",
           }}

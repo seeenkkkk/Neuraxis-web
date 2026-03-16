@@ -2,9 +2,10 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import GradientText from "@/components/ui/GradientText";
-import NeonButton from "@/components/ui/NeonButton";
-import NeonBadge from "@/components/ui/NeonBadge";
+
+// ── Constants ─────────────────────────────────────────────────────────────────
+
+const BRAND_GRADIENT = "linear-gradient(135deg, #8BC34A 0%, #7B1FA2 50%, #00BCD4 100%)";
 
 const PLANS = [
   {
@@ -19,7 +20,7 @@ const PLANS = [
       "Adaptado a móvil",
       "Entrega en 7 días",
     ],
-    color: "#00AAFF",
+    hoverBorder: "#8BC34A",
     highlighted: false,
     cta: "Solicitar Landing",
   },
@@ -36,7 +37,7 @@ const PLANS = [
       "Adaptado a móvil",
       "Entrega en 7 días",
     ],
-    color: "#A855F7",
+    hoverBorder: "#00BCD4",
     highlighted: true,
     cta: "Solicitar Web Corporativa",
   },
@@ -52,17 +53,17 @@ const PLANS = [
       "SEO para ecommerce",
       "Soporte post-lanzamiento",
     ],
-    color: "#00FF88",
+    hoverBorder: "#7B1FA2",
     highlighted: false,
     cta: "Solicitar Ecommerce",
   },
 ];
 
 const FEATURES = [
-  { icon: "✦", title: "Sin plantillas", desc: "Todo diseñado desde cero para tu marca. Nunca usamos temas prediseñados." },
-  { icon: "⬡", title: "SEO incluido", desc: "Optimización técnica, velocidad y estructura desde el primer commit." },
-  { icon: "◈", title: "7 días de entrega", desc: "Proceso ágil, comunicación directa. Sin sorpresas ni retrasos." },
-  { icon: "⟐", title: "Soporte post-entrega", desc: "30 días de soporte incluido tras el lanzamiento de tu web." },
+  { icon: "✦", title: "Sin plantillas", desc: "Todo diseñado desde cero para tu marca. Nunca usamos temas prediseñados.", color: "#8BC34A" },
+  { icon: "⬡", title: "SEO incluido", desc: "Optimización técnica, velocidad y estructura desde el primer commit.", color: "#00BCD4" },
+  { icon: "◈", title: "7 días de entrega", desc: "Proceso ágil, comunicación directa. Sin sorpresas ni retrasos.", color: "#7B1FA2" },
+  { icon: "⟐", title: "Soporte post-entrega", desc: "30 días de soporte incluido tras el lanzamiento de tu web.", color: "#8BC34A" },
 ];
 
 const WA_NUMBER = "34TUNUMERO";
@@ -79,23 +80,39 @@ export default function WebPage() {
     <div className="max-w-5xl mx-auto space-y-16 pb-16">
 
       {/* ── Hero ── */}
-      <motion.div {...fadeUp(0)} className="text-center pt-6">
-        <NeonBadge color="blue" dot className="mb-5">
-          Servicio de desarrollo web
-        </NeonBadge>
-        <h1
-          className="text-4xl md:text-5xl font-black mb-5 leading-tight"
-          style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}
-        >
-          Tu web profesional <GradientText>en 7 días</GradientText>
-        </h1>
-        <p className="text-lg max-w-2xl mx-auto mb-8" style={{ color: "var(--text-secondary)" }}>
-          Diseñamos y desarrollamos tu presencia online desde cero. Sin plantillas, sin código, sin complicaciones.
-          Tú enfócate en tu negocio — nosotros nos encargamos de todo.
-        </p>
-        <a href={WA_URL} target="_blank" rel="noopener noreferrer">
-          <NeonButton size="lg">Solicitar presupuesto →</NeonButton>
-        </a>
+      <motion.div {...fadeUp(0)} className="pt-4">
+        <div className="flex items-start justify-between gap-6">
+          <div>
+            <span
+              className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full mb-5"
+              style={{ background: "rgba(0,188,212,0.12)", color: "#00BCD4", border: "1px solid rgba(0,188,212,0.25)" }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#00BCD4", boxShadow: "0 0 4px rgba(0,188,212,0.8)" }} />
+              Servicio de desarrollo web
+            </span>
+            <h1 className="text-4xl md:text-5xl font-black mb-5 leading-tight">
+              <span className="grad-text-brand">Crea tu Web con IA</span>
+            </h1>
+            <p className="text-lg max-w-xl mb-8" style={{ color: "#9ca3af" }}>
+              Diseñamos y desarrollamos tu presencia online desde cero. Sin plantillas, sin código, sin complicaciones.
+              Tú enfócate en tu negocio — nosotros nos encargamos de todo.
+            </p>
+            <a href={WA_URL} target="_blank" rel="noopener noreferrer">
+              <button
+                className="px-6 py-3 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                style={{ background: BRAND_GRADIENT }}
+              >
+                Solicitar presupuesto →
+              </button>
+            </a>
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/avatar1.png.png"
+            alt=""
+            className="w-28 flex-shrink-0 nex-float hidden md:block"
+          />
+        </div>
       </motion.div>
 
       {/* ── Features ── */}
@@ -103,19 +120,19 @@ export default function WebPage() {
         {FEATURES.map((f, i) => (
           <div
             key={i}
-            className="p-5 rounded-2xl"
-            style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}
+            className="rounded-2xl p-5 transition-all duration-200"
+            style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.08)" }}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.20)")}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
           >
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center mb-3 text-lg font-black"
-              style={{ background: "rgba(0,170,255,0.1)", color: "var(--neon-blue)" }}
+              style={{ background: `${f.color}15`, color: f.color }}
             >
               {f.icon}
             </div>
-            <p className="text-sm font-bold mb-1" style={{ color: "var(--text-primary)", fontFamily: "var(--font-syne, sans-serif)" }}>
-              {f.title}
-            </p>
-            <p className="text-xs" style={{ color: "var(--text-secondary)" }}>{f.desc}</p>
+            <p className="text-sm font-bold mb-1 text-white">{f.title}</p>
+            <p className="text-xs" style={{ color: "#9ca3af" }}>{f.desc}</p>
           </div>
         ))}
       </motion.div>
@@ -123,13 +140,10 @@ export default function WebPage() {
       {/* ── Plans ── */}
       <div>
         <motion.div {...fadeUp(0.1)} className="text-center mb-10">
-          <h2
-            className="text-3xl font-black mb-3"
-            style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}
-          >
-            Elige tu <GradientText>tipo de web</GradientText>
+          <h2 className="text-3xl font-black mb-3">
+            Elige tu <span className="grad-text-brand">tipo de web</span>
           </h2>
-          <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          <p className="text-sm" style={{ color: "#9ca3af" }}>
             Precio único sin mensualidades · Hosting no incluido
           </p>
         </motion.div>
@@ -139,49 +153,38 @@ export default function WebPage() {
             <motion.div
               key={i}
               {...fadeUp(0.06 * i)}
-              className="p-7 rounded-2xl flex flex-col relative"
+              className="rounded-2xl p-7 flex flex-col relative transition-all duration-200"
               style={{
-                background: "var(--bg-card)",
-                border: `1px solid ${plan.highlighted ? plan.color + "50" : "var(--border-card)"}`,
-                boxShadow: plan.highlighted ? `0 0 30px ${plan.color}15` : "none",
+                background: "#111827",
+                border: plan.highlighted ? `2px solid ${plan.hoverBorder}` : "1px solid rgba(255,255,255,0.08)",
+                boxShadow: plan.highlighted ? `0 0 30px ${plan.hoverBorder}18` : "none",
               }}
+              onMouseEnter={e => { if (!plan.highlighted) (e.currentTarget as HTMLElement).style.borderColor = plan.hoverBorder; }}
+              onMouseLeave={e => { if (!plan.highlighted) (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)"; }}
             >
               {plan.highlighted && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <NeonBadge color="purple">Más popular</NeonBadge>
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                  <span
+                    className="px-3 py-1 rounded-full text-xs font-bold text-white"
+                    style={{ background: BRAND_GRADIENT }}
+                  >
+                    Recomendado
+                  </span>
                 </div>
               )}
 
               <div className="mb-5">
-                <h3
-                  className="text-lg font-black mb-3"
-                  style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}
-                >
-                  {plan.name}
-                </h3>
+                <h3 className="text-lg font-black mb-3 text-white">{plan.name}</h3>
                 <div className="flex items-end gap-1.5">
-                  <span
-                    className="text-4xl font-black"
-                    style={{
-                      fontFamily: "var(--font-syne, sans-serif)",
-                      background: plan.highlighted ? `linear-gradient(135deg, ${plan.color}, #00AAFF)` : undefined,
-                      WebkitBackgroundClip: plan.highlighted ? "text" : undefined,
-                      WebkitTextFillColor: plan.highlighted ? "transparent" : undefined,
-                      color: plan.highlighted ? undefined : "var(--text-primary)",
-                    }}
-                  >
-                    {plan.price}
-                  </span>
-                  <span className="text-sm mb-1.5" style={{ color: "var(--text-muted)" }}>
-                    pago {plan.period}
-                  </span>
+                  <span className="text-4xl font-black grad-text-brand">{plan.price}</span>
+                  <span className="text-sm mb-1.5" style={{ color: "#6b7280" }}>pago {plan.period}</span>
                 </div>
               </div>
 
               <ul className="space-y-2.5 mb-8 flex-1">
                 {plan.features.map((f) => (
-                  <li key={f} className="flex items-center gap-2.5 text-sm" style={{ color: "var(--text-secondary)" }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={plan.color} strokeWidth="2.5">
+                  <li key={f} className="flex items-center gap-2.5 text-sm" style={{ color: "#d1d5db" }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8BC34A" strokeWidth="2.5">
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                     {f}
@@ -191,12 +194,10 @@ export default function WebPage() {
 
               <a href={WA_URL} target="_blank" rel="noopener noreferrer">
                 <button
-                  className="w-full py-3 rounded-xl text-sm font-bold transition-all hover:opacity-90"
-                  style={{
-                    background: plan.highlighted ? `linear-gradient(135deg, ${plan.color}90, #00AAFF90)` : "var(--bg-elevated)",
-                    color: plan.highlighted ? "#fff" : "var(--text-secondary)",
-                    border: `1px solid ${plan.highlighted ? plan.color + "50" : "var(--border-card)"}`,
-                  }}
+                  className="w-full py-3 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                  style={{ background: "#25D366" }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "#128C7E")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "#25D366")}
                 >
                   {plan.cta} →
                 </button>
@@ -209,13 +210,15 @@ export default function WebPage() {
       {/* ── Doubts / Contact ── */}
       <motion.div
         {...fadeUp(0.1)}
-        className="rounded-2xl p-8 text-center"
-        style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}
+        className="rounded-2xl p-8 text-center transition-all duration-200"
+        style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.08)" }}
+        onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.20)")}
+        onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
       >
-        <p className="text-lg font-bold mb-2" style={{ color: "var(--text-primary)", fontFamily: "var(--font-syne, sans-serif)" }}>
+        <p className="text-lg font-bold mb-2 text-white">
           ¿Tienes dudas? Habla con nosotros
         </p>
-        <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>
+        <p className="text-sm mb-6" style={{ color: "#9ca3af" }}>
           Cuéntanos tu proyecto y te respondemos en menos de 24h. Sin compromiso.
         </p>
         <a href={WA_URL} target="_blank" rel="noopener noreferrer">
@@ -233,11 +236,18 @@ export default function WebPage() {
 
       {/* ── Final CTA ── */}
       <motion.div {...fadeUp(0.12)} className="text-center">
-        <p className="text-sm mb-4" style={{ color: "var(--text-muted)" }}>
+        <p className="text-sm mb-4" style={{ color: "#6b7280" }}>
           También puedes ver el resto de servicios de Neuraxis
         </p>
         <Link href="/dashboard">
-          <NeonButton variant="secondary">Volver al dashboard →</NeonButton>
+          <button
+            className="px-6 py-3 rounded-xl text-sm font-medium transition-all"
+            style={{ border: "1px solid rgba(255,255,255,0.20)", color: "rgba(255,255,255,0.7)" }}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.40)")}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.20)")}
+          >
+            Volver al dashboard →
+          </button>
         </Link>
       </motion.div>
 
