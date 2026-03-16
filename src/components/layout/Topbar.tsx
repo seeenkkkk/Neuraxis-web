@@ -49,7 +49,7 @@ export default function Topbar({
       {/* Logoletras — desktop left */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/images/logoletras2.png"
+        src="/images/logoletras2.png.png"
         alt="Neuraxis"
         className="hidden lg:block h-8 w-auto object-contain"
       />

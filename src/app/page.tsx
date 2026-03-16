@@ -102,7 +102,7 @@ export default function LandingPage() {
       >
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-16">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/logoletras2.png" alt="Neuraxis" className="h-10 w-auto object-contain" />
+          <img src="/images/logoletras2.png.png" alt="Neuraxis" className="h-10 w-auto object-contain" />
           <div className="flex items-center gap-3">
             <Link href="/login">
               <button
