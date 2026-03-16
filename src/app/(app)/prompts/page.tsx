@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-const BRAND_GRADIENT = "linear-gradient(135deg, #8BC34A 0%, #7B1FA2 50%, #00BCD4 100%)";
 
 type Model = "Claude" | "ChatGPT" | "Gemini";
 
@@ -510,7 +509,6 @@ export default function PromptsPage() {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const config = MODEL_CONFIG[activeModel];
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
