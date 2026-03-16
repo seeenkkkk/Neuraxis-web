@@ -49,8 +49,8 @@ export default function Topbar({
       {/* Logoletras — desktop left */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/images/logoletras2_png-removebg-preview.png"
-        className="hidden lg:block h-8 w-auto brightness-0 invert"
+        src="/images/logoletras-removebg-preview.png"
+        className="hidden lg:block h-8 w-auto"
         alt="Neuraxis IA"
       />
 
