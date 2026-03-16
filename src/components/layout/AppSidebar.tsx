@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import NeuraxisLogo from "@/components/brand/NeuraxisLogo";
 import { createClient } from "@/lib/supabase/client";
 
-// ── Nav items ──────────────────────────────────────────────────────────────────
+// ── Nav items ────────────────────────────────────────────────────────────────
+
 type NavItem =
   | { type?: undefined; label: string; href: string; icon: React.ReactNode; badge?: string; external?: boolean }
   | { type: "section"; label: string };
@@ -102,10 +104,14 @@ const NAV_ITEMS: NavItem[] = [
   },
 ];
 
+// ── Props ────────────────────────────────────────────────────────────────────
+
 interface AppSidebarProps {
   isOpen?: boolean;
   onClose?: () => void;
 }
+
+// ── Component ────────────────────────────────────────────────────────────────
 
 export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) {
   const pathname = usePathname();
@@ -133,6 +139,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
   };
 
   type NavLinkItem = Extract<NavItem, { href: string }>;
+
   const NavItemComponent = ({ item }: { item: NavLinkItem }) => {
     const isActive = !item.external && (pathname === item.href || pathname.startsWith(item.href + "/"));
     const isRevly = item.label === "Revly";
@@ -146,7 +153,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
           target="_blank"
           rel="noopener noreferrer"
           onClick={onClose}
-          className={`${baseClass} hover:bg-gray-50`}
+          className={`${baseClass} hover:bg-slate-50`}
           style={{
             color: isRevly ? "#0d9488" : "#374151",
             borderLeft: "2px solid transparent",
@@ -168,7 +175,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
       <Link
         href={item.href}
         onClick={onClose}
-        className={`${baseClass} ${!isActive ? "hover:bg-gray-50" : ""}`}
+        className={`${baseClass} ${!isActive ? "hover:bg-slate-50" : ""}`}
         style={{
           color: isActive ? "#0d9488" : "#374151",
           background: isActive ? "#f0fdfa" : undefined,
@@ -176,16 +183,13 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
           fontWeight: isActive ? 600 : 500,
         }}
       >
-        <span
-          className="flex-shrink-0"
-          style={{ color: isActive ? "#0d9488" : "#9ca3af" }}
-        >
+        <span className="flex-shrink-0" style={{ color: isActive ? "#0d9488" : "#9ca3af" }}>
           {item.icon}
         </span>
         <span>{item.label}</span>
         {item.badge && (
           <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded-md font-medium"
-            style={{ color: "#7c3aed", background: "#f5f3ff", border: "1px solid #ddd6fe" }}>
+            style={{ color: "#0d9488", background: "#f0fdfc", border: "1px solid #ccfbf1" }}>
             {item.badge}
           </span>
         )}
@@ -194,7 +198,8 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
   };
 
   const sidebarContent = (
-    <div className="flex flex-col h-full" style={{ background: "#ffffff" }}>
+    <div className="flex flex-col h-full bg-white">
+
       {/* Logo */}
       <div className="flex items-center px-4 h-14 flex-shrink-0" style={{ borderBottom: "1px solid #f3f4f6" }}>
         <NeuraxisLogo size="sm" animated />
@@ -222,37 +227,52 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
       <div className="p-3 flex-shrink-0">
         <button
           onClick={() => setProfileOpen(!profileOpen)}
-          className="w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-150 hover:bg-gray-50"
+          className="w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-150 hover:bg-slate-50"
           style={{
             border: "1px solid " + (profileOpen ? "#e5e7eb" : "transparent"),
             background: profileOpen ? "#f9fafb" : "transparent",
           }}
         >
-          <div
-            className="w-8 h-8 rounded-full flex-shrink-0 relative flex items-center justify-center font-bold text-sm"
-            style={{
-              background: "linear-gradient(135deg, #00AAFF, #7C3AED)",
-              color: "#fff",
-              fontFamily: "var(--font-syne)",
-            }}
-          >
-            {userName.charAt(0).toUpperCase()}
-            <span
-              className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white"
-              style={{ background: "#10b981" }}
+          {/* Avatar with real image */}
+          <div className="w-8 h-8 rounded-full flex-shrink-0 relative overflow-hidden border-2"
+            style={{ borderColor: "#e5e7eb" }}>
+            <Image
+              src="/images/avatar.png"
+              alt={userName}
+              width={32}
+              height={32}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                // fallback: hide image, show initials via parent
+                (e.target as HTMLImageElement).style.display = "none";
+              }}
             />
+            <div
+              className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white"
+              style={{ background: "#0d9488" }}
+              aria-hidden
+            >
+              {userName.charAt(0).toUpperCase()}
+            </div>
           </div>
 
           <div className="flex-1 text-left min-w-0">
-            <p className="text-xs font-semibold truncate" style={{ color: "#111827" }}>
-              {userName}
-            </p>
+            <div className="flex items-center gap-1.5">
+              <p className="text-xs font-semibold truncate" style={{ color: "#111827" }}>
+                {userName}
+              </p>
+              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-md flex-shrink-0"
+                style={{ background: "#f0fdfc", color: "#0d9488", border: "1px solid #ccfbf1" }}>
+                Free
+              </span>
+            </div>
             <p className="text-[10px] truncate" style={{ color: "#6b7280" }}>
               {userEmail || "Arquitecto de IAs"}
             </p>
           </div>
 
-          <motion.span animate={{ rotate: profileOpen ? 180 : 0 }} transition={{ duration: 0.2 }} style={{ color: "#9ca3af" }}>
+          <motion.span animate={{ rotate: profileOpen ? 180 : 0 }} transition={{ duration: 0.2 }}
+            style={{ color: "#9ca3af" }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="6 9 12 15 18 9" />
             </svg>
@@ -269,6 +289,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
               className="overflow-hidden"
             >
               <div className="pt-2 space-y-2">
+                {/* Neurax-Points bar */}
                 <div className="p-3 rounded-xl" style={{ background: "#f9fafb", border: "1px solid #e5e7eb" }}>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[10px] font-medium" style={{ color: "#6b7280" }}>Neurax-Points</span>
@@ -280,22 +301,18 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
                       animate={{ width: "56.8%" }}
                       transition={{ duration: 1, ease: "easeOut" as const }}
                       className="h-full rounded-full"
-                      style={{ background: "linear-gradient(90deg, #0d9488, #06b6d4)" }}
+                      style={{ background: "#0d9488" }}
                     />
                   </div>
-                  <div className="flex items-center gap-1.5 mt-2">
-                    <svg width="11" height="11" viewBox="0 0 14 14" fill="none">
-                      <polygon points="7,1 12,4 12,10 7,13 2,10 2,4" fill="#0d9488" fillOpacity="0.2" stroke="#0d9488" strokeWidth="1" />
-                    </svg>
-                    <span className="text-[10px]" style={{ color: "#6b7280" }}>850 créditos disponibles</span>
-                  </div>
+                  <p className="text-[10px] mt-2" style={{ color: "#9ca3af" }}>850 créditos disponibles</p>
                 </div>
 
+                {/* Actions */}
                 <div className="flex gap-1.5">
                   <Link
                     href="/settings"
                     onClick={onClose}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-medium transition-colors hover:bg-gray-100"
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-medium transition-colors hover:bg-slate-100"
                     style={{ color: "#374151", background: "#f3f4f6", border: "1px solid #e5e7eb" }}
                   >
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -344,7 +361,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="lg:hidden fixed inset-0 z-40"
-              style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
+              style={{ background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)" }}
               onClick={onClose}
             />
             <motion.aside

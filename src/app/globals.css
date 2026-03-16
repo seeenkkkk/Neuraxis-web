@@ -269,4 +269,24 @@ html, body {
 .step-active   { border-color: var(--neon-blue)  !important; box-shadow: var(--glow-blue); }
 .step-pending  { border-color: var(--border-subtle) !important; opacity: 0.5; }
 
+/* ─── Premium landing utilities (2026-03-16) ────────────────────────────── */
+
+/* Value prop cards — teal left border accent on hover */
+.value-card {
+  border-left: 4px solid transparent !important;
+  transition: border-left-color 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.value-card:hover {
+  border-left-color: #0d9488 !important;
+  border-color: #99f6e4 !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
+}
+
+/* Quick action cards — teal border on hover */
+.quick-action-card:hover {
+  border-color: #0d9488 !important;
+  box-shadow: 0 2px 12px rgba(13,148,136,0.08) !important;
+  background: #f0fdfc !important;
+}
+
 @layer utilities { .text-balance { text-wrap: balance; } }

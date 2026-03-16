@@ -4,14 +4,16 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import GradientText from "@/components/ui/GradientText";
+import NexMascot from "@/components/brand/NexMascot";
+
+// ── Data ────────────────────────────────────────────────────────────────────
 
 const STATS = [
   {
     label: "Agentes Activos",
     value: "0",
     icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <circle cx="12" cy="8" r="4" />
         <path d="M8 8H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h1M16 8h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-1" />
         <path d="M9 14h6l1 6H8l1-6z" />
@@ -22,7 +24,7 @@ const STATS = [
     label: "Conversaciones",
     value: "0",
     icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
       </svg>
     ),
@@ -31,7 +33,7 @@ const STATS = [
     label: "Workflows",
     value: "0",
     icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <rect x="2" y="7" width="6" height="4" rx="1" />
         <rect x="9" y="3" width="6" height="4" rx="1" />
         <rect x="9" y="13" width="6" height="4" rx="1" />
@@ -44,7 +46,7 @@ const STATS = [
     label: "Clientes",
     value: "0",
     icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
         <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
@@ -53,17 +55,17 @@ const STATS = [
   },
 ];
 
-const QUICK_LINKS = [
+const QUICK_ACTIONS = [
   {
     label: "Crear Agente",
     desc: "Configura un nuevo agente IA",
     href: "/agents",
-    color: "#00AAFF",
     external: false,
     icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <circle cx="12" cy="8" r="4" />
         <path d="M9 14h6l1 6H8l1-6z" />
+        <path d="M12 2v2M12 14v-2" strokeLinecap="round" />
       </svg>
     ),
   },
@@ -71,10 +73,9 @@ const QUICK_LINKS = [
     label: "Mi Web",
     desc: "Tu presencia online profesional",
     href: "/web",
-    color: "#A855F7",
     external: false,
     icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10" />
         <line x1="2" y1="12" x2="22" y2="12" />
         <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
@@ -83,12 +84,11 @@ const QUICK_LINKS = [
   },
   {
     label: "Revly",
-    desc: "Tu agente de ventas en WhatsApp",
+    desc: "Agente de ventas en WhatsApp",
     href: "https://revly.app",
-    color: "#0d9488",
     external: true,
     icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
       </svg>
     ),
@@ -97,10 +97,9 @@ const QUICK_LINKS = [
     label: "Delegar",
     desc: "Implementación por expertos",
     href: "/delegate",
-    color: "#00FF88",
     external: false,
     icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
         <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
@@ -115,6 +114,8 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.35, delay, ease: "easeOut" as const },
 });
 
+// ── Component ────────────────────────────────────────────────────────────────
+
 export default function DashboardPage() {
   const [userName, setUserName] = useState("");
 
@@ -128,104 +129,129 @@ export default function DashboardPage() {
     });
   }, []);
 
-  const today = new Date().toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
+  const today = new Date().toLocaleDateString("es-ES", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-5xl mx-auto space-y-8 px-1">
 
-      {/* Header */}
+      {/* ── Header ── */}
       <motion.div {...fadeUp(0)}>
-        <h1
-          className="text-2xl font-black mb-1"
-          style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}
-        >
-          Hola, <GradientText>{userName || "Arquitecto"}</GradientText> 👋
+        <h1 className="text-2xl font-bold mb-1" style={{ color: "#0f172a" }}>
+          Hola, {userName || "Mario"} 👋
         </h1>
-        <p className="text-sm capitalize mb-1" style={{ color: "var(--text-muted)" }}>
-          {today}
-        </p>
-        <p className="text-sm" style={{ color: "var(--text-muted)", opacity: 0.7 }}>
-          Tu agencia IA está creciendo.
-        </p>
+        <p className="text-sm capitalize mb-0.5" style={{ color: "#94a3b8" }}>{today}</p>
+        <p className="text-sm" style={{ color: "#94a3b8" }}>Tu agencia IA está creciendo.</p>
       </motion.div>
 
-      {/* Stats */}
-      <motion.div {...fadeUp(0.05)} className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      {/* ── Stats Grid ── */}
+      <motion.div {...fadeUp(0.05)} className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {STATS.map((stat, i) => (
           <div
             key={i}
-            className="rounded-xl p-4"
-            style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}
+            className="rounded-xl p-5 bg-white border transition-all duration-200 hover:shadow-md"
+            style={{ border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}
           >
             <div
-              className="w-7 h-7 rounded-lg flex items-center justify-center mb-3"
-              style={{ background: "var(--bg-elevated)", color: "var(--text-muted)" }}
+              className="w-9 h-9 rounded-xl flex items-center justify-center mb-4"
+              style={{ background: "#f0fdfc", color: "#0d9488" }}
             >
               {stat.icon}
             </div>
-            <p className="text-2xl font-bold mb-0.5" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "var(--text-primary)" }}>
+            <p className="text-3xl font-bold mb-1" style={{ color: "#0f172a" }}>
               {stat.value}
             </p>
-            <p className="text-xs" style={{ color: "var(--text-muted)" }}>{stat.label}</p>
+            <p className="text-xs font-medium" style={{ color: "#94a3b8" }}>{stat.label}</p>
           </div>
         ))}
       </motion.div>
 
-      {/* Content row */}
-      <div className="grid lg:grid-cols-5 gap-4">
+      {/* ── Content Row ── */}
+      <div className="grid lg:grid-cols-5 gap-5">
 
-        {/* Activity */}
+        {/* Recent Activity */}
         <motion.div {...fadeUp(0.1)} className="lg:col-span-3">
-          <div className="rounded-xl p-5 h-full" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
-            <p className="text-xs font-semibold uppercase tracking-widest mb-5" style={{ color: "var(--text-muted)", fontFamily: "var(--font-syne, sans-serif)" }}>
+          <div
+            className="rounded-xl p-6 h-full bg-white border"
+            style={{ border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}
+          >
+            <p className="text-xs font-semibold uppercase tracking-widest mb-6" style={{ color: "#94a3b8" }}>
               Actividad Reciente
             </p>
-            <div className="flex flex-col items-center justify-center py-10 gap-3">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{ color: "var(--text-muted)", opacity: 0.4 }}>
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v4M12 16h.01" strokeLinecap="round" />
-              </svg>
-              <p className="text-sm" style={{ color: "var(--text-muted)" }}>Aún no hay actividad</p>
-              <p className="text-xs text-center max-w-[180px]" style={{ color: "var(--text-muted)", opacity: 0.6 }}>
-                Las acciones que realices aparecerán aquí
-              </p>
+
+            {/* Empty state with NexMascot */}
+            <div className="flex flex-col items-center justify-center py-8 gap-4">
+              <div className="opacity-80">
+                <NexMascot emotion="sleeping" size="md" />
+              </div>
+              <div className="text-center">
+                <p className="text-sm font-medium mb-1" style={{ color: "#334155" }}>
+                  Aún no hay actividad
+                </p>
+                <p className="text-xs max-w-[200px] leading-relaxed" style={{ color: "#94a3b8" }}>
+                  ¡Crea tu primer agente para empezar!
+                </p>
+              </div>
+              <Link href="/agents">
+                <button
+                  className="px-4 py-2 text-xs font-semibold text-white rounded-lg transition-colors mt-1"
+                  style={{ background: "#0d9488" }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "#0f766e")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "#0d9488")}
+                >
+                  Crear primer agente →
+                </button>
+              </Link>
             </div>
           </div>
         </motion.div>
 
-        {/* Quick access */}
+        {/* Quick Actions */}
         <motion.div {...fadeUp(0.12)} className="lg:col-span-2">
-          <div className="rounded-xl p-5 h-full" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
-            <p className="text-xs font-semibold uppercase tracking-widest mb-5" style={{ color: "var(--text-muted)", fontFamily: "var(--font-syne, sans-serif)" }}>
+          <div
+            className="rounded-xl p-6 h-full bg-white border"
+            style={{ border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}
+          >
+            <p className="text-xs font-semibold uppercase tracking-widest mb-5" style={{ color: "#94a3b8" }}>
               Accesos Rápidos
             </p>
             <div className="space-y-2">
-              {QUICK_LINKS.map((link) => {
+              {QUICK_ACTIONS.map(action => {
                 const inner = (
                   <>
-                    <span className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${link.color}15`, color: link.color }}>
-                      {link.icon}
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-xs font-medium" style={{ color: "var(--text-primary)" }}>{link.label}</p>
-                      <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{link.desc}</p>
+                    <div
+                      className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ background: "#f0fdfc", color: "#0d9488" }}
+                    >
+                      {action.icon}
                     </div>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium" style={{ color: "#0f172a" }}>{action.label}</p>
+                      <p className="text-xs" style={{ color: "#94a3b8" }}>{action.desc}</p>
+                    </div>
+                    <svg
+                      width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                       className="ml-auto flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                      style={{ color: "var(--text-muted)" }}
+                      style={{ color: "#0d9488" }}
                     >
                       <polyline points="9 18 15 12 9 6" />
                     </svg>
                   </>
                 );
-                const sharedStyle = { background: "var(--bg-elevated)", border: "1px solid var(--border-subtle)" };
-                const sharedClass = "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 group";
-                return link.external ? (
-                  <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" className={sharedClass} style={sharedStyle}>
+
+                const cls = "quick-action-card flex items-center gap-3 px-3.5 py-3 rounded-xl group border transition-all duration-150";
+                const sty = { border: "1px solid #e2e8f0", background: "#fff" };
+
+                return action.external ? (
+                  <a key={action.href} href={action.href} target="_blank" rel="noopener noreferrer"
+                    className={cls} style={sty}>
                     {inner}
                   </a>
                 ) : (
-                  <Link key={link.href} href={link.href} className={sharedClass} style={sharedStyle}>
+                  <Link key={action.href} href={action.href} className={cls} style={sty}>
                     {inner}
                   </Link>
                 );
