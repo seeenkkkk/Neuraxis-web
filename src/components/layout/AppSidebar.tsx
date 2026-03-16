@@ -228,7 +228,8 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
         <img
           src="/images/logoletras-removebg-preview.png"
           alt="Neuraxis"
-          className="h-8 w-auto"
+          className="h-8 w-auto rounded-lg px-2 py-1"
+          style={{ background: "#ffffff" }}
         />
       </div>
 
