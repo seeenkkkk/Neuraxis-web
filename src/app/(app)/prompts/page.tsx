@@ -537,9 +537,9 @@ export default function PromptsPage() {
               onClick={() => setActiveModel(model)}
               className="px-4 py-2 rounded-xl text-sm font-semibold transition-all"
               style={{
-                background: isActive ? mc.bg : "rgba(255,255,255,0.04)",
-                border: `1px solid ${isActive ? mc.border : "rgba(255,255,255,0.08)"}`,
-                color: isActive ? mc.color : "rgba(255,255,255,0.5)",
+                background: isActive ? mc.bg : "#111827",
+                border: `1px solid ${isActive ? mc.border : "rgba(255,255,255,0.20)"}`,
+                color: isActive ? mc.color : "#d1d5db",
               }}
             >
               {model}
