@@ -151,7 +151,7 @@ export default function DashboardPage() {
           <div className="flex items-center gap-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/avatar9.png.png"
+              src="/images/avatar9.png-removebg-preview.png"
               alt="Avatar"
               className="w-12 h-12 rounded-full object-cover flex-shrink-0"
               style={{ border: "2px solid rgba(139,195,74,0.4)" }}
@@ -220,7 +220,7 @@ export default function DashboardPage() {
             <div className="flex flex-col items-center justify-center py-8 gap-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/images/avatar4.png.png"
+                src="/images/avatar4.png-removebg-preview.png"
                 alt="Sin actividad"
                 className="w-32 opacity-80"
               />

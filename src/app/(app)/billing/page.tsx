@@ -64,7 +64,7 @@ function BillingContent() {
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
         <div className="flex items-center gap-3 mb-1">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/avatar9.png.png" alt="" className="w-16 h-16 rounded-full object-cover flex-shrink-0" />
+          <img src="/images/avatar9.png-removebg-preview.png" alt="" className="w-16 h-16 rounded-full object-cover flex-shrink-0" />
           <div>
             <h1 className="text-2xl font-bold grad-text-brand">Planes y Facturación</h1>
             <p className="text-sm" style={{ color: "#9ca3af" }}>

@@ -80,7 +80,7 @@ export default function DelegatePage() {
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/avatar2.png.png"
+            src="/images/avatar2.png-removebg-preview.png"
             alt=""
             className="w-32 flex-shrink-0 nex-float hidden md:block"
           />
@@ -155,7 +155,7 @@ export default function DelegatePage() {
               className="text-center py-8 flex flex-col items-center gap-4"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/avatar3.png.png" alt="" className="w-24" />
+              <img src="/images/avatar3.png-removebg-preview.png" alt="" className="w-24" />
               <div>
                 <p className="font-bold mb-1" style={{ color: "#8BC34A" }}>¡Mensaje enviado!</p>
                 <p className="text-sm" style={{ color: "#9ca3af" }}>Te contactamos en menos de 24h.</p>

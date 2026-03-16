@@ -226,7 +226,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
       <div className="flex items-center px-4 h-14 flex-shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/logo1.png.png"
+          src="/images/logo1.png-removebg-preview.png"
           alt="Neuraxis"
           className="h-8 w-auto object-contain"
         />
@@ -272,7 +272,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/avatar9.png.png"
+            src="/images/avatar9.png-removebg-preview.png"
             alt={userName}
             className="w-8 h-8 rounded-full flex-shrink-0 object-cover"
             style={{ border: "2px solid rgba(139,195,74,0.4)" }}

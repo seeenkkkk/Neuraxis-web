@@ -108,7 +108,7 @@ export default function WebPage() {
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/avatar1.png.png"
+            src="/images/avatar1.png-removebg-preview.png"
             alt=""
             className="w-28 flex-shrink-0 nex-float hidden md:block"
           />

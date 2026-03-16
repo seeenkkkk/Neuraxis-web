@@ -102,7 +102,7 @@ export default function LandingPage() {
       >
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-16">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/logo1.png.png" alt="Neuraxis" className="h-10 object-contain" />
+          <img src="/images/logo1.png-removebg-preview.png" alt="Neuraxis" className="h-10 object-contain" />
           <div className="flex items-center gap-3">
             <Link href="/login">
               <button
@@ -196,7 +196,7 @@ export default function LandingPage() {
             {/* Background logo decoration */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/logo2.png.png"
+              src="/images/logo2.png-removebg-preview.png"
               alt=""
               aria-hidden
               className="absolute w-96 opacity-5 blur-sm pointer-events-none select-none"
@@ -205,7 +205,7 @@ export default function LandingPage() {
             {/* Mascot */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/avatar1.png.png"
+              src="/images/avatar1.png-removebg-preview.png"
               alt="Nex mascot"
               className="nex-float relative z-10 w-80 drop-shadow-2xl"
               style={{ filter: "drop-shadow(0 20px 60px rgba(0,188,212,0.3))" }}
@@ -279,7 +279,7 @@ export default function LandingPage() {
               {/* Mascot bottom-right */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/images/avatar8.png.png"
+                src="/images/avatar8.png-removebg-preview.png"
                 alt=""
                 aria-hidden
                 className="absolute bottom-4 right-4 w-32 opacity-80 pointer-events-none select-none"
@@ -404,7 +404,7 @@ export default function LandingPage() {
           <div className="flex justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/avatar3.png.png"
+              src="/images/avatar3.png-removebg-preview.png"
               alt="Nex mascot happy"
               className="w-40 mx-auto"
               style={{ filter: "drop-shadow(0 8px 24px rgba(139,195,74,0.3))" }}
@@ -561,7 +561,7 @@ export default function LandingPage() {
             {/* Mascot */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/avatar2.png.png"
+              src="/images/avatar2.png-removebg-preview.png"
               alt="Nex celebrating"
               className="nex-float w-48 mx-auto mb-8"
               style={{ filter: "drop-shadow(0 10px 30px rgba(0,0,0,0.3))" }}
@@ -594,7 +594,7 @@ export default function LandingPage() {
             {/* Brand */}
             <div className="md:col-span-1">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/logo1.png.png" alt="Neuraxis" className="h-8 object-contain mb-4" />
+              <img src="/images/logo1.png-removebg-preview.png" alt="Neuraxis" className="h-8 object-contain mb-4" />
               <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.3)" }}>
                 La plataforma para construir y escalar tu agencia de IA en España.
               </p>

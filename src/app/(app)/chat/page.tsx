@@ -84,7 +84,7 @@ export default function ChatPage() {
       <div className="flex items-center gap-3 flex-shrink-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/logo2.png.png"
+          src="/images/logo2.png-removebg-preview.png"
           alt="Neuraxis"
           className="w-8 h-8 rounded-xl object-contain flex-shrink-0"
           style={{ background: "rgba(255,255,255,0.06)", padding: "4px" }}
