@@ -228,7 +228,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
         <img
           src="/images/logo1.png-removebg-preview.png"
           alt="Neuraxis"
-          className="h-8 w-auto object-contain"
+          className="h-12 w-auto object-contain"
         />
       </div>
 
