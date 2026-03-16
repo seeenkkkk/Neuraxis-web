@@ -226,7 +226,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
       <div className="flex items-center px-4 h-14 flex-shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/logoletras2.png-removebg-preview.png"
+          src="/images/logoletras-removebg-preview.png"
           alt="Neuraxis"
           className="h-8 w-auto"
         />
