@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import NeuraxisLogo from "@/components/brand/NeuraxisLogo";
 import { createClient } from "@/lib/supabase/client";
+
+// ── Constants ────────────────────────────────────────────────────────────────
+
+const BRAND_GRADIENT = "linear-gradient(135deg, #8BC34A 0%, #7B1FA2 50%, #00BCD4 100%)";
 
 // ── Nav items ────────────────────────────────────────────────────────────────
 
@@ -117,7 +119,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
   const pathname = usePathname();
   const router = useRouter();
   const [profileOpen, setProfileOpen] = useState(false);
-  const [userName, setUserName] = useState("Admin Neuraxis");
+  const [userName, setUserName] = useState("Mario");
   const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
@@ -126,7 +128,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
       if (user) {
         setUserEmail(user.email ?? "");
         const fullName = user.user_metadata?.full_name;
-        setUserName(fullName || user.email?.split("@")[0] || "Admin Neuraxis");
+        setUserName(fullName?.split(" ")[0] || user.email?.split("@")[0] || "Mario");
       }
     });
   }, []);
@@ -144,7 +146,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
     const isActive = !item.external && (pathname === item.href || pathname.startsWith(item.href + "/"));
     const isRevly = item.label === "Revly";
 
-    const baseClass = "flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors duration-150 group";
+    const baseClass = "flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-150 group";
 
     if (item.external) {
       return (
@@ -153,13 +155,21 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
           target="_blank"
           rel="noopener noreferrer"
           onClick={onClose}
-          className={`${baseClass} hover:bg-slate-50`}
+          className={baseClass}
           style={{
-            color: isRevly ? "#0d9488" : "#374151",
+            color: isRevly ? "#8BC34A" : "rgba(255,255,255,0.55)",
             borderLeft: "2px solid transparent",
           }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
+            (e.currentTarget as HTMLElement).style.color = "#fff";
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLElement).style.background = "transparent";
+            (e.currentTarget as HTMLElement).style.color = isRevly ? "#8BC34A" : "rgba(255,255,255,0.55)";
+          }}
         >
-          <span className="flex-shrink-0" style={{ color: isRevly ? "#0d9488" : "#9ca3af" }}>
+          <span className="flex-shrink-0" style={{ color: isRevly ? "#8BC34A" : "rgba(255,255,255,0.35)" }}>
             {item.icon}
           </span>
           <span className="font-medium">{item.label}</span>
@@ -175,21 +185,33 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
       <Link
         href={item.href}
         onClick={onClose}
-        className={`${baseClass} ${!isActive ? "hover:bg-slate-50" : ""}`}
+        className={baseClass}
         style={{
-          color: isActive ? "#0d9488" : "#374151",
-          background: isActive ? "#f0fdfa" : undefined,
-          borderLeft: isActive ? "2px solid #0d9488" : "2px solid transparent",
+          color: isActive ? "#8BC34A" : "rgba(255,255,255,0.55)",
+          background: isActive ? "rgba(139,195,74,0.10)" : "transparent",
+          borderLeft: isActive ? "3px solid #8BC34A" : "3px solid transparent",
           fontWeight: isActive ? 600 : 500,
         }}
+        onMouseEnter={e => {
+          if (!isActive) {
+            (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
+            (e.currentTarget as HTMLElement).style.color = "#fff";
+          }
+        }}
+        onMouseLeave={e => {
+          if (!isActive) {
+            (e.currentTarget as HTMLElement).style.background = "transparent";
+            (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.55)";
+          }
+        }}
       >
-        <span className="flex-shrink-0" style={{ color: isActive ? "#0d9488" : "#9ca3af" }}>
+        <span className="flex-shrink-0" style={{ color: isActive ? "#8BC34A" : "rgba(255,255,255,0.35)" }}>
           {item.icon}
         </span>
         <span>{item.label}</span>
         {item.badge && (
           <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded-md font-medium"
-            style={{ color: "#0d9488", background: "#f0fdfc", border: "1px solid #ccfbf1" }}>
+            style={{ color: "#8BC34A", background: "rgba(139,195,74,0.12)", border: "1px solid rgba(139,195,74,0.25)" }}>
             {item.badge}
           </span>
         )}
@@ -198,11 +220,16 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
   };
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full" style={{ background: "#111827" }}>
 
       {/* Logo */}
-      <div className="flex items-center px-4 h-14 flex-shrink-0" style={{ borderBottom: "1px solid #f3f4f6" }}>
-        <NeuraxisLogo size="sm" animated />
+      <div className="flex items-center px-4 h-14 flex-shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/logo1.png.png"
+          alt="Neuraxis"
+          className="h-8 w-auto object-contain"
+        />
       </div>
 
       {/* Nav */}
@@ -210,7 +237,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
         {NAV_ITEMS.map((item, i) =>
           item.type === "section" ? (
             <div key={`section-${i}`} className="px-3 pt-5 pb-1.5">
-              <span className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: "#9ca3af" }}>
+              <span className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.25)" }}>
                 {item.label}
               </span>
             </div>
@@ -221,58 +248,55 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
       </nav>
 
       {/* Divider */}
-      <div className="mx-4 h-px" style={{ background: "#f3f4f6" }} />
+      <div className="mx-4 h-px" style={{ background: "rgba(255,255,255,0.07)" }} />
 
       {/* Profile section */}
       <div className="p-3 flex-shrink-0">
         <button
           onClick={() => setProfileOpen(!profileOpen)}
-          className="w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-150 hover:bg-slate-50"
+          className="w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-150"
           style={{
-            border: "1px solid " + (profileOpen ? "#e5e7eb" : "transparent"),
-            background: profileOpen ? "#f9fafb" : "transparent",
+            border: "1px solid " + (profileOpen ? "rgba(255,255,255,0.12)" : "transparent"),
+            background: profileOpen ? "rgba(255,255,255,0.05)" : "transparent",
+          }}
+          onMouseEnter={e => {
+            if (!profileOpen) {
+              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
+            }
+          }}
+          onMouseLeave={e => {
+            if (!profileOpen) {
+              (e.currentTarget as HTMLElement).style.background = "transparent";
+            }
           }}
         >
-          {/* Avatar with real image */}
-          <div className="w-8 h-8 rounded-full flex-shrink-0 relative overflow-hidden border-2"
-            style={{ borderColor: "#e5e7eb" }}>
-            <Image
-              src="/images/avatar.png"
-              alt={userName}
-              width={32}
-              height={32}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                // fallback: hide image, show initials via parent
-                (e.target as HTMLImageElement).style.display = "none";
-              }}
-            />
-            <div
-              className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white"
-              style={{ background: "#0d9488" }}
-              aria-hidden
-            >
-              {userName.charAt(0).toUpperCase()}
-            </div>
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/avatar9.png.png"
+            alt={userName}
+            className="w-8 h-8 rounded-full flex-shrink-0 object-cover"
+            style={{ border: "2px solid rgba(139,195,74,0.4)" }}
+          />
 
           <div className="flex-1 text-left min-w-0">
             <div className="flex items-center gap-1.5">
-              <p className="text-xs font-semibold truncate" style={{ color: "#111827" }}>
+              <p className="text-xs font-semibold truncate text-white">
                 {userName}
               </p>
-              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-md flex-shrink-0"
-                style={{ background: "#f0fdfc", color: "#0d9488", border: "1px solid #ccfbf1" }}>
-                Free
+              <span
+                className="text-[9px] font-bold px-1.5 py-0.5 rounded-md flex-shrink-0 text-white"
+                style={{ background: BRAND_GRADIENT }}
+              >
+                Pro
               </span>
             </div>
-            <p className="text-[10px] truncate" style={{ color: "#6b7280" }}>
+            <p className="text-[10px] truncate" style={{ color: "rgba(255,255,255,0.35)" }}>
               {userEmail || "Arquitecto de IAs"}
             </p>
           </div>
 
           <motion.span animate={{ rotate: profileOpen ? 180 : 0 }} transition={{ duration: 0.2 }}
-            style={{ color: "#9ca3af" }}>
+            style={{ color: "rgba(255,255,255,0.35)" }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="6 9 12 15 18 9" />
             </svg>
@@ -290,21 +314,21 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
             >
               <div className="pt-2 space-y-2">
                 {/* Neurax-Points bar */}
-                <div className="p-3 rounded-xl" style={{ background: "#f9fafb", border: "1px solid #e5e7eb" }}>
+                <div className="p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-medium" style={{ color: "#6b7280" }}>Neurax-Points</span>
-                    <span className="text-[10px] font-bold" style={{ color: "#0d9488" }}>2.840 / 5.000</span>
+                    <span className="text-[10px] font-medium" style={{ color: "rgba(255,255,255,0.4)" }}>Neurax-Points</span>
+                    <span className="text-[10px] font-bold" style={{ color: "#8BC34A" }}>2.840 / 5.000</span>
                   </div>
-                  <div className="w-full h-1.5 rounded-full" style={{ background: "#e5e7eb" }}>
+                  <div className="w-full h-1.5 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }}>
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: "56.8%" }}
                       transition={{ duration: 1, ease: "easeOut" as const }}
                       className="h-full rounded-full"
-                      style={{ background: "#0d9488" }}
+                      style={{ background: BRAND_GRADIENT }}
                     />
                   </div>
-                  <p className="text-[10px] mt-2" style={{ color: "#9ca3af" }}>850 créditos disponibles</p>
+                  <p className="text-[10px] mt-2" style={{ color: "rgba(255,255,255,0.25)" }}>850 créditos disponibles</p>
                 </div>
 
                 {/* Actions */}
@@ -312,8 +336,10 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
                   <Link
                     href="/settings"
                     onClick={onClose}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-medium transition-colors hover:bg-slate-100"
-                    style={{ color: "#374151", background: "#f3f4f6", border: "1px solid #e5e7eb" }}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-medium transition-colors"
+                    style={{ color: "rgba(255,255,255,0.6)", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)" }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.10)"}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)"}
                   >
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <circle cx="12" cy="12" r="3" />
@@ -323,8 +349,10 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-medium transition-colors hover:bg-red-50"
-                    style={{ color: "#ef4444", background: "#fff5f5", border: "1px solid #fecaca" }}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-medium transition-colors"
+                    style={{ color: "#ef4444", background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.20)" }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(239,68,68,0.15)"}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "rgba(239,68,68,0.08)"}
                   >
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -347,7 +375,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
       {/* Desktop sidebar */}
       <aside
         className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-60 z-30"
-        style={{ borderRight: "1px solid #e5e7eb" }}
+        style={{ borderRight: "1px solid rgba(255,255,255,0.07)" }}
       >
         {sidebarContent}
       </aside>
@@ -361,7 +389,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="lg:hidden fixed inset-0 z-40"
-              style={{ background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)" }}
+              style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }}
               onClick={onClose}
             />
             <motion.aside
@@ -370,7 +398,7 @@ export default function AppSidebar({ isOpen = true, onClose }: AppSidebarProps) 
               exit={{ x: "-100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
               className="lg:hidden fixed left-0 top-0 bottom-0 w-64 z-50"
-              style={{ borderRight: "1px solid #e5e7eb" }}
+              style={{ borderRight: "1px solid rgba(255,255,255,0.07)" }}
             >
               {sidebarContent}
             </motion.aside>

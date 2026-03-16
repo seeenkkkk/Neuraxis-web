@@ -4,7 +4,10 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import NexMascot from "@/components/brand/NexMascot";
+
+// ── Constants ────────────────────────────────────────────────────────────────
+
+const BRAND_GRADIENT = "linear-gradient(135deg, #8BC34A 0%, #7B1FA2 50%, #00BCD4 100%)";
 
 // ── Data ────────────────────────────────────────────────────────────────────
 
@@ -12,6 +15,7 @@ const STATS = [
   {
     label: "Agentes Activos",
     value: "0",
+    color: "#8BC34A",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <circle cx="12" cy="8" r="4" />
@@ -23,6 +27,7 @@ const STATS = [
   {
     label: "Conversaciones",
     value: "0",
+    color: "#00BCD4",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
@@ -32,6 +37,7 @@ const STATS = [
   {
     label: "Workflows",
     value: "0",
+    color: "#7B1FA2",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <rect x="2" y="7" width="6" height="4" rx="1" />
@@ -45,6 +51,7 @@ const STATS = [
   {
     label: "Clientes",
     value: "0",
+    color: "#8BC34A",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -140,11 +147,32 @@ export default function DashboardPage() {
 
       {/* ── Header ── */}
       <motion.div {...fadeUp(0)}>
-        <h1 className="text-2xl font-bold mb-1" style={{ color: "#0f172a" }}>
-          Hola, {userName || "Mario"} 👋
-        </h1>
-        <p className="text-sm capitalize mb-0.5" style={{ color: "#94a3b8" }}>{today}</p>
-        <p className="text-sm" style={{ color: "#94a3b8" }}>Tu agencia IA está creciendo.</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/avatar9.png.png"
+              alt="Avatar"
+              className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+              style={{ border: "2px solid rgba(139,195,74,0.4)" }}
+            />
+            <div>
+              <h1 className="text-2xl font-bold text-white mb-0.5">
+                Hola, {userName || "Mario"} 👋
+              </h1>
+              <p className="text-sm capitalize" style={{ color: "#9ca3af" }}>{today}</p>
+              <p className="text-sm" style={{ color: "#9ca3af" }}>Tu agencia IA está creciendo.</p>
+            </div>
+          </div>
+          <Link href="/agents">
+            <button
+              className="px-5 py-2.5 text-sm font-semibold text-white rounded-xl transition-opacity hover:opacity-90"
+              style={{ background: BRAND_GRADIENT }}
+            >
+              + Crear Agente
+            </button>
+          </Link>
+        </div>
       </motion.div>
 
       {/* ── Stats Grid ── */}
@@ -152,19 +180,22 @@ export default function DashboardPage() {
         {STATS.map((stat, i) => (
           <div
             key={i}
-            className="rounded-xl p-5 bg-white border transition-all duration-200 hover:shadow-md"
-            style={{ border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}
+            className="rounded-xl p-5 transition-all duration-200 hover:scale-[1.02]"
+            style={{
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
           >
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center mb-4"
-              style={{ background: "#f0fdfc", color: "#0d9488" }}
+              style={{ background: `${stat.color}18`, color: stat.color }}
             >
               {stat.icon}
             </div>
-            <p className="text-3xl font-bold mb-1" style={{ color: "#0f172a" }}>
+            <p className="text-3xl font-bold mb-1 text-white">
               {stat.value}
             </p>
-            <p className="text-xs font-medium" style={{ color: "#94a3b8" }}>{stat.label}</p>
+            <p className="text-xs font-medium" style={{ color: "#6b7280" }}>{stat.label}</p>
           </div>
         ))}
       </motion.div>
@@ -175,32 +206,36 @@ export default function DashboardPage() {
         {/* Recent Activity */}
         <motion.div {...fadeUp(0.1)} className="lg:col-span-3">
           <div
-            className="rounded-xl p-6 h-full bg-white border"
-            style={{ border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}
+            className="rounded-xl p-6 h-full"
+            style={{
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
           >
-            <p className="text-xs font-semibold uppercase tracking-widest mb-6" style={{ color: "#94a3b8" }}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-6" style={{ color: "#6b7280" }}>
               Actividad Reciente
             </p>
 
-            {/* Empty state with NexMascot */}
+            {/* Empty state */}
             <div className="flex flex-col items-center justify-center py-8 gap-4">
-              <div className="opacity-80">
-                <NexMascot emotion="sleeping" size="md" />
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/avatar4.png.png"
+                alt="Sin actividad"
+                className="w-32 opacity-80"
+              />
               <div className="text-center">
-                <p className="text-sm font-medium mb-1" style={{ color: "#334155" }}>
+                <p className="text-sm font-medium mb-1 text-white">
                   Aún no hay actividad
                 </p>
-                <p className="text-xs max-w-[200px] leading-relaxed" style={{ color: "#94a3b8" }}>
+                <p className="text-xs max-w-[200px] leading-relaxed" style={{ color: "#6b7280" }}>
                   ¡Crea tu primer agente para empezar!
                 </p>
               </div>
               <Link href="/agents">
                 <button
-                  className="px-4 py-2 text-xs font-semibold text-white rounded-lg transition-colors mt-1"
-                  style={{ background: "#0d9488" }}
-                  onMouseEnter={e => (e.currentTarget.style.background = "#0f766e")}
-                  onMouseLeave={e => (e.currentTarget.style.background = "#0d9488")}
+                  className="px-4 py-2 text-xs font-semibold text-white rounded-lg transition-opacity hover:opacity-90 mt-1"
+                  style={{ background: BRAND_GRADIENT }}
                 >
                   Crear primer agente →
                 </button>
@@ -212,10 +247,13 @@ export default function DashboardPage() {
         {/* Quick Actions */}
         <motion.div {...fadeUp(0.12)} className="lg:col-span-2">
           <div
-            className="rounded-xl p-6 h-full bg-white border"
-            style={{ border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}
+            className="rounded-xl p-6 h-full"
+            style={{
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
           >
-            <p className="text-xs font-semibold uppercase tracking-widest mb-5" style={{ color: "#94a3b8" }}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-5" style={{ color: "#6b7280" }}>
               Accesos Rápidos
             </p>
             <div className="space-y-2">
@@ -224,34 +262,55 @@ export default function DashboardPage() {
                   <>
                     <div
                       className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{ background: "#f0fdfc", color: "#0d9488" }}
+                      style={{ background: "rgba(139,195,74,0.12)", color: "#8BC34A" }}
                     >
                       {action.icon}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium" style={{ color: "#0f172a" }}>{action.label}</p>
-                      <p className="text-xs" style={{ color: "#94a3b8" }}>{action.desc}</p>
+                      <p className="text-sm font-medium text-white">{action.label}</p>
+                      <p className="text-xs" style={{ color: "#6b7280" }}>{action.desc}</p>
                     </div>
                     <svg
                       width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                       className="ml-auto flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                      style={{ color: "#0d9488" }}
+                      style={{ color: "#8BC34A" }}
                     >
                       <polyline points="9 18 15 12 9 6" />
                     </svg>
                   </>
                 );
 
-                const cls = "quick-action-card flex items-center gap-3 px-3.5 py-3 rounded-xl group border transition-all duration-150";
-                const sty = { border: "1px solid #e2e8f0", background: "#fff" };
+                const cls = "flex items-center gap-3 px-3.5 py-3 rounded-xl group transition-all duration-150";
+                const sty = {
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                };
 
                 return action.external ? (
                   <a key={action.href} href={action.href} target="_blank" rel="noopener noreferrer"
-                    className={cls} style={sty}>
+                    className={cls} style={sty}
+                    onMouseEnter={e => {
+                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(139,195,74,0.4)";
+                      (e.currentTarget as HTMLElement).style.background = "rgba(139,195,74,0.06)";
+                    }}
+                    onMouseLeave={e => {
+                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)";
+                      (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)";
+                    }}
+                  >
                     {inner}
                   </a>
                 ) : (
-                  <Link key={action.href} href={action.href} className={cls} style={sty}>
+                  <Link key={action.href} href={action.href} className={cls} style={sty}
+                    onMouseEnter={e => {
+                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(139,195,74,0.4)";
+                      (e.currentTarget as HTMLElement).style.background = "rgba(139,195,74,0.06)";
+                    }}
+                    onMouseLeave={e => {
+                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)";
+                      (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)";
+                    }}
+                  >
                     {inner}
                   </Link>
                 );

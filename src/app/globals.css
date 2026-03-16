@@ -290,3 +290,23 @@ html, body {
 }
 
 @layer utilities { .text-balance { text-wrap: balance; } }
+
+/* ─── Brand design system (2026-03-16) ─────────────────────────────────── */
+
+@keyframes nex-float-brand {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-16px); }
+}
+.nex-float { animation: nex-float-brand 3s ease-in-out infinite; }
+
+.grad-text-brand {
+  background: linear-gradient(135deg, #8BC34A, #7B1FA2, #00BCD4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.btn-gradient {
+  background: linear-gradient(135deg, #8BC34A 0%, #7B1FA2 50%, #00BCD4 100%);
+  color: white;
+}
