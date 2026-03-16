@@ -3,11 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import NeuraxisLogo from "@/components/brand/NeuraxisLogo";
-import CreditsBadge from "@/components/ui/CreditsBadge";
 import StatusDot from "@/components/ui/StatusDot";
 
 interface TopbarProps {
-  credits?: number;
   userName?: string;
   userAvatar?: string;
   onMenuToggle?: () => void;
@@ -15,7 +13,6 @@ interface TopbarProps {
 }
 
 export default function Topbar({
-  credits = 850,
   userName = "Admin Neuraxis",
   userAvatar = "/avatar.png",
   onMenuToggle,
@@ -49,14 +46,19 @@ export default function Topbar({
         <NeuraxisLogo size="sm" animated={false} />
       </div>
 
+      {/* Logoletras — desktop left */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/logoletras-removebg-preview.png"
+        alt="Neuraxis"
+        className="hidden lg:block h-8 w-auto object-contain"
+      />
+
       {/* Spacer */}
       <div className="flex-1" />
 
       {/* Right side */}
       <div className="flex items-center gap-2">
-        {/* Credits */}
-        <CreditsBadge credits={credits} onClick={() => {}} />
-
         {/* Notifications */}
         <div className="relative">
           <button
