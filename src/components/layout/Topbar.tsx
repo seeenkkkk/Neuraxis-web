@@ -50,8 +50,9 @@ export default function Topbar({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/images/logoletras2.png-removebg-preview.png"
-        alt="Neuraxis"
+        alt="Neuraxis IA"
         className="hidden lg:block h-8 w-auto object-contain"
+        style={{ background: "none" }}
       />
 
       {/* Spacer */}
