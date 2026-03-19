@@ -102,7 +102,7 @@ export default function LandingPage() {
       >
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-16">
           <span style={{ fontFamily: "var(--font-syne, sans-serif)", fontWeight: 800, fontSize: "1.5rem", letterSpacing: "0.04em" }}>
-            <span style={{ WebkitTextStroke: "1.5px white", WebkitTextFillColor: "transparent" }}>NEURAXIS</span>
+            <span style={{ color: "white" }}>NEURAXIS</span>
             {" "}<span style={{ color: "#00BCD4" }}>IA</span>
           </span>
           <div className="flex items-center gap-3">

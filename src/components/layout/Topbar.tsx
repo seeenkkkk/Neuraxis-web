@@ -49,7 +49,7 @@ export default function Topbar({
       {/* Logoletras — desktop left */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <span className="hidden lg:flex items-center" style={{ fontFamily: "var(--font-syne, sans-serif)", fontWeight: 800, fontSize: "1.25rem", letterSpacing: "0.04em" }}>
-        <span style={{ WebkitTextStroke: "1.5px black", WebkitTextFillColor: "transparent" }}>NEURAXIS</span>
+        <span style={{ color: "black" }}>NEURAXIS</span>
         {" "}<span style={{ color: "#00BCD4" }}>IA</span>
       </span>
 
