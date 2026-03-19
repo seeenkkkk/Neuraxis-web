@@ -101,8 +101,10 @@ export default function LandingPage() {
         }}
       >
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-16">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/logoletras2.png-removebg-preview.png" className="h-10 w-auto" alt="Neuraxis IA" />
+          <span style={{ fontFamily: "var(--font-syne, sans-serif)", fontWeight: 800, fontSize: "1.5rem", letterSpacing: "0.04em" }}>
+            <span style={{ WebkitTextStroke: "1.5px white", WebkitTextFillColor: "transparent" }}>NEURAXIS</span>
+            {" "}<span style={{ color: "#00BCD4" }}>IA</span>
+          </span>
           <div className="flex items-center gap-3">
             <Link href="/login">
               <button
