@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Syne, DM_Sans } from "next/font/google";
+import { Outfit, DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const syne = Syne({
+const outfit = Outfit({
   subsets: ["latin"],
-  weight: ["700", "800"],
-  variable: "--font-syne",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-syne", // keeping var name for backward compat
   display: "swap",
 });
 
@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="es"
-      className={`${syne.variable} ${dmSans.variable} scroll-smooth`}
+      className={`${outfit.variable} ${dmSans.variable} scroll-smooth`}
     >
       <body className="font-sans antialiased bg-[--bg-root] text-[--text-primary]"
         style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>

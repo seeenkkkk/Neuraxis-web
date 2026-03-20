@@ -164,8 +164,8 @@ function AgentCard({
         <div
           className="absolute inset-0 backface-hidden rounded-2xl overflow-hidden"
           style={{
-            background: "rgba(13,13,26,0.85)",
-            border: `1px solid ${hovered ? agent.color + "55" : "rgba(255,255,255,0.07)"}`,
+            background: "#F8F9FF",
+            border: `1px solid ${hovered ? agent.color + "55" : "rgba(0,0,0,0.07)"}`,
             boxShadow: hovered
               ? `0 0 30px ${agent.glow}, 0 0 60px ${agent.color}22, inset 0 0 30px rgba(0,0,0,0.3)`
               : "0 4px 24px rgba(0,0,0,0.3)",
@@ -244,16 +244,16 @@ function AgentCard({
                   onClick={() => setFlipped(true)}
                   className="text-[10px] font-medium rounded-full px-2 py-0.5 transition-all"
                   style={{
-                    color: "rgba(255,255,255,0.3)",
-                    border: "1px solid rgba(255,255,255,0.1)",
+                    color: "rgba(0,0,0,0.35)",
+                    border: "1px solid rgba(0,0,0,0.08)",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.color = agent.color;
                     e.currentTarget.style.borderColor = agent.color + "55";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "rgba(255,255,255,0.3)";
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+                    e.currentTarget.style.color = "rgba(0,0,0,0.35)";
+                    e.currentTarget.style.borderColor = "rgba(0,0,0,0.08)";
                   }}
                 >
                   Ver más ↻
@@ -263,12 +263,12 @@ function AgentCard({
 
             {/* Name + role */}
             <h3
-              className="text-xl font-black text-white mb-0.5"
-              style={{ fontFamily: "var(--font-syne, sans-serif)" }}
+              className="text-xl font-black mb-0.5"
+              style={{ color: "#1a1a2e", fontFamily: "var(--font-syne, sans-serif)" }}
             >
               {agent.name}
             </h3>
-            <p className="text-xs font-medium mb-3" style={{ color: "rgba(255,255,255,0.4)" }}>
+            <p className="text-xs font-medium mb-3" style={{ color: "rgba(0,0,0,0.35)" }}>
               {agent.role}
             </p>
 
@@ -297,7 +297,7 @@ function AgentCard({
                   >
                     {s.val}
                   </p>
-                  <p className="text-[9px] leading-tight" style={{ color: "rgba(255,255,255,0.35)" }}>
+                  <p className="text-[9px] leading-tight" style={{ color: "rgba(0,0,0,0.35)" }}>
                     {s.label}
                   </p>
                 </div>
@@ -310,7 +310,7 @@ function AgentCard({
         <div
           className="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl overflow-hidden flex flex-col"
           style={{
-            background: `linear-gradient(160deg, ${agent.color}18 0%, rgba(13,13,26,0.95) 50%)`,
+            background: `linear-gradient(160deg, ${agent.color}18 0%, #F8F9FF 50%)`,
             border: `1px solid ${agent.color}45`,
             boxShadow: `0 0 40px ${agent.glow}, 0 0 80px ${agent.color}22`,
           }}
@@ -347,7 +347,7 @@ function AgentCard({
 
             <p
               className="text-sm leading-relaxed mb-6"
-              style={{ color: "rgba(255,255,255,0.55)" }}
+              style={{ color: "rgba(0,0,0,0.5)" }}
             >
               {agent.specialty}
             </p>
@@ -371,7 +371,7 @@ function AgentCard({
                   >
                     ✓
                   </div>
-                  <span className="text-sm text-white/65">{feat}</span>
+                  <span className="text-sm" style={{ color: "rgba(0,0,0,0.6)" }}>{feat}</span>
                 </motion.div>
               ))}
             </div>
@@ -399,7 +399,7 @@ export default function AgentsSectionNew() {
       id="agentes"
       ref={ref}
       className="py-28 relative overflow-hidden"
-      style={{ background: "#0A0A18" }}
+      style={{ background: "#FFFFFF" }}
     >
       {/* Background decoration */}
       <div
@@ -426,8 +426,8 @@ export default function AgentsSectionNew() {
             Tu equipo IA
           </span>
           <h2
-            className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-5"
-            style={{ fontFamily: "var(--font-syne, sans-serif)" }}
+            className="text-4xl sm:text-5xl lg:text-6xl font-black mb-5"
+            style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
           >
             Los{" "}
             <span
@@ -442,7 +442,7 @@ export default function AgentsSectionNew() {
             </span>{" "}
             Neuraxis
           </h2>
-          <p className="text-lg max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.45)" }}>
+          <p className="text-lg max-w-xl mx-auto" style={{ color: "rgba(0,0,0,0.5)" }}>
             Cinco especialistas IA operando 24/7. Pasa el cursor para ver sus capacidades
             y haz click en{" "}
             <span style={{ color: "#9B30FF" }}>Ver más</span> para girar la card.

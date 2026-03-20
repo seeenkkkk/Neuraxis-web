@@ -24,12 +24,16 @@ const SmoothScrollProvider = dynamic(
 );
 
 // ── New sections ───────────────────────────────────────────────────────────
-const HeroNew = dynamic(
-  () => import("../components/landing/HeroNew"),
+const BackgroundCanvas = dynamic(
+  () => import("../components/landing/BackgroundCanvas"),
   { ssr: false }
 );
-const AgentsSectionNew = dynamic(
-  () => import("../components/landing/AgentsSectionNew"),
+const ScrollZoomIntro = dynamic(
+  () => import("../components/landing/ScrollZoomIntro"),
+  { ssr: false }
+);
+const HeroNew = dynamic(
+  () => import("../components/landing/HeroNew"),
   { ssr: false }
 );
 const HowItWorksNew = dynamic(
@@ -41,47 +45,33 @@ const HowItWorksNew = dynamic(
 
 const PLANS = [
   {
-    name: "Free",
-    price: "0€",
-    features: ["1 agente IA básico", "20 mensajes/día", "Prompts básicos", "Dashboard básico", "Soporte comunidad"],
-    cta: "Empezar gratis",
-    href: "/register",
+    name: "Básico",
+    price: "desde 500€",
+    features: ["Automatización simple (1 workflow)", "Instalación incluida", "1 canal (WhatsApp o email)", "Soporte 30 días"],
+    cta: "Solicitar presupuesto",
+    href: "mailto:neuraxis.ia.global@gmail.com",
     highlighted: false,
   },
   {
-    name: "Starter",
-    price: "29€",
-    features: ["2 agentes IA completos", "200 conversaciones/mes", "5 workflows n8n", "500 Neurax-Points", "Soporte por email"],
-    cta: "Empezar Starter",
-    href: "/billing",
-    highlighted: false,
-  },
-  {
-    name: "Pro",
-    price: "99€",
-    features: ["10 agentes con integraciones", "2.000 conversaciones/mes", "Workflows ilimitados", "Chat IA con Claude", "2.000 Neurax-Points"],
-    cta: "Comenzar Pro",
-    href: "/billing",
+    name: "Avanzado",
+    price: "desde 900€",
+    features: ["Hasta 3 workflows conectados", "Instalación y configuración completa", "Multicanal (WhatsApp + email + web)", "Soporte 60 días", "Dashboard de métricas básico"],
+    cta: "Solicitar presupuesto",
+    href: "mailto:neuraxis.ia.global@gmail.com",
     highlighted: true,
   },
   {
     name: "Enterprise",
-    price: "299€",
-    features: ["Agentes IA ilimitados", "Conversaciones ilimitadas", "Implementación completa", "API acceso total", "Soporte 24/7 dedicado"],
-    cta: "Contactar ventas",
-    href: "/billing",
+    price: "desde 1.500€",
+    features: ["Automatización completa a medida", "Integraciones ilimitadas", "Equipo dedicado", "Soporte continuo", "Consultoría estratégica incluida"],
+    cta: "Hablar con el equipo",
+    href: "mailto:neuraxis.ia.global@gmail.com",
     highlighted: false,
   },
 ];
 
-const STATS = [
-  { value: "+50", label: "Agencias activas" },
-  { value: "+10K", label: "Conversaciones IA" },
-  { value: "98%", label: "Satisfacción cliente" },
-  { value: "€0", label: "Setup inicial" },
-];
 
-const BRAND_GRADIENT = "linear-gradient(135deg, #9B30FF 0%, #00C4FF 100%)";
+const BRAND_GRADIENT = "linear-gradient(135deg, #7B2FBE 0%, #00A8D6 100%)";
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -92,7 +82,6 @@ const fadeUp = (delay = 0) => ({
 // ── Navbar ────────────────────────────────────────────────────────────────────
 
 const NAV_LINKS = [
-  { label: "Agentes", href: "#agentes" },
   { label: "Cómo funciona", href: "#como-funciona" },
   { label: "Planes", href: "#planes" },
 ];
@@ -133,34 +122,20 @@ function Navbar() {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       style={{
-        background: scrolled ? "rgba(13,13,26,0.92)" : "transparent",
-        backdropFilter: scrolled ? "blur(24px)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(24px)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(255,255,255,0.07)" : "none",
-        boxShadow: scrolled ? "0 4px 30px rgba(0,0,0,0.3)" : "none",
+        background: "#FFFFFF",
+        borderBottom: "1px solid rgba(0,168,214,0.15)",
+        boxShadow: scrolled ? "0 2px 16px rgba(0,0,0,0.06)" : "none",
       }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-16">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2.5 group">
-          <motion.div
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            transition={{ type: "spring", stiffness: 400, damping: 15 }}
-            className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-sm font-black"
-            style={{
-              background: BRAND_GRADIENT,
-              boxShadow: "0 0 16px rgba(155,48,255,0.4)",
-            }}
-          >
-            N
-          </motion.div>
-          <span
-            className="text-base font-black tracking-tight text-white"
-            style={{ fontFamily: "var(--font-syne, sans-serif)" }}
-          >
-            NEURAXIS{" "}
-            <span style={{ color: "#00C4FF" }}>IA</span>
-          </span>
+        <a href="#" className="flex items-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/logoletras2_png-removebg-preview.png"
+            alt="Neuraxis IA"
+            className="h-9 w-auto object-contain"
+          />
         </a>
 
         {/* Desktop links */}
@@ -170,7 +145,7 @@ function Navbar() {
               key={l.label}
               href={l.href}
               className="relative transition-colors duration-200"
-              style={{ color: active === l.href.replace("#", "") ? "white" : "rgba(255,255,255,0.5)" }}
+              style={{ color: active === l.href.replace("#", "") ? "#7B2FBE" : "rgba(0,0,0,0.55)" }}
             >
               {l.label}
               {/* Active indicator */}
@@ -188,26 +163,16 @@ function Navbar() {
 
         {/* CTA buttons */}
         <div className="hidden md:flex items-center gap-3">
-          <Link href="/login">
-            <button
-              className="px-4 py-2 text-sm font-medium rounded-xl transition-colors"
-              style={{ color: "rgba(255,255,255,0.55)", background: "transparent" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "white")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.55)")}
-            >
-              Iniciar sesión
-            </button>
-          </Link>
-          <Link href="/register">
+          <a href="mailto:neuraxis.ia.global@gmail.com">
             <motion.button
-              whileHover={{ scale: 1.04, boxShadow: "0 0 20px rgba(155,48,255,0.4)" }}
+              whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
               className="px-5 py-2.5 text-sm font-bold rounded-xl text-white"
               style={{ background: BRAND_GRADIENT }}
             >
-              Empezar gratis
+              Contactar
             </motion.button>
-          </Link>
+          </a>
         </div>
 
         {/* Mobile toggle */}
@@ -217,15 +182,15 @@ function Navbar() {
           aria-label="Menú"
         >
           <motion.span
-            className="block w-5 h-0.5 rounded-full bg-white"
+            className="block w-5 h-0.5 rounded-full bg-[#1a1a2e]"
             animate={{ rotate: mobileOpen ? 45 : 0, y: mobileOpen ? 8 : 0 }}
           />
           <motion.span
-            className="block w-5 h-0.5 rounded-full bg-white"
+            className="block w-5 h-0.5 rounded-full bg-[#1a1a2e]"
             animate={{ opacity: mobileOpen ? 0 : 1 }}
           />
           <motion.span
-            className="block w-5 h-0.5 rounded-full bg-white"
+            className="block w-5 h-0.5 rounded-full bg-[#1a1a2e]"
             animate={{ rotate: mobileOpen ? -45 : 0, y: mobileOpen ? -8 : 0 }}
           />
         </button>
@@ -239,9 +204,8 @@ function Navbar() {
           exit={{ opacity: 0, height: 0 }}
           className="md:hidden border-t flex flex-col px-6 py-5 gap-4"
           style={{
-            background: "rgba(13,13,26,0.97)",
-            borderColor: "rgba(255,255,255,0.07)",
-            backdropFilter: "blur(20px)",
+            background: "#FFFFFF",
+            borderColor: "rgba(0,168,214,0.15)",
           }}
         >
           {NAV_LINKS.map((l) => (
@@ -250,19 +214,19 @@ function Navbar() {
               href={l.href}
               onClick={() => setMobileOpen(false)}
               className="text-sm font-medium"
-              style={{ color: "rgba(255,255,255,0.65)" }}
+              style={{ color: "rgba(0,0,0,0.6)" }}
             >
               {l.label}
             </a>
           ))}
-          <Link href="/register">
+          <a href="mailto:neuraxis.ia.global@gmail.com">
             <button
               className="w-full py-3 text-sm font-bold rounded-xl text-white"
               style={{ background: BRAND_GRADIENT }}
             >
-              Empezar gratis
+              Contactar
             </button>
-          </Link>
+          </a>
         </motion.div>
       )}
     </motion.nav>
@@ -274,7 +238,10 @@ function Navbar() {
 export default function LandingPage() {
   return (
     <SmoothScrollProvider>
-      <div style={{ background: "#0D0D1A", minHeight: "100vh", color: "white" }}>
+      <div style={{ background: "transparent", minHeight: "100vh", color: "#1a1a2e" }}>
+
+        {/* ── Background canvas (fixed, z-index -1) ───────────────────────── */}
+        <BackgroundCanvas />
 
         {/* ── Global effects ──────────────────────────────────────────────── */}
         <LoadingScreen />
@@ -284,6 +251,9 @@ export default function LandingPage() {
         {/* ── Navbar ──────────────────────────────────────────────────────── */}
         <Navbar />
 
+        {/* ── Scroll Zoom Intro ───────────────────────────────────────────── */}
+        <ScrollZoomIntro />
+
         {/* ── Hero ────────────────────────────────────────────────────────── */}
         <HeroNew />
 
@@ -291,35 +261,34 @@ export default function LandingPage() {
         <div
           className="py-4 px-6 border-y overflow-hidden"
           style={{
-            background: "rgba(255,255,255,0.02)",
-            borderColor: "rgba(255,255,255,0.05)",
+            background: "#F8F9FF",
+            borderColor: "rgba(0,168,214,0.15)",
           }}
         >
           <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-center gap-3 text-sm"
-            style={{ color: "rgba(255,255,255,0.3)" }}>
+            style={{ color: "rgba(0,0,0,0.35)" }}>
             <span>Usado por agencias en</span>
             {["Madrid", "Barcelona", "Valencia", "Sevilla", "Bilbao", "Málaga"].map((city, i) => (
               <span key={city} className="flex items-center gap-3">
-                {i > 0 && <span style={{ color: "#00C4FF", fontSize: "7px" }}>●</span>}
+                {i > 0 && <span style={{ color: "#00A8D6", fontSize: "7px" }}>●</span>}
                 {city}
               </span>
             ))}
           </div>
         </div>
 
-        {/* ── Agents Section (NEW) ─────────────────────────────────────────── */}
-        <AgentsSectionNew />
-
         {/* ── How It Works (NEW) ──────────────────────────────────────────── */}
-        <HowItWorksNew />
+        <div style={{ borderTop: "1px solid rgba(0,168,214,0.2)" }}>
+          <HowItWorksNew />
+        </div>
 
         {/* ── Value Section ───────────────────────────────────────────────── */}
-        <section className="py-24 px-6" style={{ background: "#0A0A18" }}>
+        <section className="py-24 px-6" style={{ background: "#FFFFFF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
           <div className="max-w-6xl mx-auto">
             <motion.div {...fadeUp(0.05)} className="text-center mb-14">
               <h2
-                className="text-3xl font-bold mb-3 text-white"
-                style={{ fontFamily: "var(--font-syne, sans-serif)" }}
+                className="text-3xl font-bold mb-3"
+                style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
               >
                 Un sistema de{" "}
                 <span
@@ -333,7 +302,7 @@ export default function LandingPage() {
                   2 capas de valor
                 </span>
               </h2>
-              <p style={{ color: "rgba(255,255,255,0.4)" }}>Empieza donde estás. Escala cuando quieras.</p>
+              <p style={{ color: "rgba(0,0,0,0.45)" }}>Empieza donde estás. Escala cuando quieras.</p>
             </motion.div>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -342,15 +311,15 @@ export default function LandingPage() {
                 {...fadeUp(0.1)}
                 className="relative overflow-hidden rounded-2xl p-8 transition-all duration-300 group"
                 style={{
-                  background: "rgba(13,13,26,0.85)",
-                  border: "1px solid rgba(255,255,255,0.07)",
+                  background: "#F8F9FF",
+                  border: "1px solid rgba(0,0,0,0.07)",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(155,48,255,0.4)";
-                  e.currentTarget.style.boxShadow = "0 0 30px rgba(155,48,255,0.12)";
+                  e.currentTarget.style.borderColor = "rgba(123,47,190,0.3)";
+                  e.currentTarget.style.boxShadow = "0 4px 24px rgba(123,47,190,0.08)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
+                  e.currentTarget.style.borderColor = "rgba(0,0,0,0.07)";
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
@@ -369,17 +338,17 @@ export default function LandingPage() {
                 </div>
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-2xl">🤖</span>
-                  <h3 className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-syne, sans-serif)" }}>
+                  <h3 className="text-2xl font-bold" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}>
                     Construye
                   </h3>
                 </div>
-                <p className="text-sm mb-5 leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
+                <p className="text-sm mb-5 leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>
                   Despliega agentes de IA propios. Desde un agente básico hasta integraciones enterprise completas.
                 </p>
                 <ul className="space-y-2.5">
                   {["Crea agentes IA en minutos", "Sin código, sin fricciones", "Entrena con tus datos", "Múltiples canales"].map((item) => (
-                    <li key={item} className="flex items-center gap-2.5 text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>
-                      <span style={{ color: "#9B30FF" }}>✓</span>
+                    <li key={item} className="flex items-center gap-2.5 text-sm" style={{ color: "rgba(0,0,0,0.6)" }}>
+                      <span style={{ color: "#7B2FBE" }}>✓</span>
                       {item}
                     </li>
                   ))}
@@ -399,15 +368,15 @@ export default function LandingPage() {
                 {...fadeUp(0.15)}
                 className="relative overflow-hidden rounded-2xl p-8 transition-all duration-300 group"
                 style={{
-                  background: "rgba(13,13,26,0.85)",
-                  border: "1px solid rgba(255,255,255,0.07)",
+                  background: "#F8F9FF",
+                  border: "1px solid rgba(0,0,0,0.07)",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(0,196,255,0.4)";
-                  e.currentTarget.style.boxShadow = "0 0 30px rgba(0,196,255,0.12)";
+                  e.currentTarget.style.borderColor = "rgba(0,168,214,0.3)";
+                  e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,168,214,0.08)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
+                  e.currentTarget.style.borderColor = "rgba(0,0,0,0.07)";
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
@@ -426,17 +395,17 @@ export default function LandingPage() {
                 </div>
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-2xl">🚀</span>
-                  <h3 className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-syne, sans-serif)" }}>
+                  <h3 className="text-2xl font-bold" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}>
                     Delega
                   </h3>
                 </div>
-                <p className="text-sm mb-5 leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
+                <p className="text-sm mb-5 leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>
                   Implementación llave en mano. Nuestro equipo construye, configura y mantiene tu sistema de IA.
                 </p>
                 <ul className="space-y-2.5">
                   {["Expertos en automatización IA", "Setup completo en 48h", "Soporte continuo dedicado", "ROI garantizado"].map((item) => (
-                    <li key={item} className="flex items-center gap-2.5 text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>
-                      <span style={{ color: "#00C4FF" }}>✓</span>
+                    <li key={item} className="flex items-center gap-2.5 text-sm" style={{ color: "rgba(0,0,0,0.6)" }}>
+                      <span style={{ color: "#00A8D6" }}>✓</span>
                       {item}
                     </li>
                   ))}
@@ -446,114 +415,77 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ── Stats Row ───────────────────────────────────────────────────── */}
-        <section
-          className="py-16 px-6 border-y"
-          style={{ background: "rgba(255,255,255,0.02)", borderColor: "rgba(255,255,255,0.05)" }}
-        >
-          <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
-            {STATS.map((stat, i) => (
-              <motion.div key={i} {...fadeUp(0.06 * i)} className="text-center">
-                <p
-                  className="text-5xl font-black mb-2"
-                  style={{
-                    background: BRAND_GRADIENT,
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                    fontFamily: "var(--font-syne, sans-serif)",
-                  }}
-                >
-                  {stat.value}
-                </p>
-                <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
         {/* ── Pricing ─────────────────────────────────────────────────────── */}
-        <section id="planes" className="py-24 px-6" style={{ background: "#0D0D1A" }}>
+        <section id="planes" className="py-24 px-6" style={{ background: "#FFFFFF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
           <div className="max-w-6xl mx-auto">
             <motion.div {...fadeUp(0.05)} className="text-center mb-14">
               <h2
-                className="text-3xl font-bold mb-3 text-white"
-                style={{ fontFamily: "var(--font-syne, sans-serif)" }}
+                className="text-3xl font-bold mb-3"
+                style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
               >
                 Elige tu plan
               </h2>
-              <p style={{ color: "rgba(255,255,255,0.4)" }}>
+              <p style={{ color: "rgba(0,0,0,0.45)" }}>
                 Empieza gratis. Escala cuando tu agencia crezca.
               </p>
             </motion.div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
               {PLANS.map((plan, i) => (
                 <motion.div
                   key={i}
                   {...fadeUp(0.05 * i)}
                   className="relative flex flex-col p-6 rounded-2xl transition-all duration-300"
                   style={{
-                    background: plan.highlighted ? "rgba(155,48,255,0.08)" : "rgba(13,13,26,0.85)",
+                    background: plan.highlighted ? "rgba(123,47,190,0.04)" : "#F8F9FF",
                     border: plan.highlighted
-                      ? "1px solid rgba(155,48,255,0.4)"
-                      : "1px solid rgba(255,255,255,0.07)",
+                      ? "1px solid rgba(123,47,190,0.35)"
+                      : "1px solid rgba(0,0,0,0.07)",
                     boxShadow: plan.highlighted
-                      ? "0 0 40px rgba(155,48,255,0.15), 0 0 80px rgba(0,196,255,0.08)"
+                      ? "0 1px 3px rgba(0,0,0,0.4)"
                       : "none",
                   }}
                   onMouseEnter={(e) => {
                     if (!plan.highlighted) {
-                      e.currentTarget.style.borderColor = "rgba(155,48,255,0.25)";
+                      e.currentTarget.style.borderColor = "rgba(123,47,190,0.2)";
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!plan.highlighted) {
-                      e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
+                      e.currentTarget.style.borderColor = "rgba(0,0,0,0.07)";
                     }
                   }}
                 >
-                  {plan.highlighted && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                      <span
-                        className="px-4 py-1.5 text-xs font-bold rounded-full text-white"
-                        style={{ background: BRAND_GRADIENT }}
-                      >
-                        Más popular
-                      </span>
-                    </div>
-                  )}
-                  <h3 className="text-base font-semibold mb-1 text-white">{plan.name}</h3>
-                  <div className="flex items-end gap-1 mb-5">
-                    <span className="text-4xl font-black text-white" style={{ fontFamily: "var(--font-syne, sans-serif)" }}>
+                  <h3 className="text-base font-semibold mb-1" style={{ color: "#1a1a2e" }}>{plan.name}</h3>
+                  <div className="mb-5">
+                    <span className="text-3xl font-black" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}>
                       {plan.price}
                     </span>
-                    <span className="text-sm mb-1.5" style={{ color: "rgba(255,255,255,0.3)" }}>/mes</span>
                   </div>
                   <ul className="space-y-2.5 mb-7 flex-1">
                     {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm" style={{ color: "rgba(255,255,255,0.5)" }}>
-                        <span style={{ color: "#9B30FF", flexShrink: 0, marginTop: 1 }}>✓</span>
+                      <li key={f} className="flex items-start gap-2 text-sm" style={{ color: "rgba(0,0,0,0.55)" }}>
+                        <span style={{ color: "#7B2FBE", flexShrink: 0, marginTop: 1 }}>✓</span>
                         {f}
                       </li>
                     ))}
                   </ul>
-                  <Link href={plan.href}>
+                  <a href={plan.href}>
                     <button
                       className="w-full py-2.5 text-sm font-bold rounded-xl transition-all hover:opacity-90 hover:scale-[1.02]"
                       style={
                         plan.highlighted
                           ? { background: BRAND_GRADIENT, color: "white" }
                           : {
-                              background: "rgba(255,255,255,0.05)",
-                              color: "rgba(255,255,255,0.65)",
-                              border: "1px solid rgba(255,255,255,0.1)",
+                              background: "rgba(0,0,0,0.04)",
+                              color: "rgba(0,0,0,0.6)",
+                              border: "1px solid rgba(0,0,0,0.08)",
                             }
                       }
                     >
                       {plan.cta}
                     </button>
-                  </Link>
+                  </a>
                 </motion.div>
               ))}
             </div>
@@ -572,27 +504,27 @@ export default function LandingPage() {
         </section>
 
         {/* ── Web Service ─────────────────────────────────────────────────── */}
-        <section className="py-24 px-6" style={{ background: "#0A0A18" }}>
+        <section className="py-24 px-6" style={{ background: "#F8F9FF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
           <div className="max-w-6xl mx-auto">
             <motion.div {...fadeUp(0.05)} className="text-center mb-14">
               <div
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5"
                 style={{
-                  background: "rgba(0,196,255,0.08)",
-                  color: "#00C4FF",
-                  border: "1px solid rgba(0,196,255,0.2)",
+                  background: "rgba(0,168,214,0.08)",
+                  color: "#00A8D6",
+                  border: "1px solid rgba(0,168,214,0.18)",
                 }}
               >
                 Servicio adicional
               </div>
               <h2
-                className="text-3xl font-bold mb-3 text-white"
-                style={{ fontFamily: "var(--font-syne, sans-serif)" }}
+                className="text-3xl font-bold mb-3"
+                style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
               >
                 Tu negocio merece una web{" "}
-                <span style={{ color: "#00C4FF" }}>que venda</span>
+                <span style={{ color: "#00A8D6" }}>que venda</span>
               </h2>
-              <p className="max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.4)" }}>
+              <p className="max-w-xl mx-auto" style={{ color: "rgba(0,0,0,0.45)" }}>
                 Diseñamos y desarrollamos tu presencia online desde cero.
               </p>
             </motion.div>
@@ -603,13 +535,13 @@ export default function LandingPage() {
                   icon: "🎨",
                   title: "Diseño único y a medida",
                   desc: "Cada web creada desde cero, adaptada a tu marca y pensada para convertir visitantes en clientes.",
-                  color: "#9B30FF",
+                  color: "#7B2FBE",
                 },
                 {
                   icon: "🔍",
                   title: "SEO desde el primer día",
                   desc: "Optimización técnica incluida: velocidad, estructura, metadatos y contenido indexable desde el lanzamiento.",
-                  color: "#00C4FF",
+                  color: "#00A8D6",
                 },
                 {
                   icon: "⚡",
@@ -623,21 +555,21 @@ export default function LandingPage() {
                   {...fadeUp(0.08 * i)}
                   className="p-6 rounded-2xl transition-all duration-200 group"
                   style={{
-                    background: "rgba(13,13,26,0.85)",
-                    border: "1px solid rgba(255,255,255,0.06)",
+                    background: "#FFFFFF",
+                    border: "1px solid rgba(0,0,0,0.07)",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = card.color + "35";
-                    e.currentTarget.style.boxShadow = `0 0 20px ${card.color}15`;
+                    e.currentTarget.style.borderColor = card.color + "40";
+                    e.currentTarget.style.boxShadow = `0 4px 20px ${card.color}12`;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
+                    e.currentTarget.style.borderColor = "rgba(0,0,0,0.07)";
                     e.currentTarget.style.boxShadow = "none";
                   }}
                 >
                   <div className="text-3xl mb-4">{card.icon}</div>
-                  <h3 className="font-semibold text-base mb-2 text-white">{card.title}</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>
+                  <h3 className="font-semibold text-base mb-2" style={{ color: "#1a1a2e" }}>{card.title}</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>
                     {card.desc}
                   </p>
                 </motion.div>
@@ -645,37 +577,116 @@ export default function LandingPage() {
             </div>
 
             <div className="text-center">
-              <Link href="/web">
+              <a href="#web">
                 <button
                   className="px-6 py-3 text-sm font-semibold rounded-xl transition-all hover:scale-105"
                   style={{
                     background: "transparent",
-                    color: "#00C4FF",
+                    color: "#00A8D6",
                     border: "1px solid rgba(0,196,255,0.4)",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(0,196,255,0.08)";
+                    e.currentTarget.style.background = "rgba(0,168,214,0.07)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = "transparent";
                   }}
                 >
-                  Ver más sobre este servicio →
+                  Ver precios →
                 </button>
-              </Link>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Crea tu web ─────────────────────────────────────────────────── */}
+        <section id="web" className="py-24 px-6" style={{ background: "#F8F9FF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
+          <div className="max-w-5xl mx-auto">
+            <motion.div {...fadeUp(0.05)} className="text-center mb-14">
+              <h2
+                className="text-3xl font-bold mb-3"
+                style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
+              >
+                ¿Necesitas una web profesional?
+              </h2>
+              <p className="max-w-xl mx-auto" style={{ color: "rgba(0,0,0,0.45)" }}>
+                Diseñamos y desarrollamos tu página web desde cero. Rápido, moderno y optimizado para convertir.
+              </p>
+            </motion.div>
+
+            <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+              {[
+                {
+                  name: "Landing page",
+                  price: "desde 500€",
+                  features: ["Entrega en 7 días", "Diseño moderno y responsive", "SEO básico incluido"],
+                  highlighted: false,
+                },
+                {
+                  name: "Web completa",
+                  price: "desde 1.200€",
+                  features: ["Entrega en 15 días", "Diseño personalizado", "Panel de gestión incluido", "Integración con tus herramientas"],
+                  highlighted: true,
+                },
+              ].map((plan, i) => (
+                <motion.div
+                  key={plan.name}
+                  {...fadeUp(0.08 * i)}
+                  className="relative flex flex-col p-6 rounded-2xl transition-all duration-300"
+                  style={{
+                    background: plan.highlighted ? "rgba(123,47,190,0.04)" : "#FFFFFF",
+                    border: plan.highlighted
+                      ? "1px solid rgba(123,47,190,0.35)"
+                      : "1px solid rgba(0,168,214,0.15)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = "0 4px 24px rgba(123,47,190,0.08)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                >
+                  <h3 className="text-base font-semibold mb-1" style={{ color: "#1a1a2e" }}>{plan.name}</h3>
+                  <div className="mb-5">
+                    <span className="text-3xl font-black" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}>
+                      {plan.price}
+                    </span>
+                  </div>
+                  <ul className="space-y-2.5 mb-7 flex-1">
+                    {plan.features.map((f) => (
+                      <li key={f} className="flex items-start gap-2 text-sm" style={{ color: "rgba(0,0,0,0.55)" }}>
+                        <span style={{ color: "#7B2FBE", flexShrink: 0, marginTop: 1 }}>✓</span>
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <a href="mailto:neuraxis.ia.global@gmail.com">
+                    <button
+                      className="w-full py-2.5 text-sm font-bold rounded-xl transition-all hover:opacity-90 hover:scale-[1.02]"
+                      style={
+                        plan.highlighted
+                          ? { background: BRAND_GRADIENT, color: "white" }
+                          : { background: "rgba(0,0,0,0.04)", color: "rgba(0,0,0,0.6)", border: "1px solid rgba(0,0,0,0.08)" }
+                      }
+                    >
+                      Solicitar mi web
+                    </button>
+                  </a>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* ── Revly ───────────────────────────────────────────────────────── */}
-        <section className="py-20 px-6" style={{ background: "#0D0D1A" }}>
+        <section className="py-20 px-6" style={{ background: "#FFFFFF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
           <div className="max-w-5xl mx-auto">
             <motion.div
               {...fadeUp(0.05)}
               className="rounded-2xl p-10 md:p-14 text-center relative overflow-hidden"
               style={{
-                background: "rgba(0,196,255,0.04)",
-                border: "1px solid rgba(0,196,255,0.18)",
+                background: "#F0FAFF",
+                border: "1px solid rgba(0,168,214,0.2)",
               }}
             >
               <div
@@ -689,22 +700,22 @@ export default function LandingPage() {
                 <div
                   className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6"
                   style={{
-                    background: "rgba(0,196,255,0.08)",
-                    color: "#00C4FF",
+                    background: "rgba(0,168,214,0.07)",
+                    color: "#00A8D6",
                     border: "1px solid rgba(0,196,255,0.2)",
                   }}
                 >
                   Creado por Neuraxis
                 </div>
                 <h2
-                  className="text-3xl font-bold mb-4 text-white"
-                  style={{ fontFamily: "var(--font-syne, sans-serif)" }}
+                  className="text-3xl font-bold mb-4"
+                  style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
                 >
-                  Conoce <span style={{ color: "#00C4FF" }}>Revly</span> — tu agente de ventas en WhatsApp
+                  Conoce <span style={{ color: "#00A8D6" }}>Revly</span> — tu agente de ventas en WhatsApp
                 </h2>
                 <p
                   className="text-lg mb-8 leading-relaxed max-w-2xl mx-auto"
-                  style={{ color: "rgba(255,255,255,0.5)" }}
+                  style={{ color: "rgba(0,0,0,0.5)" }}
                 >
                   Responde clientes 24/7, califica leads y cierra ventas mientras duermes.
                 </p>
@@ -714,8 +725,8 @@ export default function LandingPage() {
                       key={pill}
                       className="px-3.5 py-1.5 rounded-full text-xs font-medium"
                       style={{
-                        background: "rgba(0,196,255,0.08)",
-                        color: "#00C4FF",
+                        background: "rgba(0,168,214,0.07)",
+                        color: "#00A8D6",
                         border: "1px solid rgba(0,196,255,0.18)",
                       }}
                     >
@@ -739,7 +750,7 @@ export default function LandingPage() {
         {/* ── Final CTA ───────────────────────────────────────────────────── */}
         <section
           className="py-24 px-6 relative overflow-hidden"
-          style={{ background: BRAND_GRADIENT }}
+          style={{ background: BRAND_GRADIENT, borderTop: "1px solid rgba(0,168,214,0.2)" }}
         >
           {/* Overlay pattern */}
           <div
@@ -768,23 +779,21 @@ export default function LandingPage() {
                 className="text-4xl font-black text-white mb-5"
                 style={{ fontFamily: "var(--font-syne, sans-serif)" }}
               >
-                Tu agencia IA empieza hoy
+                Automatiza tu empresa hoy
               </h2>
               <p className="text-xl mb-10" style={{ color: "rgba(255,255,255,0.8)" }}>
-                Únete a +50 agencias que ya automatizan con Neuraxis.
-                <br />
-                Sin setup, sin tarjeta de crédito.
+                Cuéntanos qué necesitas automatizar.
               </p>
-              <Link href="/register">
+              <a href="mailto:neuraxis.ia.global@gmail.com">
                 <motion.button
                   whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(0,0,0,0.4)" }}
                   whileTap={{ scale: 0.97 }}
                   className="px-10 py-4 font-black rounded-2xl text-base"
                   style={{ background: "#0D0D1A", color: "white" }}
                 >
-                  Empezar gratis →
+                  Contactar
                 </motion.button>
-              </Link>
+              </a>
             </motion.div>
           </div>
         </section>
@@ -792,7 +801,7 @@ export default function LandingPage() {
         {/* ── Footer ──────────────────────────────────────────────────────── */}
         <footer
           className="py-14 px-6"
-          style={{ background: "#0D0D1A", borderTop: "1px solid rgba(255,255,255,0.05)" }}
+          style={{ background: "#F8F9FF", borderTop: "1px solid rgba(0,0,0,0.07)" }}
         >
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-4 gap-10 mb-10">
@@ -804,7 +813,7 @@ export default function LandingPage() {
                   alt="Neuraxis"
                   className="h-8 object-contain mb-4"
                 />
-                <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.28)" }}>
+                <p className="text-sm leading-relaxed" style={{ color: "rgba(0,0,0,0.4)" }}>
                   La plataforma para construir y escalar tu agencia de IA en España.
                 </p>
               </div>
@@ -812,7 +821,7 @@ export default function LandingPage() {
               <div>
                 <h4
                   className="text-xs font-semibold uppercase tracking-widest mb-4"
-                  style={{ color: "rgba(255,255,255,0.25)" }}
+                  style={{ color: "rgba(0,0,0,0.3)" }}
                 >
                   Producto
                 </h4>
@@ -827,12 +836,12 @@ export default function LandingPage() {
                       <Link
                         href={l.href}
                         className="text-sm transition-colors"
-                        style={{ color: "rgba(255,255,255,0.38)" }}
+                        style={{ color: "rgba(0,0,0,0.5)" }}
                         onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) =>
-                          (e.currentTarget.style.color = "white")
+                          (e.currentTarget.style.color = "#1a1a2e")
                         }
                         onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) =>
-                          (e.currentTarget.style.color = "rgba(255,255,255,0.38)")
+                          (e.currentTarget.style.color = "rgba(0,0,0,0.5)")
                         }
                       >
                         {l.label}
@@ -845,7 +854,7 @@ export default function LandingPage() {
               <div>
                 <h4
                   className="text-xs font-semibold uppercase tracking-widest mb-4"
-                  style={{ color: "rgba(255,255,255,0.25)" }}
+                  style={{ color: "rgba(0,0,0,0.3)" }}
                 >
                   Empresa
                 </h4>
@@ -860,12 +869,12 @@ export default function LandingPage() {
                       <a
                         href={l.href}
                         className="text-sm transition-colors"
-                        style={{ color: "rgba(255,255,255,0.38)" }}
+                        style={{ color: "rgba(0,0,0,0.5)" }}
                         onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) =>
-                          (e.currentTarget.style.color = "white")
+                          (e.currentTarget.style.color = "#1a1a2e")
                         }
                         onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) =>
-                          (e.currentTarget.style.color = "rgba(255,255,255,0.38)")
+                          (e.currentTarget.style.color = "rgba(0,0,0,0.5)")
                         }
                       >
                         {l.label}
@@ -878,7 +887,7 @@ export default function LandingPage() {
               <div>
                 <h4
                   className="text-xs font-semibold uppercase tracking-widest mb-4"
-                  style={{ color: "rgba(255,255,255,0.25)" }}
+                  style={{ color: "rgba(0,0,0,0.3)" }}
                 >
                   Legal
                 </h4>
@@ -888,12 +897,12 @@ export default function LandingPage() {
                       <Link
                         href="/"
                         className="text-sm transition-colors"
-                        style={{ color: "rgba(255,255,255,0.38)" }}
+                        style={{ color: "rgba(0,0,0,0.5)" }}
                         onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) =>
-                          (e.currentTarget.style.color = "white")
+                          (e.currentTarget.style.color = "#1a1a2e")
                         }
                         onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) =>
-                          (e.currentTarget.style.color = "rgba(255,255,255,0.38)")
+                          (e.currentTarget.style.color = "rgba(0,0,0,0.5)")
                         }
                       >
                         {l}
@@ -906,12 +915,12 @@ export default function LandingPage() {
 
             <div
               className="pt-8 flex flex-col md:flex-row items-center justify-between gap-3"
-              style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+              style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}
             >
-              <p className="text-xs" style={{ color: "rgba(255,255,255,0.18)" }}>
+              <p className="text-xs" style={{ color: "rgba(0,0,0,0.3)" }}>
                 © 2025 Neuraxis IA · Todos los derechos reservados
               </p>
-              <p className="text-xs" style={{ color: "rgba(255,255,255,0.18)" }}>
+              <p className="text-xs" style={{ color: "rgba(0,0,0,0.3)" }}>
                 Hecho con ❤️ en España
               </p>
             </div>
