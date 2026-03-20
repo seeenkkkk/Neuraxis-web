@@ -11,7 +11,6 @@ import {
   useTransform,
   useMotionValue,
   useSpring,
-  AnimatePresence,
 } from "framer-motion";
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -101,7 +100,6 @@ export default function HeroNew() {
 
   // Parallax layers
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
-  const midY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const orbY = useTransform(scrollYProgress, [0, 1], ["0%", "-10%"]);

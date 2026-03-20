@@ -36,11 +36,9 @@ const STEPS = [
 function StepCard({
   step,
   index,
-  total,
 }: {
   step: (typeof STEPS)[0];
   index: number;
-  total: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
@@ -260,7 +258,7 @@ export default function HowItWorksNew() {
           <div className="flex flex-col lg:flex-row gap-5 lg:gap-0">
             {STEPS.map((step, i) => (
               <div key={step.num} className="flex flex-col lg:flex-row flex-1 items-stretch">
-                <StepCard step={step} index={i} total={STEPS.length} />
+                <StepCard step={step} index={i} />
 
                 {/* Mobile connector */}
                 {i < STEPS.length - 1 && (
