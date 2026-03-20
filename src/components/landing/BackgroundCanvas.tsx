@@ -32,8 +32,8 @@ export default function BackgroundCanvas() {
       y: Math.random() * window.innerHeight,
       size: 30 + Math.random() * 80,
       currentSize: 30 + Math.random() * 80,
-      opacity: 0.06,
-      currentOpacity: 0.06,
+      opacity: 0.14,
+      currentOpacity: 0.14,
       color: Math.random() > 0.5 ? '123,47,190' : '0,168,214',
     }))
 
@@ -59,7 +59,7 @@ export default function BackgroundCanvas() {
       }
       ctx.closePath()
       ctx.strokeStyle = `rgba(${color},${opacity})`
-      ctx.lineWidth = 1
+      ctx.lineWidth = 1.5
       ctx.stroke()
     }
 
@@ -75,7 +75,7 @@ export default function BackgroundCanvas() {
 
         const near = dist < 150
         const targetSize = near ? hex.size * 0.3 : hex.size
-        const targetOpacity = near ? 0.01 : 0.06
+        const targetOpacity = near ? 0.02 : 0.14
 
         // lerp
         hex.currentSize += (targetSize - hex.currentSize) * 0.08
