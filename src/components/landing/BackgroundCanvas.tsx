@@ -55,7 +55,7 @@ export default function BackgroundCanvas() {
         const angle = (Math.PI / 3) * i - Math.PI / 6
         const px = x + size * Math.cos(angle)
         const py = y + size * Math.sin(angle)
-        i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py)
+        if (i === 0) { ctx.moveTo(px, py) } else { ctx.lineTo(px, py) }
       }
       ctx.closePath()
       ctx.strokeStyle = `rgba(${color},${opacity})`
