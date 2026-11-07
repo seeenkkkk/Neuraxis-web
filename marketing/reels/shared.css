@@ -1,0 +1,87 @@
+/* Neuraxis reels — base 1080x1920 (9:16). Colores de marca:
+   verde #8BC34A · cian #00BCD4 · morado #7B1FA2 · fondo #0D0D1A */
+:root {
+  --bg: #0D0D1A;
+  --green: #8BC34A;
+  --cyan: #00BCD4;
+  --purple: #7B1FA2;
+  --purple-l: #A855F7;
+  --text: #F2F3FF;
+  --muted: #9AA0C3;
+  --card: rgba(255, 255, 255, 0.05);
+  --line: rgba(255, 255, 255, 0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", "Noto Color Emoji", system-ui, sans-serif;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Fondo: glows + rejilla */
+.bg-glow { position: absolute; border-radius: 50%; filter: blur(120px); opacity: .55; }
+.bg-glow.a { width: 900px; height: 900px; background: var(--purple); top: -300px; left: -350px; animation: drift 9s ease-in-out infinite alternate; }
+.bg-glow.b { width: 800px; height: 800px; background: var(--cyan); bottom: -320px; right: -320px; opacity: .35; animation: drift 11s ease-in-out infinite alternate-reverse; }
+.bg-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+}
+@keyframes drift { to { transform: translate(120px, 160px) scale(1.1); } }
+
+/* Marca fija arriba */
+.brandbar {
+  position: absolute; top: 120px; left: 0; right: 0;
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  font-weight: 800; font-size: 34px; letter-spacing: 6px; z-index: 50;
+}
+.brandbar img { width: 54px; height: 54px; }
+.brandbar .ia { color: var(--cyan); text-shadow: 0 0 14px rgba(0,188,212,.7); }
+
+/* Barra de progreso del vídeo */
+.progress { position: absolute; top: 0; left: 0; height: 8px; width: 100%; transform-origin: left;
+  background: linear-gradient(90deg, var(--cyan), var(--purple-l)); animation: grow var(--dur) linear both; z-index: 60; }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Escenas */
+.scene { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 80px; text-align: center;
+  animation: sIn .55s cubic-bezier(.2,.8,.2,1) var(--in) both, sOut .45s ease-in var(--out) forwards; }
+.scene.last { animation: sIn .55s cubic-bezier(.2,.8,.2,1) var(--in) both; }
+@keyframes sIn { from { opacity: 0; transform: translateY(60px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes sOut { to { opacity: 0; transform: translateY(-60px) scale(.98); } }
+
+/* Elementos que aparecen */
+.pop { animation: pop .5s cubic-bezier(.2,.9,.3,1.25) var(--d, 0s) both; }
+@keyframes pop { from { opacity: 0; transform: translateY(40px) scale(.9); } to { opacity: 1; transform: none; } }
+.fade { animation: fadeIn .6s ease var(--d, 0s) both; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Tipografía */
+.hook { font-size: 96px; font-weight: 900; line-height: 1.05; letter-spacing: -2px; }
+.h2 { font-size: 72px; font-weight: 850; line-height: 1.1; letter-spacing: -1.5px; }
+.sub { font-size: 44px; color: var(--muted); font-weight: 500; line-height: 1.3; }
+.grad { background: linear-gradient(90deg, var(--cyan), var(--purple-l)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.green { color: var(--green); }
+.cyan { color: var(--cyan); }
+
+/* Tarjeta final */
+.endcard img.mascot { width: 420px; height: 420px; animation: pop .6s cubic-bezier(.2,.9,.3,1.3) var(--d, 0s) both, float 3s ease-in-out infinite; filter: drop-shadow(0 20px 60px rgba(123,31,162,.6)); }
+@keyframes float { 50% { translate: 0 -18px; } }
+.endcard .name { font-size: 110px; font-weight: 900; letter-spacing: 10px; margin-top: 20px; }
+.endcard .tag { margin-top: 24px; }
+.cta {
+  margin-top: 70px; padding: 34px 56px; border-radius: 999px; font-size: 46px; font-weight: 800;
+  background: linear-gradient(90deg, var(--cyan), var(--purple)); color: #fff;
+  box-shadow: 0 0 60px rgba(0,188,212,.45);
+}
+.cta.pulse { animation: pop .5s cubic-bezier(.2,.9,.3,1.25) var(--d, 0s) both, pulse 1.4s ease-in-out calc(var(--d, 0s) + .5s) infinite; }
+@keyframes pulse { 50% { transform: scale(1.05); box-shadow: 0 0 90px rgba(0,188,212,.7); } }
+
+.chip { display: inline-block; padding: 12px 28px; border-radius: 999px; border: 2px solid var(--line); background: var(--card);
+  font-size: 32px; font-weight: 700; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }

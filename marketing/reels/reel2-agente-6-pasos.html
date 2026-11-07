@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Reel 2 — Tu agente en 6 pasos</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  :root { --dur: 20s; }
+  .steps { width: 920px; display: flex; flex-direction: column; gap: 22px; margin-top: 120px; text-align: left; }
+  .step { display: flex; align-items: center; gap: 30px; padding: 26px 34px; border-radius: 30px; background: var(--card); border: 2px solid var(--line);
+    animation: pop .5s cubic-bezier(.2,.9,.3,1.25) var(--d) both, active .4s ease var(--d) both, done .4s ease calc(var(--d) + 1.8s) forwards; }
+  @keyframes active { to { border-color: var(--cyan); background: rgba(0,188,212,.10); box-shadow: 0 0 50px rgba(0,188,212,.25); } }
+  @keyframes done { to { border-color: rgba(139,195,74,.5); background: rgba(139,195,74,.06); box-shadow: none; } }
+  .num { flex: none; width: 92px; height: 92px; border-radius: 26px; display: grid; place-items: center; font-size: 46px; font-weight: 900; position: relative;
+    background: linear-gradient(135deg, var(--cyan), var(--purple)); }
+  .num .ok { position: absolute; inset: 0; border-radius: 26px; background: var(--green); display: grid; place-items: center; color: #0D0D1A; font-size: 54px;
+    animation: okIn .35s cubic-bezier(.2,.9,.3,1.4) calc(var(--d) + 1.8s) both; }
+  @keyframes okIn { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: none; } }
+  .st { font-size: 46px; font-weight: 850; }
+  .sd { font-size: 30px; color: var(--muted); margin-top: 6px; line-height: 1.3; }
+  .head { position: absolute; top: 240px; left: 0; right: 0; text-align: center; }
+  .bar { width: 920px; height: 18px; border-radius: 99px; background: rgba(255,255,255,.08); margin: 30px auto 0; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 100%; transform-origin: left; background: linear-gradient(90deg, var(--cyan), var(--green));
+    animation: fill 10.8s linear 3.4s both; }
+  @keyframes fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  .pct { font-size: 34px; font-weight: 800; color: var(--green); margin-top: 14px; }
+</style></head>
+<body>
+  <div class="bg-glow a"></div><div class="bg-glow b"></div><div class="bg-grid"></div>
+  <div class="progress"></div>
+  <div class="brandbar"><img src="assets/hex.svg"><span>NEURAXIS <span class="ia">IA</span></span></div>
+
+  <section class="scene" style="--in:0s;--out:2.9s">
+    <div class="sub pop" style="--d:.1s">¿Tu negocio necesita</div>
+    <div class="hook grad pop" style="--d:.4s;margin-top:16px">un agente<br>de IA?</div>
+    <div class="h2 pop" style="--d:1.2s;margin-top:50px">Así lo creamos<br>en <span class="green">6 pasos</span> 👇</div>
+  </section>
+
+  <section class="scene" style="--in:3.1s;--out:15.4s">
+    <div class="head">
+      <div class="h2 pop" style="--d:3.2s;font-size:60px">De la idea al agente funcionando</div>
+      <div class="bar"><i></i></div>
+      <div class="pct" id="pct">0%</div>
+    </div>
+    <div class="steps">
+      <div class="step" style="--d:3.4s"><div class="num">1<div class="ok">✓</div></div><div><div class="st">Problema</div><div class="sd">¿Qué te quita más tiempo? Lo definimos claro.</div></div></div>
+      <div class="step" style="--d:5.2s"><div class="num">2<div class="ok">✓</div></div><div><div class="st">Soluciones</div><div class="sd">Chatbot, cualificador de leads, agenda…</div></div></div>
+      <div class="step" style="--d:7.0s"><div class="num">3<div class="ok">✓</div></div><div><div class="st">Nicho</div><div class="sd">Adaptado a tu sector y a tus clientes.</div></div></div>
+      <div class="step" style="--d:8.8s"><div class="num">4<div class="ok">✓</div></div><div><div class="st">Plan</div><div class="sd">Un plan claro, sin letra pequeña.</div></div></div>
+      <div class="step" style="--d:10.6s"><div class="num">5<div class="ok">✓</div></div><div><div class="st">Landing</div><div class="sd">Tu página lista para captar clientes.</div></div></div>
+      <div class="step" style="--d:12.4s"><div class="num">6<div class="ok">✓</div></div><div><div class="st">Agente</div><div class="sd">Configurado con tu info y funcionando.</div></div></div>
+    </div>
+  </section>
+
+  <section class="scene last endcard" style="--in:15.6s">
+    <img class="mascot" src="assets/nexmascot.png" style="--d:15.7s">
+    <div class="name grad pop" style="--d:16s">NEURAXIS</div>
+    <div class="sub tag pop" style="--d:16.3s">Tu agente de IA, paso a paso</div>
+    <div class="cta pulse" style="--d:16.7s">Guárdalo y comenta “PASOS” 👇</div>
+  </section>
+
+  <script>
+    window.onFrame = (t) => {
+      const p = Math.max(0, Math.min(1, (t - 3.4) / 10.8));
+      document.getElementById('pct').textContent = Math.round(p * 100) + '%';
+    };
+  </script>
+</body></html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Reel 3 — Citas perdidas</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  :root { --dur: 20s; }
+  .calc { width: 900px; margin-top: 40px; display: flex; flex-direction: column; gap: 26px; }
+  .row { display: flex; justify-content: space-between; align-items: center; padding: 34px 44px; border-radius: 30px; background: var(--card); border: 2px solid var(--line); font-size: 44px; font-weight: 700; }
+  .row b { font-size: 60px; font-weight: 900; }
+  .op { font-size: 64px; font-weight: 900; color: var(--muted); line-height: .8; }
+  .total { margin-top: 20px; padding: 40px; border-radius: 34px; border: 3px solid #ff5a6e; background: rgba(255,90,110,.10); box-shadow: 0 0 70px rgba(255,90,110,.25); }
+  .total .big { font-size: 150px; font-weight: 900; color: #ff6b7d; letter-spacing: -4px; line-height: 1; }
+  .total .lbl { font-size: 38px; color: var(--muted); margin-top: 10px; font-weight: 600; }
+  .note { font-size: 30px; color: var(--muted); margin-top: 26px; }
+
+  .flow { width: 900px; margin-top: 110px; position: relative; text-align: left; }
+  .line { position: absolute; left: 66px; top: 70px; bottom: 70px; width: 6px; border-radius: 6px; background: linear-gradient(var(--cyan), var(--green));
+    transform-origin: top; animation: lineGrow 4.8s ease-in-out 9.7s both; }
+  @keyframes lineGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  .node { display: flex; align-items: center; gap: 34px; padding: 22px 0; position: relative; }
+  .node .ic { flex: none; width: 138px; height: 138px; border-radius: 40px; display: grid; place-items: center; font-size: 66px;
+    background: #15152a; border: 3px solid var(--cyan); box-shadow: 0 0 40px rgba(0,188,212,.35); }
+  .node:last-child .ic { border-color: var(--green); box-shadow: 0 0 50px rgba(139,195,74,.45); }
+  .node .t { font-size: 46px; font-weight: 850; }
+  .node .d { font-size: 31px; color: var(--muted); margin-top: 6px; }
+  .head { position: absolute; top: 240px; left: 0; right: 0; text-align: center; }
+</style></head>
+<body>
+  <div class="bg-glow a"></div><div class="bg-glow b"></div><div class="bg-grid"></div>
+  <div class="progress"></div>
+  <div class="brandbar"><img src="assets/hex.svg"><span>NEURAXIS <span class="ia">IA</span></span></div>
+
+  <section class="scene" style="--in:0s;--out:2.9s">
+    <div class="hook pop" style="--d:.1s">Cada cita que<br>no aparece…</div>
+    <div class="hook grad pop" style="--d:1s;margin-top:30px">es dinero<br>que pierdes.</div>
+  </section>
+
+  <section class="scene" style="--in:3.1s;--out:8.6s">
+    <span class="chip pop" style="--d:3.2s">Ejemplo · haz la cuenta con tus números</span>
+    <div class="calc">
+      <div class="row pop" style="--d:3.6s"><span>Citas perdidas / semana</span><b>4</b></div>
+      <div class="op pop" style="--d:4.0s">×</div>
+      <div class="row pop" style="--d:4.3s"><span>Precio medio por cita</span><b>30 €</b></div>
+      <div class="op pop" style="--d:4.7s">×</div>
+      <div class="row pop" style="--d:5.0s"><span>Semanas al mes</span><b>4</b></div>
+      <div class="total pop" style="--d:5.6s"><div class="big" id="money">0 €</div><div class="lbl">que se van cada mes</div></div>
+    </div>
+  </section>
+
+  <section class="scene" style="--in:8.8s;--out:15.4s">
+    <div class="head"><div class="h2 pop" style="--d:8.9s">La solución:<br><span class="grad">recordatorios automáticos</span></div></div>
+    <div class="flow">
+      <div class="line"></div>
+      <div class="node pop" style="--d:9.6s"><div class="ic">📅</div><div><div class="t">El cliente reserva</div><div class="d">Web, WhatsApp o teléfono</div></div></div>
+      <div class="node pop" style="--d:11.0s"><div class="ic">⏰</div><div><div class="t">24 h antes: WhatsApp</div><div class="d">Mensaje automático, sin llamar</div></div></div>
+      <div class="node pop" style="--d:12.4s"><div class="ic">✅</div><div><div class="t">Confirma o cambia</div><div class="d">Con un solo mensaje</div></div></div>
+      <div class="node pop" style="--d:13.8s"><div class="ic">🔁</div><div><div class="t green">El hueco se recupera</div><div class="d">Y se lo das a otro cliente</div></div></div>
+    </div>
+  </section>
+
+  <section class="scene last endcard" style="--in:15.6s">
+    <img class="mascot" src="assets/nexmascot.png" style="--d:15.7s">
+    <div class="h2 pop" style="--d:16s;margin-top:20px">Sin llamadas.<br><span class="grad">Sin olvidos.</span></div>
+    <div class="sub tag pop" style="--d:16.4s">Neuraxis · automatización con IA</div>
+    <div class="cta pulse" style="--d:16.8s">Comenta “CITAS” 👇</div>
+  </section>
+
+  <script>
+    window.onFrame = (t) => {
+      const p = Math.max(0, Math.min(1, (t - 5.8) / 1.4));
+      const e = 1 - Math.pow(1 - p, 3);
+      document.getElementById('money').textContent = Math.round(480 * e) + ' €';
+    };
+  </script>
+</body></html>

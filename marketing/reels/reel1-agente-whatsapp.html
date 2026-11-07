@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Reel 1 — Agente WhatsApp 23:47</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  :root { --dur: 18s; }
+  .phone { width: 760px; height: 1240px; border-radius: 80px; background: #0b141a; border: 14px solid #1d1d2e;
+    box-shadow: 0 40px 120px rgba(0,0,0,.6), 0 0 0 2px rgba(0,188,212,.35), 0 0 80px rgba(123,31,162,.35);
+    overflow: hidden; display: flex; flex-direction: column; text-align: left; margin-top: 90px; }
+  .wa-head { background: #1f2c34; padding: 54px 34px 26px; display: flex; align-items: center; gap: 22px; }
+  .wa-head .av { width: 84px; height: 84px; border-radius: 50%; background: linear-gradient(135deg, var(--cyan), var(--purple)); display: grid; place-items: center; font-size: 40px; font-weight: 900; }
+  .wa-head .t1 { font-size: 36px; font-weight: 700; }
+  .wa-head .t2 { font-size: 26px; color: var(--green); }
+  .wa-body { flex: 1; padding: 34px 28px; display: flex; flex-direction: column; gap: 22px;
+    background: radial-gradient(circle at 30% 20%, rgba(0,188,212,.06), transparent 60%), #0b141a; }
+  .msg { max-width: 82%; padding: 20px 26px 14px; border-radius: 26px; font-size: 33px; line-height: 1.35; position: relative; }
+  .msg .time { display: block; text-align: right; font-size: 21px; color: rgba(255,255,255,.55); margin-top: 6px; }
+  .in { background: #005c4b; align-self: flex-end; border-bottom-right-radius: 8px; }
+  .out { background: #1f2c34; align-self: flex-start; border-bottom-left-radius: 8px; }
+  .out .bot { font-size: 22px; font-weight: 800; color: var(--cyan); letter-spacing: 1px; display: block; margin-bottom: 4px; }
+  .slot { position: relative; align-self: flex-start; max-width: 82%; }
+  .slot .msg { max-width: 100%; }
+  .typing { position: absolute; top: 0; left: 0; background: #1f2c34; border-radius: 26px; padding: 26px 30px; display: flex; gap: 10px;
+    animation: pop .3s ease var(--d) both, gone .2s ease var(--e) forwards; }
+  .typing i { width: 16px; height: 16px; border-radius: 50%; background: #8696a0; animation: dot 1s ease-in-out infinite; }
+  .typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+  @keyframes dot { 50% { transform: translateY(-10px); opacity: .5; } }
+  @keyframes gone { to { opacity: 0; visibility: hidden; } }
+  .toast { position: absolute; left: 50%; bottom: 330px; translate: -50% 0; background: rgba(139,195,74,.14); border: 2px solid var(--green);
+    color: var(--green); padding: 24px 40px; border-radius: 28px; font-size: 36px; font-weight: 800; white-space: nowrap; box-shadow: 0 0 50px rgba(139,195,74,.35); }
+  .clock { font-size: 220px; font-weight: 900; letter-spacing: -6px; line-height: 1; }
+  .caption { position: absolute; top: 230px; left: 0; right: 0; text-align: center; font-size: 46px; font-weight: 800; }
+</style></head>
+<body>
+  <div class="bg-glow a"></div><div class="bg-glow b"></div><div class="bg-grid"></div>
+  <div class="progress"></div>
+  <div class="brandbar"><img src="assets/hex.svg"><span>NEURAXIS <span class="ia">IA</span></span></div>
+
+  <!-- Escena 1: gancho -->
+  <section class="scene" style="--in:0s;--out:2.7s">
+    <div class="clock grad pop" style="--d:.1s">23:47</div>
+    <div class="h2 pop" style="--d:.6s;margin-top:40px">Tu peluquería<br>está cerrada.</div>
+    <div class="sub pop" style="--d:1.3s;margin-top:40px">Y un cliente te escribe…</div>
+  </section>
+
+  <!-- Escena 2: chat -->
+  <section class="scene" style="--in:2.9s;--out:11.8s">
+    <div class="caption pop" style="--d:3.1s">Tu <span class="cyan">agente de IA</span> responde por ti</div>
+    <div class="phone">
+      <div class="wa-head"><div class="av">✂️</div><div><div class="t1">Peluquería · Agente IA</div><div class="t2">en línea</div></div></div>
+      <div class="wa-body">
+        <div class="msg in pop" style="--d:3.6s">¡Hola! ¿Tenéis hueco mañana para un corte?<span class="time">23:47</span></div>
+        <div class="slot">
+          <div class="typing" style="--d:4.4s;--e:5.6s"><i></i><i></i><i></i></div>
+          <div class="msg out pop" style="--d:5.6s"><span class="bot">AGENTE IA</span>¡Hola! 👋 Mañana tengo libre a las <b>10:30</b>, <b>12:00</b> o <b>17:15</b>. ¿Cuál te viene mejor?<span class="time">23:47</span></div>
+        </div>
+        <div class="msg in pop" style="--d:7.3s">Las 17:15 perfecto 👌<span class="time">23:48</span></div>
+        <div class="slot">
+          <div class="typing" style="--d:8.0s;--e:9.1s"><i></i><i></i><i></i></div>
+          <div class="msg out pop" style="--d:9.1s"><span class="bot">AGENTE IA</span>¡Hecho! ✅ Mañana a las 17:15, corte. Te mando un recordatorio 2 horas antes.<span class="time">23:48</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="toast pop" style="--d:10.2s">📅 Cita añadida a la agenda</div>
+  </section>
+
+  <!-- Escena 3: giro -->
+  <section class="scene" style="--in:12s;--out:14.7s">
+    <div class="h2 pop" style="--d:12.1s">Mientras dormías,</div>
+    <div class="hook grad pop" style="--d:12.6s;margin-top:20px">tu negocio<br>siguió vendiendo.</div>
+    <div class="sub pop" style="--d:13.3s;margin-top:50px">Responde 24/7 en WhatsApp</div>
+  </section>
+
+  <!-- Escena 4: cierre -->
+  <section class="scene last endcard" style="--in:14.9s">
+    <img class="mascot" src="assets/nexmascot.png" style="--d:15s">
+    <div class="name grad pop" style="--d:15.3s">NEURAXIS</div>
+    <div class="sub tag pop" style="--d:15.6s">Agentes de IA para negocios locales</div>
+    <div class="cta pulse" style="--d:16s">Comenta “AGENTE” 👇</div>
+  </section>
+</body></html>
