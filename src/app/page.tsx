@@ -43,32 +43,31 @@ const HowItWorksNew = dynamic(
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
-const PLANS = [
+const SERVICES = [
   {
-    name: "Básico",
-    price: "desde 500€",
-    features: ["Automatización simple (1 workflow)", "Instalación incluida", "1 canal (WhatsApp o email)", "Soporte 30 días"],
-    cta: "Solicitar presupuesto",
-    href: "mailto:neuraxis.ia.global@gmail.com",
-    highlighted: false,
+    icon: "🌐",
+    title: "Páginas web para empresas",
+    desc: "Webs a medida, rápidas y pensadas para convertir visitas en clientes. Diseño único, adaptado a tu marca.",
+    features: ["Diseño a medida y responsive", "SEO desde el primer día", "Formularios y reservas conectados", "Lista en días, no en meses"],
+    color: "#7B2FBE",
   },
   {
-    name: "Avanzado",
-    price: "desde 900€",
-    features: ["Hasta 3 workflows conectados", "Instalación y configuración completa", "Multicanal (WhatsApp + email + web)", "Soporte 60 días", "Dashboard de métricas básico"],
-    cta: "Solicitar presupuesto",
-    href: "mailto:neuraxis.ia.global@gmail.com",
-    highlighted: true,
+    icon: "⚙️",
+    title: "Automatización de procesos",
+    desc: "Quitamos las tareas repetitivas de tu día a día y las dejamos funcionando solas, 24/7.",
+    features: ["Gmail y correo automático", "Chatbots para web y WhatsApp", "Conexión con tu CRM y tus herramientas", "Avisos, informes y seguimiento de clientes"],
+    color: "#00A8D6",
   },
   {
-    name: "Enterprise",
-    price: "desde 1.500€",
-    features: ["Automatización completa a medida", "Integraciones ilimitadas", "Equipo dedicado", "Soporte continuo", "Consultoría estratégica incluida"],
-    cta: "Hablar con el equipo",
-    href: "mailto:neuraxis.ia.global@gmail.com",
-    highlighted: false,
+    icon: "🎬",
+    title: "Contenido y marketing con IA",
+    desc: "Contenido constante y profesional para tus redes, sin que tengas que grabar ni editar nada.",
+    features: ["Vídeos y reels con IA", "Calendario de contenido mensual", "Guiones y textos que venden", "Imagen de marca coherente"],
+    color: "#00CC6A",
   },
 ];
+
+const CONTACT_HREF = "mailto:neuraxis.ia.global@gmail.com";
 
 
 const BRAND_GRADIENT = "linear-gradient(135deg, #7B2FBE 0%, #00A8D6 100%)";
@@ -83,7 +82,7 @@ const fadeUp = (delay = 0) => ({
 
 const NAV_LINKS = [
   { label: "Cómo funciona", href: "#como-funciona" },
-  { label: "Planes", href: "#planes" },
+  { label: "Servicios", href: "#servicios" },
 ];
 
 function Navbar() {
@@ -415,75 +414,97 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ── Pricing ─────────────────────────────────────────────────────── */}
-        <section id="planes" className="py-24 px-6" style={{ background: "#FFFFFF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
+        {/* ── Servicios ───────────────────────────────────────────────────── */}
+        <section id="servicios" className="py-24 px-6" style={{ background: "#FFFFFF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
           <div className="max-w-6xl mx-auto">
             <motion.div {...fadeUp(0.05)} className="text-center mb-14">
+              <div
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5"
+                style={{
+                  background: "rgba(0,168,214,0.08)",
+                  color: "#00A8D6",
+                  border: "1px solid rgba(0,168,214,0.18)",
+                }}
+              >
+                Nuestros servicios
+              </div>
               <h2
                 className="text-3xl font-bold mb-3"
                 style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
               >
-                Elige tu plan
+                Todo lo que tu empresa necesita para{" "}
+                <span
+                  style={{
+                    background: BRAND_GRADIENT,
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  crecer con IA
+                </span>
               </h2>
-              <p style={{ color: "rgba(0,0,0,0.45)" }}>
-                Empieza gratis. Escala cuando tu agencia crezca.
+              <p className="max-w-xl mx-auto" style={{ color: "rgba(0,0,0,0.45)" }}>
+                Cada proyecto es a medida. Cuéntanos qué necesitas y te preparamos una propuesta adaptada a tu negocio.
               </p>
             </motion.div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
-              {PLANS.map((plan, i) => (
+            <div className="grid md:grid-cols-3 gap-6 mb-12">
+              {SERVICES.map((s, i) => (
                 <motion.div
-                  key={i}
-                  {...fadeUp(0.05 * i)}
-                  className="relative flex flex-col p-6 rounded-2xl transition-all duration-300"
+                  key={s.title}
+                  {...fadeUp(0.08 * i)}
+                  className="relative flex flex-col p-7 rounded-2xl transition-all duration-300"
                   style={{
-                    background: plan.highlighted ? "rgba(123,47,190,0.04)" : "#F8F9FF",
-                    border: plan.highlighted
-                      ? "1px solid rgba(123,47,190,0.35)"
-                      : "1px solid rgba(0,0,0,0.07)",
-                    boxShadow: plan.highlighted
-                      ? "0 1px 3px rgba(0,0,0,0.4)"
-                      : "none",
+                    background: "#F8F9FF",
+                    border: "1px solid rgba(0,0,0,0.07)",
                   }}
                   onMouseEnter={(e) => {
-                    if (!plan.highlighted) {
-                      e.currentTarget.style.borderColor = "rgba(123,47,190,0.2)";
-                    }
+                    e.currentTarget.style.borderColor = s.color + "55";
+                    e.currentTarget.style.boxShadow = `0 4px 24px ${s.color}14`;
                   }}
                   onMouseLeave={(e) => {
-                    if (!plan.highlighted) {
-                      e.currentTarget.style.borderColor = "rgba(0,0,0,0.07)";
-                    }
+                    e.currentTarget.style.borderColor = "rgba(0,0,0,0.07)";
+                    e.currentTarget.style.boxShadow = "none";
                   }}
                 >
-                  <h3 className="text-base font-semibold mb-1" style={{ color: "#1a1a2e" }}>{plan.name}</h3>
-                  <div className="mb-5">
-                    <span className="text-3xl font-black" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}>
-                      {plan.price}
+                  <div className="flex items-center justify-between mb-5">
+                    <span
+                      className="text-5xl font-black leading-none select-none"
+                      style={{
+                        background: BRAND_GRADIENT,
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }}
+                    >
+                      {String(i + 1).padStart(2, "0")}
                     </span>
+                    <span className="text-3xl">{s.icon}</span>
                   </div>
+                  <h3
+                    className="text-xl font-bold mb-3"
+                    style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
+                  >
+                    {s.title}
+                  </h3>
+                  <p className="text-sm mb-5 leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>
+                    {s.desc}
+                  </p>
                   <ul className="space-y-2.5 mb-7 flex-1">
-                    {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm" style={{ color: "rgba(0,0,0,0.55)" }}>
-                        <span style={{ color: "#7B2FBE", flexShrink: 0, marginTop: 1 }}>✓</span>
+                    {s.features.map((f) => (
+                      <li key={f} className="flex items-start gap-2 text-sm" style={{ color: "rgba(0,0,0,0.6)" }}>
+                        <span style={{ color: s.color, flexShrink: 0, marginTop: 1 }}>✓</span>
                         {f}
                       </li>
                     ))}
                   </ul>
-                  <a href={plan.href}>
+                  <a href={CONTACT_HREF}>
                     <button
                       className="w-full py-2.5 text-sm font-bold rounded-xl transition-all hover:opacity-90 hover:scale-[1.02]"
-                      style={
-                        plan.highlighted
-                          ? { background: BRAND_GRADIENT, color: "white" }
-                          : {
-                              background: "rgba(0,0,0,0.04)",
-                              color: "rgba(0,0,0,0.6)",
-                              border: "1px solid rgba(0,0,0,0.08)",
-                            }
-                      }
+                      style={{ background: BRAND_GRADIENT, color: "white" }}
                     >
-                      {plan.cta}
+                      Pedir presupuesto
                     </button>
                   </a>
                 </motion.div>
@@ -500,250 +521,6 @@ export default function LandingPage() {
                 style={{ filter: "drop-shadow(0 8px 32px rgba(155,48,255,0.3))" }}
               />
             </div>
-          </div>
-        </section>
-
-        {/* ── Web Service ─────────────────────────────────────────────────── */}
-        <section className="py-24 px-6" style={{ background: "#F8F9FF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
-          <div className="max-w-6xl mx-auto">
-            <motion.div {...fadeUp(0.05)} className="text-center mb-14">
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5"
-                style={{
-                  background: "rgba(0,168,214,0.08)",
-                  color: "#00A8D6",
-                  border: "1px solid rgba(0,168,214,0.18)",
-                }}
-              >
-                Servicio adicional
-              </div>
-              <h2
-                className="text-3xl font-bold mb-3"
-                style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
-              >
-                Tu negocio merece una web{" "}
-                <span style={{ color: "#00A8D6" }}>que venda</span>
-              </h2>
-              <p className="max-w-xl mx-auto" style={{ color: "rgba(0,0,0,0.45)" }}>
-                Diseñamos y desarrollamos tu presencia online desde cero.
-              </p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-3 gap-5 mb-10">
-              {[
-                {
-                  icon: "🎨",
-                  title: "Diseño único y a medida",
-                  desc: "Cada web creada desde cero, adaptada a tu marca y pensada para convertir visitantes en clientes.",
-                  color: "#7B2FBE",
-                },
-                {
-                  icon: "🔍",
-                  title: "SEO desde el primer día",
-                  desc: "Optimización técnica incluida: velocidad, estructura, metadatos y contenido indexable desde el lanzamiento.",
-                  color: "#00A8D6",
-                },
-                {
-                  icon: "⚡",
-                  title: "Entrega en 7 días",
-                  desc: "Proceso ágil y directo. Sin reuniones interminables, sin sorpresas. Tu web lista en una semana.",
-                  color: "#00CC6A",
-                },
-              ].map((card, i) => (
-                <motion.div
-                  key={i}
-                  {...fadeUp(0.08 * i)}
-                  className="p-6 rounded-2xl transition-all duration-200 group"
-                  style={{
-                    background: "#FFFFFF",
-                    border: "1px solid rgba(0,0,0,0.07)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = card.color + "40";
-                    e.currentTarget.style.boxShadow = `0 4px 20px ${card.color}12`;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(0,0,0,0.07)";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
-                >
-                  <div className="text-3xl mb-4">{card.icon}</div>
-                  <h3 className="font-semibold text-base mb-2" style={{ color: "#1a1a2e" }}>{card.title}</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>
-                    {card.desc}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="text-center">
-              <a href="#web">
-                <button
-                  className="px-6 py-3 text-sm font-semibold rounded-xl transition-all hover:scale-105"
-                  style={{
-                    background: "transparent",
-                    color: "#00A8D6",
-                    border: "1px solid rgba(0,196,255,0.4)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(0,168,214,0.07)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "transparent";
-                  }}
-                >
-                  Ver precios →
-                </button>
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Crea tu web ─────────────────────────────────────────────────── */}
-        <section id="web" className="py-24 px-6" style={{ background: "#F8F9FF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
-          <div className="max-w-5xl mx-auto">
-            <motion.div {...fadeUp(0.05)} className="text-center mb-14">
-              <h2
-                className="text-3xl font-bold mb-3"
-                style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
-              >
-                ¿Necesitas una web profesional?
-              </h2>
-              <p className="max-w-xl mx-auto" style={{ color: "rgba(0,0,0,0.45)" }}>
-                Diseñamos y desarrollamos tu página web desde cero. Rápido, moderno y optimizado para convertir.
-              </p>
-            </motion.div>
-
-            <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
-              {[
-                {
-                  name: "Landing page",
-                  price: "desde 500€",
-                  features: ["Entrega en 7 días", "Diseño moderno y responsive", "SEO básico incluido"],
-                  highlighted: false,
-                },
-                {
-                  name: "Web completa",
-                  price: "desde 1.200€",
-                  features: ["Entrega en 15 días", "Diseño personalizado", "Panel de gestión incluido", "Integración con tus herramientas"],
-                  highlighted: true,
-                },
-              ].map((plan, i) => (
-                <motion.div
-                  key={plan.name}
-                  {...fadeUp(0.08 * i)}
-                  className="relative flex flex-col p-6 rounded-2xl transition-all duration-300"
-                  style={{
-                    background: plan.highlighted ? "rgba(123,47,190,0.04)" : "#FFFFFF",
-                    border: plan.highlighted
-                      ? "1px solid rgba(123,47,190,0.35)"
-                      : "1px solid rgba(0,168,214,0.15)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = "0 4px 24px rgba(123,47,190,0.08)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
-                >
-                  <h3 className="text-base font-semibold mb-1" style={{ color: "#1a1a2e" }}>{plan.name}</h3>
-                  <div className="mb-5">
-                    <span className="text-3xl font-black" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}>
-                      {plan.price}
-                    </span>
-                  </div>
-                  <ul className="space-y-2.5 mb-7 flex-1">
-                    {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm" style={{ color: "rgba(0,0,0,0.55)" }}>
-                        <span style={{ color: "#7B2FBE", flexShrink: 0, marginTop: 1 }}>✓</span>
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <a href="mailto:neuraxis.ia.global@gmail.com">
-                    <button
-                      className="w-full py-2.5 text-sm font-bold rounded-xl transition-all hover:opacity-90 hover:scale-[1.02]"
-                      style={
-                        plan.highlighted
-                          ? { background: BRAND_GRADIENT, color: "white" }
-                          : { background: "rgba(0,0,0,0.04)", color: "rgba(0,0,0,0.6)", border: "1px solid rgba(0,0,0,0.08)" }
-                      }
-                    >
-                      Solicitar mi web
-                    </button>
-                  </a>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── Revly ───────────────────────────────────────────────────────── */}
-        <section className="py-20 px-6" style={{ background: "#FFFFFF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
-          <div className="max-w-5xl mx-auto">
-            <motion.div
-              {...fadeUp(0.05)}
-              className="rounded-2xl p-10 md:p-14 text-center relative overflow-hidden"
-              style={{
-                background: "#F0FAFF",
-                border: "1px solid rgba(0,168,214,0.2)",
-              }}
-            >
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background:
-                    "radial-gradient(ellipse at center, rgba(0,196,255,0.05) 0%, transparent 70%)",
-                }}
-              />
-              <div className="relative z-10">
-                <div
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6"
-                  style={{
-                    background: "rgba(0,168,214,0.07)",
-                    color: "#00A8D6",
-                    border: "1px solid rgba(0,196,255,0.2)",
-                  }}
-                >
-                  Creado por Neuraxis
-                </div>
-                <h2
-                  className="text-3xl font-bold mb-4"
-                  style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
-                >
-                  Conoce <span style={{ color: "#00A8D6" }}>Revly</span> — tu agente de ventas en WhatsApp
-                </h2>
-                <p
-                  className="text-lg mb-8 leading-relaxed max-w-2xl mx-auto"
-                  style={{ color: "rgba(0,0,0,0.5)" }}
-                >
-                  Responde clientes 24/7, califica leads y cierra ventas mientras duermes.
-                </p>
-                <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-                  {["500 conversaciones/mes desde €14.99", "Setup en minutos", "Sin conocimientos técnicos"].map((pill) => (
-                    <span
-                      key={pill}
-                      className="px-3.5 py-1.5 rounded-full text-xs font-medium"
-                      style={{
-                        background: "rgba(0,168,214,0.07)",
-                        color: "#00A8D6",
-                        border: "1px solid rgba(0,196,255,0.18)",
-                      }}
-                    >
-                      {pill}
-                    </span>
-                  ))}
-                </div>
-                <a href="https://revly.app" target="_blank" rel="noopener noreferrer">
-                  <button
-                    className="px-8 py-3.5 text-sm font-bold rounded-xl transition-all hover:scale-105 hover:opacity-90"
-                    style={{ background: BRAND_GRADIENT, color: "white" }}
-                  >
-                    Probar Revly gratis →
-                  </button>
-                </a>
-              </div>
-            </motion.div>
           </div>
         </section>
 
@@ -860,10 +637,9 @@ export default function LandingPage() {
                 </h4>
                 <ul className="space-y-2.5">
                   {[
-                    { label: "Crea tu Web", href: "/web" },
-                    { label: "Revly", href: "https://revly.app" },
-                    { label: "Delegar", href: "/delegate" },
-                    { label: "Planes", href: "/billing" },
+                    { label: "Servicios", href: "#servicios" },
+                    { label: "Cómo funciona", href: "#como-funciona" },
+                    { label: "Contacto", href: CONTACT_HREF },
                   ].map((l) => (
                     <li key={l.label}>
                       <a
