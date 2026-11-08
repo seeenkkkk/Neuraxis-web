@@ -266,8 +266,8 @@ export default function LandingPage() {
         >
           <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-center gap-3 text-sm"
             style={{ color: "rgba(0,0,0,0.35)" }}>
-            <span>Usado por agencias en</span>
-            {["Madrid", "Barcelona", "Valencia", "Sevilla", "Bilbao", "Málaga"].map((city, i) => (
+            <span>Lo que hacemos:</span>
+            {["Webs a medida", "SEO", "Chatbots", "Automatizaciones", "Reels con IA", "Contenido para redes"].map((city, i) => (
               <span key={city} className="flex items-center gap-3">
                 {i > 0 && <span style={{ color: "#00A8D6", fontSize: "7px" }}>●</span>}
                 {city}
@@ -591,7 +591,7 @@ export default function LandingPage() {
                   className="h-8 object-contain mb-4"
                 />
                 <p className="text-sm leading-relaxed" style={{ color: "rgba(0,0,0,0.4)" }}>
-                  La plataforma para construir y escalar tu agencia de IA en España.
+                  Webs, automatizaciones y contenido con IA para empresas que quieren crecer.
                 </p>
               </div>
               {/* Producto */}
