@@ -289,7 +289,7 @@ export default function LandingPage() {
                 className="text-3xl font-bold mb-3"
                 style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
               >
-                Un sistema de{" "}
+                Por qué elegir{" "}
                 <span
                   style={{
                     background: BRAND_GRADIENT,
@@ -298,10 +298,10 @@ export default function LandingPage() {
                     backgroundClip: "text",
                   }}
                 >
-                  2 capas de valor
+                  Neuraxis
                 </span>
               </h2>
-              <p style={{ color: "rgba(0,0,0,0.45)" }}>Empieza donde estás. Escala cuando quieras.</p>
+              <p style={{ color: "rgba(0,0,0,0.45)" }}>Diseño, tecnología e IA en un mismo equipo.</p>
             </motion.div>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -336,16 +336,16 @@ export default function LandingPage() {
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">🤖</span>
+                  <span className="text-2xl">✨</span>
                   <h3 className="text-2xl font-bold" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}>
-                    Construye
+                    Hecho a medida
                   </h3>
                 </div>
                 <p className="text-sm mb-5 leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>
-                  Despliega agentes de IA propios. Desde un agente básico hasta integraciones enterprise completas.
+                  Nada de plantillas. Tu web y tu contenido se crean desde cero para tu marca y tu tipo de cliente.
                 </p>
                 <ul className="space-y-2.5">
-                  {["Crea agentes IA en minutos", "Sin código, sin fricciones", "Entrena con tus datos", "Múltiples canales"].map((item) => (
+                  {["Diseño único para tu marca", "Pensado para convertir visitas en clientes", "Contenido con tu tono y tu estilo", "Web y redes con la misma imagen"].map((item) => (
                     <li key={item} className="flex items-center gap-2.5 text-sm" style={{ color: "rgba(0,0,0,0.6)" }}>
                       <span style={{ color: "#7B2FBE" }}>✓</span>
                       {item}
@@ -395,14 +395,14 @@ export default function LandingPage() {
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-2xl">🚀</span>
                   <h3 className="text-2xl font-bold" style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}>
-                    Delega
+                    Nos encargamos de todo
                   </h3>
                 </div>
                 <p className="text-sm mb-5 leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>
-                  Implementación llave en mano. Nuestro equipo construye, configura y mantiene tu sistema de IA.
+                  Tú nos cuentas qué necesitas y nosotros lo hacemos realidad. Sin tecnicismos y sin perder tu tiempo.
                 </p>
                 <ul className="space-y-2.5">
-                  {["Expertos en automatización IA", "Setup completo en 48h", "Soporte continuo dedicado", "ROI garantizado"].map((item) => (
+                  {["Un único equipo para web y contenido", "Entregas rápidas y sin sorpresas", "La IA trabaja a tu favor", "Soporte cercano cuando lo necesites"].map((item) => (
                     <li key={item} className="flex items-center gap-2.5 text-sm" style={{ color: "rgba(0,0,0,0.6)" }}>
                       <span style={{ color: "#00A8D6" }}>✓</span>
                       {item}

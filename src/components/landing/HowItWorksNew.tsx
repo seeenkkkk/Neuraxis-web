@@ -8,31 +8,32 @@ const BRAND_GRADIENT = "linear-gradient(135deg, #7B2FBE 0%, #00A8D6 100%)";
 const STEPS = [
   {
     num: "01",
-    title: "Elige tu automatización",
-    desc: "Selecciona el workflow que necesita tu negocio. Tenemos soluciones para WhatsApp, email, captación de leads y mucho más.",
+    title: "Nos cuentas tu negocio",
+    desc: "Una llamada corta para conocer tu marca, tus clientes y qué quieres conseguir: más visitas, más ventas o más presencia en redes.",
     icon: (
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="24" cy="24" r="8" stroke="#7B2FBE" strokeWidth="2.5" fill="none"/>
-        <path d="M24 4v6M24 38v6M4 24h6M38 24h6" stroke="#7B2FBE" strokeWidth="2.5" strokeLinecap="round"/>
-        <path d="M10.1 10.1l4.24 4.24M33.66 33.66l4.24 4.24M10.1 37.9l4.24-4.24M33.66 14.34l4.24-4.24" stroke="#00A8D6" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M8 10h32a2 2 0 0 1 2 2v18a2 2 0 0 1-2 2H20l-8 7v-7H8a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2Z" stroke="#7B2FBE" strokeWidth="2.5" strokeLinejoin="round"/>
+        <path d="M15 19h18M15 25h11" stroke="#00A8D6" strokeWidth="2.5" strokeLinecap="round"/>
       </svg>
     ),
   },
   {
     num: "02",
-    title: "Lo instalamos por ti",
-    desc: "Nuestro equipo conecta todo con tus credenciales y herramientas. Sin código, sin complicaciones, en 24-48 horas.",
+    title: "Creamos tu web y tu contenido",
+    desc: "Diseñamos tu web a medida y preparamos vídeos, reels y publicaciones con IA, todo con la misma imagen de marca.",
     icon: (
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M24 6L30 18H42L32 26L36 38L24 30L12 38L16 26L6 18H18L24 6Z" stroke="#7B2FBE" strokeWidth="2.5" strokeLinejoin="round" fill="none"/>
-        <path d="M24 14v10M24 24l6 4" stroke="#00A8D6" strokeWidth="2" strokeLinecap="round"/>
+        <rect x="5" y="8" width="38" height="28" rx="3" stroke="#7B2FBE" strokeWidth="2.5"/>
+        <path d="M5 15h38" stroke="#7B2FBE" strokeWidth="2.5"/>
+        <path d="M21 21v10l8-5-8-5Z" stroke="#00A8D6" strokeWidth="2.2" strokeLinejoin="round"/>
+        <path d="M16 42h16" stroke="#7B2FBE" strokeWidth="2" strokeLinecap="round" opacity="0.3"/>
       </svg>
     ),
   },
   {
     num: "03",
-    title: "Empieza a generar resultados",
-    desc: "Tu negocio trabaja solo mientras tú te dedicas a crecer. Mide resultados desde el primer día.",
+    title: "Lanzas y creces",
+    desc: "Publicamos, medimos qué funciona y lo mejoramos. Tú te ocupas de tus clientes; nosotros, de que te encuentren.",
     icon: (
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M6 38L16 26L22 32L30 18L42 10" stroke="#7B2FBE" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -162,7 +163,7 @@ export default function HowItWorksNew() {
             </span>
           </h2>
           <p className="text-lg max-w-lg mx-auto" style={{ color: "rgba(0,0,0,0.4)" }}>
-            Tres pasos simples para automatizar tu negocio sin complicaciones.
+            De la idea a una web que vende y unas redes que no paran, en tres pasos.
           </p>
         </motion.div>
 
