@@ -40,6 +40,10 @@ const HowItWorksNew = dynamic(
   () => import("../components/landing/HowItWorksNew"),
   { ssr: false }
 );
+const ScrollJourney = dynamic(
+  () => import("../components/landing/ScrollJourney"),
+  { ssr: false }
+);
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
@@ -413,6 +417,9 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
+        {/* ── Scroll Journey (prototipo tipo Apple) ─────────────────────── */}
+        <ScrollJourney />
 
         {/* ── Servicios ───────────────────────────────────────────────────── */}
         <section id="servicios" className="py-24 px-6" style={{ background: "#FFFFFF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>

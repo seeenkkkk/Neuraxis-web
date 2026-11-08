@@ -62,7 +62,8 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 html, body {
   background: var(--bg-root);
   color: var(--text-primary);
-  overflow-x: hidden;
+  /* clip (no hidden): evita el scroll horizontal sin romper position: sticky */
+  overflow-x: clip;
 }
 
 /* ─── Scrollbar ──────────────────────────────────── */
