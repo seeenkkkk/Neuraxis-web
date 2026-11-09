@@ -34,3 +34,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# oficina de agentes: entregables pesados
+/oficina/**/*.mp4
+/oficina/**/*.mov
+/oficina/**/*.png
