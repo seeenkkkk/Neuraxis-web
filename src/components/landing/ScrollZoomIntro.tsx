@@ -143,7 +143,7 @@ export default function ScrollZoomIntro() {
   }, []);
 
   return (
-    <div ref={containerRef} style={{ height: "200vh", position: "relative" }}>
+    <div ref={containerRef} style={{ height: "160vh", position: "relative" }}>
       <div
         ref={stickyRef}
         style={{
@@ -234,7 +234,7 @@ export default function ScrollZoomIntro() {
               fontFamily: "var(--font-syne, sans-serif)",
             }}
           >
-            Automatización Inteligente
+            Webs · Automatización · Contenido con IA
           </p>
         </div>
 

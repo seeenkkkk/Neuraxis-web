@@ -1,9 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import SmoothScrollProvider from "../components/landing/SmoothScrollProvider";
+import HeroNew from "../components/landing/HeroNew";
+import HowItWorksNew from "../components/landing/HowItWorksNew";
+import { CONTACT_HREF, IG_DM_HREF, IG_PROFILE_HREF, IG_HANDLE } from "../lib/contact";
 
 // ── Global effects (dynamic = no SSR) ─────────────────────────────────────
 const LoadingScreen = dynamic(
@@ -18,10 +21,6 @@ const ScrollProgressBar = dynamic(
   () => import("../components/landing/ScrollProgressBar"),
   { ssr: false }
 );
-const SmoothScrollProvider = dynamic(
-  () => import("../components/landing/SmoothScrollProvider"),
-  { ssr: false }
-);
 
 // ── New sections ───────────────────────────────────────────────────────────
 const BackgroundCanvas = dynamic(
@@ -30,14 +29,6 @@ const BackgroundCanvas = dynamic(
 );
 const ScrollZoomIntro = dynamic(
   () => import("../components/landing/ScrollZoomIntro"),
-  { ssr: false }
-);
-const HeroNew = dynamic(
-  () => import("../components/landing/HeroNew"),
-  { ssr: false }
-);
-const HowItWorksNew = dynamic(
-  () => import("../components/landing/HowItWorksNew"),
   { ssr: false }
 );
 const ScrollJourney = dynamic(
@@ -71,7 +62,6 @@ const SERVICES = [
   },
 ];
 
-const CONTACT_HREF = "mailto:neuraxis.ia.global@gmail.com";
 
 
 const BRAND_GRADIENT = "linear-gradient(135deg, #7B2FBE 0%, #00A8D6 100%)";
@@ -85,8 +75,9 @@ const fadeUp = (delay = 0) => ({
 // ── Navbar ────────────────────────────────────────────────────────────────────
 
 const NAV_LINKS = [
-  { label: "Cómo funciona", href: "#como-funciona" },
   { label: "Servicios", href: "#servicios" },
+  { label: "Cómo funciona", href: "#como-funciona" },
+  { label: "Por qué Neuraxis", href: "#por-que" },
 ];
 
 function Navbar() {
@@ -166,14 +157,14 @@ function Navbar() {
 
         {/* CTA buttons */}
         <div className="hidden md:flex items-center gap-3">
-          <a href="mailto:neuraxis.ia.global@gmail.com">
+          <a href={CONTACT_HREF}>
             <motion.button
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
               className="px-5 py-2.5 text-sm font-bold rounded-xl text-white"
               style={{ background: BRAND_GRADIENT }}
             >
-              Contactar
+              Pedir presupuesto
             </motion.button>
           </a>
         </div>
@@ -222,12 +213,12 @@ function Navbar() {
               {l.label}
             </a>
           ))}
-          <a href="mailto:neuraxis.ia.global@gmail.com">
+          <a href={CONTACT_HREF}>
             <button
               className="w-full py-3 text-sm font-bold rounded-xl text-white"
               style={{ background: BRAND_GRADIENT }}
             >
-              Contactar
+              Pedir presupuesto
             </button>
           </a>
         </motion.div>
@@ -280,13 +271,128 @@ export default function LandingPage() {
           </div>
         </div>
 
+        {/* ── Scroll Journey (prototipo tipo Apple) ─────────────────────── */}
+        <ScrollJourney />
+
+        {/* ── Servicios ───────────────────────────────────────────────────── */}
+        <section id="servicios" className="py-24 px-6" style={{ background: "#FFFFFF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
+          <div className="max-w-6xl mx-auto">
+            <motion.div {...fadeUp(0.05)} className="text-center mb-14">
+              <div
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5"
+                style={{
+                  background: "rgba(0,168,214,0.08)",
+                  color: "#00A8D6",
+                  border: "1px solid rgba(0,168,214,0.18)",
+                }}
+              >
+                Nuestros servicios
+              </div>
+              <h2
+                className="text-3xl font-bold mb-3"
+                style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
+              >
+                Todo lo que tu empresa necesita para{" "}
+                <span
+                  style={{
+                    background: BRAND_GRADIENT,
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  crecer con IA
+                </span>
+              </h2>
+              <p className="max-w-xl mx-auto" style={{ color: "rgba(0,0,0,0.45)" }}>
+                Cada proyecto es a medida. Cuéntanos qué necesitas y te preparamos una propuesta adaptada a tu negocio.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-6 mb-12">
+              {SERVICES.map((s, i) => (
+                <motion.div
+                  key={s.title}
+                  {...fadeUp(0.08 * i)}
+                  className="relative flex flex-col p-7 rounded-2xl transition-all duration-300"
+                  style={{
+                    background: "#F8F9FF",
+                    border: "1px solid rgba(0,0,0,0.07)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = s.color + "55";
+                    e.currentTarget.style.boxShadow = `0 4px 24px ${s.color}14`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(0,0,0,0.07)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-5">
+                    <span
+                      className="text-5xl font-black leading-none select-none"
+                      style={{
+                        background: BRAND_GRADIENT,
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="text-3xl">{s.icon}</span>
+                  </div>
+                  <h3
+                    className="text-xl font-bold mb-3"
+                    style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
+                  >
+                    {s.title}
+                  </h3>
+                  <p className="text-sm mb-5 leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>
+                    {s.desc}
+                  </p>
+                  <ul className="space-y-2.5 mb-7 flex-1">
+                    {s.features.map((f) => (
+                      <li key={f} className="flex items-start gap-2 text-sm" style={{ color: "rgba(0,0,0,0.6)" }}>
+                        <span style={{ color: s.color, flexShrink: 0, marginTop: 1 }}>✓</span>
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <a href={CONTACT_HREF}>
+                    <button
+                      className="w-full py-2.5 text-sm font-bold rounded-xl transition-all hover:opacity-90 hover:scale-[1.02]"
+                      style={{ background: BRAND_GRADIENT, color: "white" }}
+                    >
+                      Pedir presupuesto
+                    </button>
+                  </a>
+                </motion.div>
+              ))}
+            </div>
+
+            <p className="text-center text-sm" style={{ color: "rgba(0,0,0,0.55)" }}>
+              ¿Prefieres escribirnos por Instagram?{" "}
+              <a
+                href={IG_DM_HREF}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold underline underline-offset-4"
+                style={{ color: "#7B2FBE" }}
+              >
+                Mándanos un mensaje a {IG_HANDLE}
+              </a>
+            </p>
+          </div>
+        </section>
+
         {/* ── How It Works (NEW) ──────────────────────────────────────────── */}
         <div style={{ borderTop: "1px solid rgba(0,168,214,0.2)" }}>
           <HowItWorksNew />
         </div>
 
         {/* ── Value Section ───────────────────────────────────────────────── */}
-        <section className="py-24 px-6" style={{ background: "#FFFFFF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
+        <section id="por-que" className="py-24 px-6" style={{ background: "#FFFFFF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
           <div className="max-w-6xl mx-auto">
             <motion.div {...fadeUp(0.05)} className="text-center mb-14">
               <h2
@@ -418,119 +524,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ── Scroll Journey (prototipo tipo Apple) ─────────────────────── */}
-        <ScrollJourney />
-
-        {/* ── Servicios ───────────────────────────────────────────────────── */}
-        <section id="servicios" className="py-24 px-6" style={{ background: "#FFFFFF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
-          <div className="max-w-6xl mx-auto">
-            <motion.div {...fadeUp(0.05)} className="text-center mb-14">
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5"
-                style={{
-                  background: "rgba(0,168,214,0.08)",
-                  color: "#00A8D6",
-                  border: "1px solid rgba(0,168,214,0.18)",
-                }}
-              >
-                Nuestros servicios
-              </div>
-              <h2
-                className="text-3xl font-bold mb-3"
-                style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
-              >
-                Todo lo que tu empresa necesita para{" "}
-                <span
-                  style={{
-                    background: BRAND_GRADIENT,
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  crecer con IA
-                </span>
-              </h2>
-              <p className="max-w-xl mx-auto" style={{ color: "rgba(0,0,0,0.45)" }}>
-                Cada proyecto es a medida. Cuéntanos qué necesitas y te preparamos una propuesta adaptada a tu negocio.
-              </p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-3 gap-6 mb-12">
-              {SERVICES.map((s, i) => (
-                <motion.div
-                  key={s.title}
-                  {...fadeUp(0.08 * i)}
-                  className="relative flex flex-col p-7 rounded-2xl transition-all duration-300"
-                  style={{
-                    background: "#F8F9FF",
-                    border: "1px solid rgba(0,0,0,0.07)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = s.color + "55";
-                    e.currentTarget.style.boxShadow = `0 4px 24px ${s.color}14`;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(0,0,0,0.07)";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
-                >
-                  <div className="flex items-center justify-between mb-5">
-                    <span
-                      className="text-5xl font-black leading-none select-none"
-                      style={{
-                        background: BRAND_GRADIENT,
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
-                      }}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="text-3xl">{s.icon}</span>
-                  </div>
-                  <h3
-                    className="text-xl font-bold mb-3"
-                    style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
-                  >
-                    {s.title}
-                  </h3>
-                  <p className="text-sm mb-5 leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>
-                    {s.desc}
-                  </p>
-                  <ul className="space-y-2.5 mb-7 flex-1">
-                    {s.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm" style={{ color: "rgba(0,0,0,0.6)" }}>
-                        <span style={{ color: s.color, flexShrink: 0, marginTop: 1 }}>✓</span>
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <a href={CONTACT_HREF}>
-                    <button
-                      className="w-full py-2.5 text-sm font-bold rounded-xl transition-all hover:opacity-90 hover:scale-[1.02]"
-                      style={{ background: BRAND_GRADIENT, color: "white" }}
-                    >
-                      Pedir presupuesto
-                    </button>
-                  </a>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Mascot */}
-            <div className="flex justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/avatar3.png-removebg-preview.png"
-                alt="Nex mascot happy"
-                className="w-36 mx-auto"
-                style={{ filter: "drop-shadow(0 8px 32px rgba(155,48,255,0.3))" }}
-              />
-            </div>
-          </div>
-        </section>
-
         {/* ── Final CTA ───────────────────────────────────────────────────── */}
         <section
           className="py-24 px-6 relative overflow-hidden"
@@ -563,21 +556,33 @@ export default function LandingPage() {
                 className="text-4xl font-black text-white mb-5"
                 style={{ fontFamily: "var(--font-syne, sans-serif)" }}
               >
-                Automatiza tu empresa hoy
+                ¿Hablamos de tu proyecto?
               </h2>
               <p className="text-xl mb-10" style={{ color: "rgba(255,255,255,0.8)" }}>
-                Cuéntanos qué necesitas automatizar.
+                Cuéntanos qué necesitas y te preparamos una propuesta sin compromiso.
               </p>
-              <a href="mailto:neuraxis.ia.global@gmail.com">
-                <motion.button
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <motion.a
+                  href={CONTACT_HREF}
                   whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(0,0,0,0.4)" }}
                   whileTap={{ scale: 0.97 }}
-                  className="px-10 py-4 font-black rounded-2xl text-base"
+                  className="w-full sm:w-auto px-10 py-4 font-black rounded-2xl text-base"
                   style={{ background: "#0D0D1A", color: "white" }}
                 >
-                  Contactar
-                </motion.button>
-              </a>
+                  Pedir presupuesto
+                </motion.a>
+                <motion.a
+                  href={IG_DM_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="w-full sm:w-auto px-10 py-4 font-black rounded-2xl text-base"
+                  style={{ background: "rgba(255,255,255,0.14)", color: "white", border: "1px solid rgba(255,255,255,0.45)" }}
+                >
+                  Escríbenos por Instagram
+                </motion.a>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -601,97 +606,56 @@ export default function LandingPage() {
                   Webs, automatizaciones y contenido con IA para empresas que quieren crecer.
                 </p>
               </div>
-              {/* Producto */}
+              {/* Servicios */}
               <div>
-                <h4
-                  className="text-xs font-semibold uppercase tracking-widest mb-4"
-                  style={{ color: "rgba(0,0,0,0.3)" }}
-                >
-                  Producto
+                <h4 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "rgba(0,0,0,0.5)" }}>
+                  Servicios
                 </h4>
                 <ul className="space-y-2.5">
-                  {[
-                    { label: "Dashboard", href: "/dashboard" },
-                    { label: "Agentes IA", href: "/agents" },
-                    { label: "Neuraxis Chat", href: "/chat" },
-                    { label: "Workflows", href: "/workflows" },
-                  ].map((l) => (
-                    <li key={l.label}>
-                      <Link
-                        href={l.href}
-                        className="text-sm transition-colors"
-                        style={{ color: "rgba(0,0,0,0.5)" }}
-                        onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) =>
-                          (e.currentTarget.style.color = "#1a1a2e")
-                        }
-                        onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) =>
-                          (e.currentTarget.style.color = "rgba(0,0,0,0.5)")
-                        }
-                      >
-                        {l.label}
-                      </Link>
+                  {SERVICES.map((sv) => (
+                    <li key={sv.title}>
+                      <a href="#servicios" className="text-sm transition-colors text-black/60 hover:text-[#1a1a2e]">
+                        {sv.title}
+                      </a>
                     </li>
                   ))}
                 </ul>
               </div>
               {/* Empresa */}
               <div>
-                <h4
-                  className="text-xs font-semibold uppercase tracking-widest mb-4"
-                  style={{ color: "rgba(0,0,0,0.3)" }}
-                >
+                <h4 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "rgba(0,0,0,0.5)" }}>
                   Empresa
                 </h4>
                 <ul className="space-y-2.5">
                   {[
-                    { label: "Servicios", href: "#servicios" },
                     { label: "Cómo funciona", href: "#como-funciona" },
-                    { label: "Contacto", href: CONTACT_HREF },
+                    { label: "Por qué Neuraxis", href: "#por-que" },
+                    { label: "Área de clientes", href: "/login" },
                   ].map((l) => (
                     <li key={l.label}>
-                      <a
-                        href={l.href}
-                        className="text-sm transition-colors"
-                        style={{ color: "rgba(0,0,0,0.5)" }}
-                        onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) =>
-                          (e.currentTarget.style.color = "#1a1a2e")
-                        }
-                        onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) =>
-                          (e.currentTarget.style.color = "rgba(0,0,0,0.5)")
-                        }
-                      >
+                      <a href={l.href} className="text-sm transition-colors text-black/60 hover:text-[#1a1a2e]">
                         {l.label}
                       </a>
                     </li>
                   ))}
                 </ul>
               </div>
-              {/* Legal */}
+              {/* Contacto */}
               <div>
-                <h4
-                  className="text-xs font-semibold uppercase tracking-widest mb-4"
-                  style={{ color: "rgba(0,0,0,0.3)" }}
-                >
-                  Legal
+                <h4 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "rgba(0,0,0,0.5)" }}>
+                  Contacto
                 </h4>
                 <ul className="space-y-2.5">
-                  {["Términos de uso", "Privacidad", "Cookies", "Contacto"].map((l) => (
-                    <li key={l}>
-                      <Link
-                        href="/"
-                        className="text-sm transition-colors"
-                        style={{ color: "rgba(0,0,0,0.5)" }}
-                        onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) =>
-                          (e.currentTarget.style.color = "#1a1a2e")
-                        }
-                        onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) =>
-                          (e.currentTarget.style.color = "rgba(0,0,0,0.5)")
-                        }
-                      >
-                        {l}
-                      </Link>
-                    </li>
-                  ))}
+                  <li>
+                    <a href={CONTACT_HREF} className="text-sm transition-colors text-black/60 hover:text-[#1a1a2e]">
+                      Pedir presupuesto por correo
+                    </a>
+                  </li>
+                  <li>
+                    <a href={IG_PROFILE_HREF} target="_blank" rel="noopener noreferrer" className="text-sm transition-colors text-black/60 hover:text-[#1a1a2e]">
+                      Instagram {IG_HANDLE}
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -701,7 +665,7 @@ export default function LandingPage() {
               style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}
             >
               <p className="text-xs" style={{ color: "rgba(0,0,0,0.3)" }}>
-                © 2025 Neuraxis IA · Todos los derechos reservados
+                © {new Date().getFullYear()} Neuraxis IA · Todos los derechos reservados
               </p>
               <p className="text-xs" style={{ color: "rgba(0,0,0,0.3)" }}>
                 Hecho con ❤️ en España

@@ -101,7 +101,7 @@ export default function BackgroundCanvas() {
       {/* CAPA 1 — imagen estática de fondo */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/images/bg-3d.png"
+        src="/images/bg-3d.webp"
         alt=""
         style={{
           position: 'fixed',

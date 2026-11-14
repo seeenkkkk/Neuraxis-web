@@ -15,7 +15,7 @@ export default function LoadingScreen() {
       });
     }, 110);
 
-    const hide = setTimeout(() => setShow(false), 2400);
+    const hide = setTimeout(() => setShow(false), 1400);
     return () => { clearInterval(interval); clearTimeout(hide); };
   }, []);
 
