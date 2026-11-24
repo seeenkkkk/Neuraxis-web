@@ -32,10 +32,10 @@ const ScrollZoomIntro = dynamic(
   () => import("../components/landing/ScrollZoomIntro"),
   { ssr: false }
 );
-// const ScrollJourney = dynamic(
-//   () => import("../components/landing/ScrollJourney"),
-//   { ssr: false }
-// );
+const ScrollJourney = dynamic(
+  () => import("../components/landing/ScrollJourney"),
+  { ssr: false }
+);
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
@@ -266,7 +266,7 @@ export default function LandingPage() {
         </div>
 
         {/* ── Scroll Journey (prototipo tipo Apple) ─────────────────────── */}
-        {/* ScrollJourney desactivado: su 3.ª escena era de contenido/reels. Reactivar cuando se ofrezca. */}
+        <ScrollJourney />
 
         {/* ── Servicios ───────────────────────────────────────────────────── */}
         <section id="servicios" className="py-24 px-6" style={{ background: "#FFFFFF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>

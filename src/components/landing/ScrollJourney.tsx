@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
  * "conduce" una cámara que entra en cada escena y pasa a la siguiente.
  *   1. Web (navegador)          → zoom dentro de la pantalla
  *   2. Automatización (nodos)   → zoom dentro del nodo IA
- *   3. Contenido (móvil + reels)
+
  *   4. Cierre con Nex y botón a Servicios
  * Fondos y mascota: imágenes propias de Neuraxis en /public/images/journey.
  */
@@ -19,7 +19,7 @@ const GREEN = "#00CC6A";
 const GRADIENT = `linear-gradient(135deg, ${PURPLE} 0%, ${CYAN} 100%)`;
 const IMG = "/images/journey";
 
-const STEPS = ["Web", "Automatización", "Contenido"];
+const STEPS = ["Web", "Automatización"];
 
 const CAPTIONS = [
   {
@@ -31,11 +31,6 @@ const CAPTIONS = [
     num: "02",
     title: "Tu negocio en automático",
     text: "Emails, chatbots y avisos que trabajan solos, conectados con tus herramientas.",
-  },
-  {
-    num: "03",
-    title: "Tus redes, siempre activas",
-    text: "Vídeos, reels y publicaciones con IA para que te encuentren cada día.",
   },
 ];
 
@@ -232,71 +227,6 @@ function FlowScene() {
   );
 }
 
-// ── Escena 3: móvil con reels reales ──────────────────────────────────────
-function PhoneScene() {
-  const reels = [
-    { img: "reel-1.webp", likes: "12,4 mil", tag: "#verano" },
-    { img: "reel-2.webp", likes: "8,9 mil", tag: "#ciudad" },
-    { img: "reel-3.webp", likes: "21 mil", tag: "#tienda" },
-  ];
-  return (
-    <div style={{ position: "relative", height: "min(54vh, 520px)", aspectRatio: "9 / 18.5" }}>
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          borderRadius: "14% / 7%",
-          background: "#0B0B1C",
-          border: "2px solid rgba(255,255,255,0.18)",
-          boxShadow: `0 30px 120px ${CYAN}55, 0 0 0 8px #15152e`,
-          overflow: "hidden",
-        }}
-      >
-        <div style={{ position: "absolute", top: "1.6%", left: "50%", transform: "translateX(-50%)", width: "30%", height: "3%", borderRadius: 99, background: "#000", zIndex: 5 }} />
-        {reels.map((r, i) => (
-          <div
-            key={i}
-            className="sj-reel"
-            style={{
-              position: "absolute",
-              inset: 0,
-              backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.25), transparent 25%, transparent 60%, rgba(0,0,0,0.65)), url(${IMG}/${r.img})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              transform: `translateY(${i * 100}%)`,
-            }}
-          >
-            <div style={{ position: "absolute", right: "6%", bottom: "16%", display: "flex", flexDirection: "column", alignItems: "center", gap: 12, color: "white", fontSize: 10, fontWeight: 700, textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
-              <span style={{ fontSize: 20 }}>❤️</span>
-              {r.likes}
-              <span style={{ fontSize: 18 }}>💬</span>
-              <span style={{ fontSize: 18 }}>↗</span>
-            </div>
-            <div style={{ position: "absolute", left: "7%", bottom: "7%", right: "26%", color: "white", textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, fontSize: 11, fontWeight: 800 }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/images/logo2.png-removebg-preview.png" alt="" aria-hidden style={{ width: 20, height: 20, borderRadius: 99, background: "#0B0B1C", padding: 2 }} />
-                tu_negocio
-              </div>
-              <div style={{ fontSize: 10, opacity: 0.85 }}>Hecho con IA en minutos ✨ {r.tag}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-      {/* Corazones que suben */}
-      {[0, 1, 2, 3, 4].map((i) => (
-        <span
-          key={i}
-          className="sj-heart"
-          style={{ position: "absolute", right: `${-8 - (i % 3) * 7}%`, bottom: `${20 + i * 4}%`, fontSize: 18 + (i % 2) * 8, opacity: 0 }}
-        >
-          {i % 2 ? "💜" : "💙"}
-        </span>
-      ))}
-      <Nex src="nex-movil.webp" className="sj-nex-3" style={{ width: "clamp(78px, 13vw, 170px)", right: "112%", bottom: "4%" }} />
-    </div>
-  );
-}
 
 export default function ScrollJourney() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -315,14 +245,13 @@ export default function ScrollJourney() {
         const q = gsap.utils.selector(stageRef);
 
         // ── Estado inicial
-        gsap.set(q(".sj-scene-2, .sj-scene-3, .sj-final"), { autoAlpha: 0 });
-        gsap.set(q(".sj-bg-2, .sj-bg-3"), { autoAlpha: 0, scale: 1.35 });
+        gsap.set(q(".sj-scene-2, .sj-final"), { autoAlpha: 0 });
+        gsap.set(q(".sj-bg-2"), { autoAlpha: 0, scale: 1.35 });
         gsap.set(q(".sj-bg-1"), { scale: 1.12 });
         gsap.set(q(".sj-cap"), { autoAlpha: 0, y: 30 });
         gsap.set(q(".sj-block"), { autoAlpha: 0, y: 40, scale: 0.9 });
         gsap.set(q(".sj-scene-1"), { scale: 0.85, rotateX: 18, transformPerspective: 1200 });
         gsap.set(q(".sj-scene-2"), { scale: 0.35 });
-        gsap.set(q(".sj-scene-3"), { scale: 0.3 });
         gsap.set(q(".sj-node"), { autoAlpha: 0, scale: 0.6 });
         gsap.set(q(".sj-nex-1, .sj-nex-2, .sj-nex-3"), { autoAlpha: 0, y: 50, scale: 0.6, rotate: -8 });
         gsap.set(q(".sj-step"), { opacity: 0.4 });
@@ -377,33 +306,13 @@ export default function ScrollJourney() {
           .to(q(".sj-bg-2"), { scale: 1, duration: 1.2 }, "<")
           .to({}, { duration: 0.6 })
 
-          // ── Zoom dentro del nodo IA → escena 3
-          .addLabel("toPhone")
-          .to(q(".sj-nex-2"), out, "toPhone")
-          .to(q(".sj-cap-2"), { autoAlpha: 0, y: -30, duration: 0.4 }, "toPhone")
-          .to(q(".sj-node, .sj-line"), { autoAlpha: 0, duration: 0.5 }, "toPhone")
-          .to(q(".sj-scene-2"), { scale: 9, autoAlpha: 0, duration: 1.2, ease: "power2.in" }, "toPhone+=0.15")
-          .to(q(".sj-bg-2"), { scale: 1.6, autoAlpha: 0, duration: 1.2, ease: "power2.in" }, "toPhone+=0.15")
-          .to(q(".sj-bg-3"), { autoAlpha: 1, scale: 1.1, duration: 1.4, ease: "power2.out" }, "toPhone+=0.6")
-          .to(q(".sj-step-2"), { opacity: 0.4, duration: 0.2 }, "toPhone+=0.7")
-          .to(q(".sj-step-3"), { opacity: 1, duration: 0.2 }, "toPhone+=0.7")
-          .to(q(".sj-scene-3"), { autoAlpha: 1, scale: 1, duration: 1.2, ease: "power2.out" }, "toPhone+=0.6")
-          .to(q(".sj-cap-3"), { autoAlpha: 1, y: 0, duration: 0.6 }, "toPhone+=1.2")
-          .to(q(".sj-nex-3"), pop, "toPhone+=1.3")
-          // los reels pasan como si hicieras swipe
-          .to(q(".sj-reel"), { yPercent: -100, duration: 0.7, ease: "power2.inOut" }, "toPhone+=1.6")
-          .to(q(".sj-reel"), { yPercent: -200, duration: 0.7, ease: "power2.inOut" }, ">+0.3")
-          .to(q(".sj-heart"), { opacity: 1, y: -60, stagger: 0.1, duration: 0.5 }, "toPhone+=1.8")
-          .to(q(".sj-heart"), { opacity: 0, y: -140, stagger: 0.1, duration: 0.5 }, ">-0.2")
-          .to(q(".sj-bg-3"), { scale: 1, duration: 1.4 }, "toPhone+=1.8")
-          .to({}, { duration: 0.4 })
-
           // ── Cierre: Nex con el pulgar arriba
           .addLabel("final")
-          .to(q(".sj-cap-3"), { autoAlpha: 0, y: -30, duration: 0.4 }, "final")
-          .to(q(".sj-nex-3"), out, "final")
-          .to(q(".sj-scene-3"), { scale: 0.6, autoAlpha: 0, y: -40, duration: 0.8, ease: "power2.in" }, "final")
-          .to(q(".sj-bg-3"), { filter: "blur(8px) brightness(0.3)", duration: 0.8 }, "final")
+          .to(q(".sj-nex-2"), out, "final")
+          .to(q(".sj-cap-2"), { autoAlpha: 0, y: -30, duration: 0.4 }, "final")
+          .to(q(".sj-node, .sj-line"), { autoAlpha: 0, duration: 0.5 }, "final")
+          .to(q(".sj-scene-2"), { scale: 0.6, autoAlpha: 0, y: -40, duration: 0.8, ease: "power2.in" }, "final")
+          .to(q(".sj-bg-2"), { filter: "blur(8px) brightness(0.3)", duration: 0.8 }, "final")
           .fromTo(q(".sj-final"), { autoAlpha: 0, scale: 0.8, y: 40 }, { autoAlpha: 1, scale: 1, y: 0, duration: 0.8, ease: "back.out(1.5)" }, "final+=0.5")
           .to({}, { duration: 0.8 });
 
@@ -421,7 +330,7 @@ export default function ScrollJourney() {
   }, []);
 
   return (
-    <div ref={containerRef} style={{ height: "700vh", position: "relative", background: BG }}>
+    <div ref={containerRef} style={{ height: "500vh", position: "relative", background: BG }}>
       <style>{`
         @keyframes sj-float { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-10px) rotate(2deg); } }
         .sj-float { animation: sj-float 3.2s ease-in-out infinite; }
@@ -432,7 +341,7 @@ export default function ScrollJourney() {
         style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", background: BG }}
       >
         {/* Fondos con los escenarios de Neuraxis */}
-        {["bg-web", "bg-auto", "bg-content"].map((bg, i) => (
+        {["bg-web", "bg-auto"].map((bg, i) => (
           <div
             key={bg}
             aria-hidden
@@ -478,9 +387,6 @@ export default function ScrollJourney() {
           <div className="sj-scene-2 absolute" style={{ willChange: "transform, opacity" }}>
             <FlowScene />
           </div>
-          <div className="sj-scene-3 absolute" style={{ willChange: "transform, opacity" }}>
-            <PhoneScene />
-          </div>
 
           {/* Cierre */}
           <div className="sj-final absolute flex flex-col items-center text-center px-6" style={{ zIndex: 40 }}>
@@ -499,7 +405,7 @@ export default function ScrollJourney() {
               </span>
             </h3>
             <p className="text-sm sm:text-lg mb-7 max-w-md" style={{ color: "rgba(255,255,255,0.6)" }}>
-              Web, automatización y contenido con un mismo equipo.
+              Tu web y tu automatización, con un mismo equipo.
             </p>
             <a
               href="#servicios"
