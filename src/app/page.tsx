@@ -32,10 +32,10 @@ const ScrollZoomIntro = dynamic(
   () => import("../components/landing/ScrollZoomIntro"),
   { ssr: false }
 );
-const ScrollJourney = dynamic(
-  () => import("../components/landing/ScrollJourney"),
-  { ssr: false }
-);
+// const ScrollJourney = dynamic(
+//   () => import("../components/landing/ScrollJourney"),
+//   { ssr: false }
+// );
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
