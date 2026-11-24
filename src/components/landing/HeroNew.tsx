@@ -8,7 +8,6 @@ const BRAND_GRADIENT = "linear-gradient(135deg, #7B2FBE 0%, #00A8D6 100%)";
 const SERVICES = [
   { icon: "🌐", label: "Páginas web", color: "#7B2FBE" },
   { icon: "⚙️", label: "Automatización", color: "#00A8D6" },
-  { icon: "🎬", label: "Contenido con IA", color: "#00CC6A" },
 ];
 
 const POINTS = ["Presupuesto sin compromiso", "Todo a medida", "Un único equipo"];
@@ -41,7 +40,7 @@ export default function HeroNew() {
             className="text-[2.5rem] sm:text-5xl lg:text-6xl font-black leading-[1.06] mb-6"
             style={{ fontFamily: "var(--font-syne, sans-serif)", color: "#1a1a2e" }}
           >
-            Tu web, tus redes y tu día a día,{" "}
+            Tu web y tu día a día,{" "}
             <span
               style={{
                 background: BRAND_GRADIENT,
@@ -61,8 +60,8 @@ export default function HeroNew() {
             className="text-base sm:text-lg leading-relaxed mb-8 max-w-xl"
             style={{ color: "#4a4a6a" }}
           >
-            Creamos tu página web, automatizamos las tareas que te quitan tiempo y producimos el
-            contenido de tus redes. Tú te ocupas de tus clientes.
+            Creamos tu página web, y automatizamos las tareas que te quitan tiempo.
+            Tú te ocupas de tus clientes.
           </motion.p>
 
           <motion.div

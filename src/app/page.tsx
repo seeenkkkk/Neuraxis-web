@@ -7,6 +7,7 @@ import SmoothScrollProvider from "../components/landing/SmoothScrollProvider";
 import HeroNew from "../components/landing/HeroNew";
 import HowItWorksNew from "../components/landing/HowItWorksNew";
 import { CONTACT_HREF, IG_DM_HREF, IG_PROFILE_HREF, IG_HANDLE } from "../lib/contact";
+import { LEGAL_LINKS } from "../lib/legal";
 
 // ── Global effects (dynamic = no SSR) ─────────────────────────────────────
 const LoadingScreen = dynamic(
@@ -52,13 +53,6 @@ const SERVICES = [
     desc: "Quitamos las tareas repetitivas de tu día a día y las dejamos funcionando solas, 24/7.",
     features: ["Gmail y correo automático", "Chatbots para web y WhatsApp", "Conexión con tu CRM y tus herramientas", "Avisos, informes y seguimiento de clientes"],
     color: "#00A8D6",
-  },
-  {
-    icon: "🎬",
-    title: "Contenido y marketing con IA",
-    desc: "Contenido constante y profesional para tus redes, sin que tengas que grabar ni editar nada.",
-    features: ["Vídeos y reels con IA", "Calendario de contenido mensual", "Guiones y textos que venden", "Imagen de marca coherente"],
-    color: "#00CC6A",
   },
 ];
 
@@ -262,7 +256,7 @@ export default function LandingPage() {
           <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-center gap-3 text-sm"
             style={{ color: "rgba(0,0,0,0.35)" }}>
             <span>Lo que hacemos:</span>
-            {["Webs a medida", "SEO", "Chatbots", "Automatizaciones", "Reels con IA", "Contenido para redes"].map((city, i) => (
+            {["Webs a medida", "SEO", "Chatbots", "Automatizaciones"].map((city, i) => (
               <span key={city} className="flex items-center gap-3">
                 {i > 0 && <span style={{ color: "#00A8D6", fontSize: "7px" }}>●</span>}
                 {city}
@@ -272,7 +266,7 @@ export default function LandingPage() {
         </div>
 
         {/* ── Scroll Journey (prototipo tipo Apple) ─────────────────────── */}
-        <ScrollJourney />
+        {/* ScrollJourney desactivado: su 3.ª escena era de contenido/reels. Reactivar cuando se ofrezca. */}
 
         {/* ── Servicios ───────────────────────────────────────────────────── */}
         <section id="servicios" className="py-24 px-6" style={{ background: "#FFFFFF", borderTop: "1px solid rgba(0,168,214,0.15)" }}>
@@ -309,7 +303,7 @@ export default function LandingPage() {
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <div className="grid md:grid-cols-2 gap-6 mb-12 max-w-4xl mx-auto">
               {SERVICES.map((s, i) => (
                 <motion.div
                   key={s.title}
@@ -452,10 +446,10 @@ export default function LandingPage() {
                   </h3>
                 </div>
                 <p className="text-sm mb-5 leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>
-                  Nada de plantillas. Tu web y tu contenido se crean desde cero para tu marca y tu tipo de cliente.
+                  Nada de plantillas. Tu web y tus automatizaciones se crean desde cero para tu marca y tu tipo de cliente.
                 </p>
                 <ul className="space-y-2.5">
-                  {["Diseño único para tu marca", "Pensado para convertir visitas en clientes", "Contenido con tu tono y tu estilo", "Web y redes con la misma imagen"].map((item) => (
+                  {["Diseño único para tu marca", "Pensado para convertir visitas en clientes", "Automatizaciones adaptadas a tu forma de trabajar", "Todo con la misma imagen de marca"].map((item) => (
                     <li key={item} className="flex items-center gap-2.5 text-sm" style={{ color: "rgba(0,0,0,0.6)" }}>
                       <span style={{ color: "#7B2FBE" }}>✓</span>
                       {item}
@@ -512,7 +506,7 @@ export default function LandingPage() {
                   Tú nos cuentas qué necesitas y nosotros lo hacemos realidad. Sin tecnicismos y sin perder tu tiempo.
                 </p>
                 <ul className="space-y-2.5">
-                  {["Un único equipo para web y contenido", "Entregas rápidas y sin sorpresas", "La IA trabaja a tu favor", "Soporte cercano cuando lo necesites"].map((item) => (
+                  {["Un único equipo para web y automatización", "Entregas rápidas y sin sorpresas", "La IA trabaja a tu favor", "Soporte cercano cuando lo necesites"].map((item) => (
                     <li key={item} className="flex items-center gap-2.5 text-sm" style={{ color: "rgba(0,0,0,0.6)" }}>
                       <span style={{ color: "#00A8D6" }}>✓</span>
                       {item}
@@ -603,7 +597,7 @@ export default function LandingPage() {
                   className="h-8 object-contain mb-4"
                 />
                 <p className="text-sm leading-relaxed" style={{ color: "rgba(0,0,0,0.4)" }}>
-                  Webs, automatizaciones y contenido con IA para empresas que quieren crecer.
+                  Webs y automatización con IA para empresas que quieren crecer.
                 </p>
               </div>
               {/* Servicios */}
@@ -667,6 +661,13 @@ export default function LandingPage() {
               <p className="text-xs" style={{ color: "rgba(0,0,0,0.3)" }}>
                 © {new Date().getFullYear()} Neuraxis IA · Todos los derechos reservados
               </p>
+              <nav className="flex items-center gap-4 text-xs">
+                {LEGAL_LINKS.map((l) => (
+                  <a key={l.href} href={l.href} className="text-black/40 hover:text-[#1a1a2e] transition-colors">
+                    {l.label}
+                  </a>
+                ))}
+              </nav>
               <p className="text-xs" style={{ color: "rgba(0,0,0,0.3)" }}>
                 Hecho con ❤️ en España
               </p>

@@ -9,7 +9,7 @@ const STEPS = [
   {
     num: "01",
     title: "Nos cuentas tu negocio",
-    desc: "Una llamada corta para conocer tu marca, tus clientes y qué quieres conseguir: más visitas, más ventas o más presencia en redes.",
+    desc: "Una llamada corta para conocer tu marca, tus clientes y qué quieres conseguir: más visitas, más ventas o menos trabajo repetitivo.",
     icon: (
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M8 10h32a2 2 0 0 1 2 2v18a2 2 0 0 1-2 2H20l-8 7v-7H8a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2Z" stroke="#7B2FBE" strokeWidth="2.5" strokeLinejoin="round"/>
@@ -19,8 +19,8 @@ const STEPS = [
   },
   {
     num: "02",
-    title: "Creamos tu web y tu contenido",
-    desc: "Diseñamos tu web a medida y preparamos vídeos, reels y publicaciones con IA, todo con la misma imagen de marca.",
+    title: "Creamos tu web y tus automatizaciones",
+    desc: "Diseñamos tu web a medida y conectamos tus herramientas (correo, chatbots, WhatsApp) para que trabajen solas.",
     icon: (
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="5" y="8" width="38" height="28" rx="3" stroke="#7B2FBE" strokeWidth="2.5"/>
@@ -163,7 +163,7 @@ export default function HowItWorksNew() {
             </span>
           </h2>
           <p className="text-lg max-w-lg mx-auto" style={{ color: "rgba(0,0,0,0.4)" }}>
-            De la idea a una web que vende y unas redes que no paran, en tres pasos.
+            De la idea a una web que vende y tareas que se hacen solas, en tres pasos.
           </p>
         </motion.div>
 

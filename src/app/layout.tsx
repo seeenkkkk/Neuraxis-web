@@ -18,11 +18,11 @@ const dmSans = DM_Sans({
 
 const SITE_URL = "https://neuraxis-web.vercel.app";
 const SITE_DESC =
-  "Neuraxis IA crea páginas web para empresas, automatiza procesos (email, chatbots, WhatsApp, CRM) y produce contenido y marketing con inteligencia artificial. Pide presupuesto sin compromiso.";
+  "Neuraxis IA crea páginas web para empresas y automatiza procesos (email, chatbots, WhatsApp, CRM) con inteligencia artificial. Pide presupuesto sin compromiso.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Neuraxis IA — Webs, automatización y contenido con IA para empresas",
+  title: "Neuraxis IA — Webs y automatización con IA para empresas",
   description: SITE_DESC,
   alternates: { canonical: "/" },
   openGraph: {
@@ -30,13 +30,13 @@ export const metadata: Metadata = {
     locale: "es_ES",
     url: SITE_URL,
     siteName: "Neuraxis IA",
-    title: "Neuraxis IA — Webs, automatización y contenido con IA",
+    title: "Neuraxis IA — Webs y automatización con IA",
     description: SITE_DESC,
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Neuraxis IA" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Neuraxis IA — Webs, automatización y contenido con IA",
+    title: "Neuraxis IA — Webs y automatización con IA",
     description: SITE_DESC,
     images: ["/og-image.png"],
   },
@@ -53,7 +53,7 @@ const JSON_LD = {
   description: SITE_DESC,
   areaServed: "ES",
   sameAs: ["https://www.instagram.com/neuraxis.ia"],
-  knowsAbout: ["Diseño web", "Automatización de procesos", "Chatbots", "Marketing de contenidos", "Inteligencia artificial"],
+  knowsAbout: ["Diseño web", "Automatización de procesos", "Chatbots", "Inteligencia artificial"],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

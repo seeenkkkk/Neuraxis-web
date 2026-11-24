@@ -234,7 +234,7 @@ export default function ScrollZoomIntro() {
               fontFamily: "var(--font-syne, sans-serif)",
             }}
           >
-            Webs · Automatización · Contenido con IA
+            Webs · Automatización con IA
           </p>
         </div>
 
